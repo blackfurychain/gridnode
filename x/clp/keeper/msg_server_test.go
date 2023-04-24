@@ -1829,7 +1829,7 @@ func TestMsgServer_AddLiquidity(t *testing.T) {
 }
 
 func TestMsgServer_AddProviderDistribution(t *testing.T) {
-	admin := "did:fury:g1gy2ne7m62uer4h5s4e7xlfq7aeem5zpwx6nu9q"
+	admin := "did:fury:g1gy2ne7m62uer4h5s4e7xlfq7aeem5zpw2nrxn8"
 	nonAdmin := "did:fury:g1gy2ne7m62uer4h5s4e7xlfq7aeem5zpwx6nu9r"
 	ctx, app := test.CreateTestAppClpFromGenesis(false, func(app *gridapp.GridironchainApp, genesisState gridapp.GenesisState) gridapp.GenesisState {
 		adminGs := &admintypes.GenesisState{
