@@ -143,7 +143,7 @@
                 {
                     "@type": "/cosmos.auth.v1beta1.BaseAccount",
                     "account_number": "4",
-                    "address": "did:fury:g1l7hypmqk2yc334vc6vmdwzp5sdefygj2ad93p5",
+                    "address": "did:fury:g1l7hypmqk2yc334vc6vmdwzp5sdefygj23y4thn",
                     "pub_key": null,
                     "sequence": "0"
                 }
@@ -235,7 +235,7 @@
                     ]
                 },
                 {
-                    "address": "did:fury:g1l7hypmqk2yc334vc6vmdwzp5sdefygj2ad93p5",
+                    "address": "did:fury:g1l7hypmqk2yc334vc6vmdwzp5sdefygj23y4thn",
                     "coins": [
                         {
                             "amount": "500000000000000000000000",
@@ -308,7 +308,7 @@
             "address_whitelist": [
                 "did:fury:g1ny48eeuk4dm9f63dy0lwfgjhnvud9yvtwl83y8",
                 "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777gfgs92",
-                "did:fury:g1l7hypmqk2yc334vc6vmdwzp5sdefygj2ad93p5"
+                "did:fury:g1l7hypmqk2yc334vc6vmdwzp5sdefygj23y4thn"
             ],
             "liquidity_provider_list": null,
             "params": {

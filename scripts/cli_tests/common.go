@@ -18,7 +18,7 @@ func getDefaultArgs() Args {
 
 	senderName := "grid"
 	path := hd.CreateHDPath(118, 0, 0).String()
-	toAddr, err := sdk.AccAddressFromBech32("did:fury:g1l7hypmqk2yc334vc6vmdwzp5sdefygj2ad93p5")
+	toAddr, err := sdk.AccAddressFromBech32("did:fury:g1l7hypmqk2yc334vc6vmdwzp5sdefygj23y4thn")
 	if err != nil {
 		panic(toAddr)
 	}

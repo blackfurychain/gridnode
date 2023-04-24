@@ -5,7 +5,7 @@
         {
           "type": "dispensation/create",
           "value": {
-            "Signer": "did:fury:g1l7hypmqk2yc334vc6vmdwzp5sdefygj2ad93p5",
+            "Signer": "did:fury:g1l7hypmqk2yc334vc6vmdwzp5sdefygj23y4thn",
             "distribution_name": "testnetfinaltest23",
             "distribution_type": "1",
             "Input": [
@@ -21,7 +21,7 @@
             ],
             "Output": [
               {
-                "address": "did:fury:g1l7hypmqk2yc334vc6vmdwzp5sdefygj2ad93p5",
+                "address": "did:fury:g1l7hypmqk2yc334vc6vmdwzp5sdefygj23y4thn",
                 "coins": [
                   {
                     "denom": "fury",
