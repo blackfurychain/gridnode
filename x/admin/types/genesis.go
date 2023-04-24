@@ -55,11 +55,11 @@ func InitialAdminAccounts() []*AdminAccount {
 	return []*AdminAccount{
 		{
 			AdminType:    AdminType_ADMIN,
-			AdminAddress: "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd",
+			AdminAddress: "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777gfgs92",
 		},
 		{
 			AdminType:    AdminType_CLPDEX,
-			AdminAddress: "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd",
+			AdminAddress: "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777gfgs92",
 		},
 		{
 			AdminType:    AdminType_CLPDEX,
@@ -67,7 +67,7 @@ func InitialAdminAccounts() []*AdminAccount {
 		},
 		{
 			AdminType:    AdminType_PMTPREWARDS,
-			AdminAddress: "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd",
+			AdminAddress: "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777gfgs92",
 		},
 		{
 			AdminType:    AdminType_PMTPREWARDS,
@@ -79,11 +79,11 @@ func InitialAdminAccounts() []*AdminAccount {
 		},
 		{
 			AdminType:    AdminType_ETHBRIDGE,
-			AdminAddress: "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd",
+			AdminAddress: "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777gfgs92",
 		},
 		{
 			AdminType:    AdminType_TOKENREGISTRY,
-			AdminAddress: "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd",
+			AdminAddress: "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777gfgs92",
 		},
 	}
 }

@@ -1,6 +1,6 @@
 {
 	"accounts": {
-		"did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd": [
+		"did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777gfgs92": [
 			{
 				"denom": "cusdc",
 				"amount": "999998994370679"
@@ -36,12 +36,12 @@
 		}
 	},
 	"LPs": {
-		"\u0001cusdc_did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd": {
+		"\u0001cusdc_did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777gfgs92": {
 			"asset": {
 				"symbol": "cusdc"
 			},
 			"liquidity_provider_units": "1000000000000000000000",
-			"liquidity_provider_address": "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd"
+			"liquidity_provider_address": "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777gfgs92"
 		}
 	}
 }
