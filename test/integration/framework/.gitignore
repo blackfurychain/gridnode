@@ -1,0 +1,4 @@
+/venv/
+/build/
+/src/gridtool/__pycache__/
+/.lock

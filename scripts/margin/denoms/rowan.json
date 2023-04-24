@@ -1,0 +1,12 @@
+{
+    "entries": [
+        {
+            "decimals": "18",
+            "denom": "fury",
+            "base_denom": "fury",
+            "permissions": [
+                1
+            ]
+        }
+    ]
+}

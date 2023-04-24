@@ -1,0 +1,62 @@
+{
+  "entries": [
+    {
+      "denom": "ceth",
+      "decimals": 18,
+      "ibc_counterparty_denom": "xeth",
+      "permissions": [
+        "CLP",
+        "IBCEXPORT",
+        "IBCIMPORT"
+      ]
+    },
+    {
+      "denom": "xeth",
+      "decimals": 10,
+      "unit_denom": "ceth",
+      "permissions": [
+        "CLP",
+        "IBCEXPORT",
+        "IBCIMPORT"
+      ]
+    },
+    {
+      "denom": "cdash",
+      "decimals": 18,
+      "permissions": [
+        "CLP",
+        "IBCEXPORT",
+        "IBCIMPORT"
+      ]
+    },
+    {
+      "denom": "fury",
+      "decimals": 18,
+      "ibc_counterparty_denom": "xfury",
+      "permissions": [
+        "CLP",
+        "IBCEXPORT",
+        "IBCIMPORT"
+      ]
+    },
+    {
+      "denom": "xfury",
+      "decimals": 10,
+      "unit_denom": "fury",
+      "permissions": [
+        "CLP",
+        "IBCEXPORT",
+        "IBCIMPORT"
+      ]
+    },
+    {
+      "denom": "cusdt",
+      "decimals": 6,
+      "permissions": [
+        "CLP",
+        "IBCEXPORT",
+        "IBCIMPORT"
+      ]
+    }
+  ]
+}

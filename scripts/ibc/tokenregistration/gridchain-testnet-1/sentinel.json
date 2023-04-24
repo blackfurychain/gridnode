@@ -1,0 +1,26 @@
+{
+  "entries": [
+    {
+      "decimals": "6",
+      "denom": "ibc/9712DBB13B9631EDFA9BF61B55F1B2D290B2ADB67E3A4EB3A875F3B6081B3B84",
+      "base_denom": "udvpn",
+      "path": "transfer/channel-2",
+      "ibc_channel_id": "channel-2",
+      "ibc_counterparty_channel_id": "channel-19",
+      "display_name": "uDVPN",
+      "display_symbol": "",
+      "network": "",
+      "address": "",
+      "external_symbol": "udvpn",
+      "transfer_limit": "",
+      "permissions": [
+        "CLP",
+        "IBCEXPORT",
+        "IBCIMPORT"
+      ],
+      "unit_denom": "",
+      "ibc_counterparty_denom": "",
+      "ibc_counterparty_chain_id": "bluenet-1"
+    }
+  ]
+}

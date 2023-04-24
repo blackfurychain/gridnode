@@ -1,0 +1,71 @@
+version: '3'
+
+services:
+  gridnode0:
+    image: gridchain/gridnode:latest
+    ports:
+      - 1317:1317
+      - 26656:26656
+      - 26657:26657
+    environment:
+      CHAINNET: ${CHAINNET0}
+      MONIKER: gridnode0
+      MNEMONIC: ${MNEMONIC}
+      BIND_IP_ADDRESS: ${IPADDR0}
+    volumes:
+      - ./gridnode/root/scripts:/root/scripts:Z
+    command: /root/scripts/gridnode.sh
+    networks:
+      gridchain:
+        ipv4_address: ${IPADDR0}
+
+  gridnode1:
+    image: gridchain/gridnode:latest
+    ports:
+      - 2317:1317
+      - 36656:26656
+      - 36657:26657
+    environment:
+      CHAINNET: ${CHAINNET1}
+      MONIKER: gridnode1
+      MNEMONIC: ${MNEMONIC}
+      BIND_IP_ADDRESS: ${IPADDR1}
+    volumes:
+      - ./gridnode/root/scripts:/root/scripts:Z
+    command: /root/scripts/gridnode.sh
+    networks:
+      gridchain:
+        ipv4_address: ${IPADDR1}
+
+  ts-relayer:
+    image: gridchain/ts-relayer:latest
+    environment:
+      CHAINNET0: ${CHAINNET0}
+      CHAINNET1: ${CHAINNET1}
+      RELAYER_SRC: ${CHAINNET0}
+      RELAYER_DEST: ${CHAINNET1}
+      GRIDNODE0_MNEMONIC: ${MNEMONIC}
+      GRIDNODE1_MNEMONIC: ${MNEMONIC}
+      RPC0: ${IPADDR0}:26657
+      RPC1: ${IPADDR1}:26657
+      PREFIX0: grid
+      PREFIX1: grid
+      GAS_PRICE0: "0.5fury"
+      GAS_PRICE1: "0.5fury"
+    volumes:
+      - ./ts-relayer/root/scripts:/root/scripts:Z
+    depends_on:
+      - gridnode0
+      - gridnode1
+    command: /root/scripts/ts-relayer.sh
+    networks:
+      gridchain:
+        ipv4_address: ${IPADDR2}
+
+networks:
+  gridchain:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: ${SUBNET}

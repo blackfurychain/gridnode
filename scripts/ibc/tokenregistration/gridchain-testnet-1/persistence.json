@@ -1,0 +1,26 @@
+{
+  "entries": [
+    {
+      "decimals": "6",
+      "denom": "ibc/1DA0D68FA3369C706C7FD8F2EDF0F35BD32EB9F02887B050622AE034E93523D0",
+      "base_denom": "uxprt",
+      "path": "transfer/channel-1",
+      "ibc_channel_id": "channel-1",
+      "ibc_counterparty_channel_id": "channel-39",
+      "display_name": "uXPRT",
+      "display_symbol": "",
+      "network": "",
+      "address": "",
+      "external_symbol": "uxprt",
+      "transfer_limit": "",
+      "permissions": [
+        "CLP",
+        "IBCEXPORT",
+        "IBCIMPORT"
+      ],
+      "unit_denom": "",
+      "ibc_counterparty_denom": "",
+      "ibc_counterparty_chain_id": "test-core-1"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "entries": [
+    {
+      "decimals": "6",
+      "denom": "ibc/AA525F30094BA9015EDCDA02FF0D4EA63A3BC056689D676EAD167CD6F760D261",
+      "base_denom": "uregen",
+      "path": "transfer/channel-4",
+      "ibc_channel_id": "channel-4",
+      "ibc_counterparty_channel_id": "channel-40",
+      "display_name": "",
+      "display_symbol": "",
+      "network": "",
+      "address": "",
+      "external_symbol": "",
+      "transfer_limit": "",
+      "permissions": [
+        "CLP",
+        "IBCEXPORT",
+        "IBCIMPORT"
+      ],
+      "unit_denom": "",
+      "ibc_counterparty_denom": "",
+      "ibc_counterparty_chain_id": "regen-1"
+    }
+  ]
+}

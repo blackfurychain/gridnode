@@ -1,0 +1,6 @@
+vagrantenv.sh
+vagrantenv.json
+/__pycache__/
+/watcher_pids.txt
+sandpit.log
+../../smart-contracts/combined.log
