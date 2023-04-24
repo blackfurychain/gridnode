@@ -47,7 +47,7 @@
                       },
                       "min_self_delegation": "1",
                       "delegator_address": "did:fury:g12tqnz6lfwdvzurvw55h24rgwzrdth7wph9g7qx",
-                      "validator_address": "gridvaloper12tqnz6lfwdvzurvw55h24rgwzrdth7wp78q5qk",
+                      "validator_address": "did:fury:gvaloper12tqnz6lfwdvzurvw55h24rgwzrdth7wp78q5qk",
                       "pubkey": "gridvalconspub1zcjduepq0rqzk2gn55k5m2897gn30ayuwdn5fx2c6g592f6duqwlp9d9crmqhwnn4n",
                       "value": {
                         "denom": "stake",

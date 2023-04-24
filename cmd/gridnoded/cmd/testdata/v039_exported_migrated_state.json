@@ -328,7 +328,7 @@
                         "previous_period": "1",
                         "stake": "1000000000000000000000000.000000000000000000"
                     },
-                    "validator_address": "gridvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna"
+                    "validator_address": "did:fury:gvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna"
                 }
             ],
             "delegator_withdraw_infos": [],
@@ -338,7 +338,7 @@
             "outstanding_rewards": [
                 {
                     "outstanding_rewards": [],
-                    "validator_address": "gridvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna"
+                    "validator_address": "did:fury:gvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna"
                 }
             ],
             "params": {
@@ -353,7 +353,7 @@
                     "accumulated": {
                         "commission": []
                     },
-                    "validator_address": "gridvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna"
+                    "validator_address": "did:fury:gvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna"
                 }
             ],
             "validator_current_rewards": [
@@ -362,7 +362,7 @@
                         "period": "2",
                         "rewards": []
                     },
-                    "validator_address": "gridvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna"
+                    "validator_address": "did:fury:gvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna"
                 }
             ],
             "validator_historical_rewards": [
@@ -372,7 +372,7 @@
                         "cumulative_reward_ratio": [],
                         "reference_count": 2
                     },
-                    "validator_address": "gridvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna"
+                    "validator_address": "did:fury:gvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna"
                 }
             ],
             "validator_slash_events": []
@@ -410,7 +410,7 @@
         },
         "oracle": {
             "address_whitelist": [
-                "gridvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna"
+                "did:fury:gvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna"
             ],
             "admin_address": ""
         },
@@ -447,14 +447,14 @@
                 {
                     "delegator_address": "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777gfgs92",
                     "shares": "1000000000000000000000000.000000000000000000",
-                    "validator_address": "gridvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna"
+                    "validator_address": "did:fury:gvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna"
                 }
             ],
             "exported": true,
             "last_total_power": "1000000",
             "last_validator_powers": [
                 {
-                    "address": "gridvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna",
+                    "address": "did:fury:gvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna",
                     "power": "1000000"
                 }
             ],
@@ -491,7 +491,7 @@
                     },
                     "jailed": false,
                     "min_self_delegation": "1",
-                    "operator_address": "gridvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna",
+                    "operator_address": "did:fury:gvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna",
                     "status": "BOND_STATUS_BONDED",
                     "tokens": "1000000000000000000000000",
                     "unbonding_height": "0",
