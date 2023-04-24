@@ -32,7 +32,7 @@ func TestMsgServer_AdminCloseAll(t *testing.T) {
 	}{
 		{
 			name:             "admin close and take funds",
-			msgAdminCloseAll: types.MsgAdminCloseAll{Signer: "did:fury:g1azpar20ck9lpys89r8x7zc8yu0qzgvtp48ng5v", TakeMarginFund: true},
+			msgAdminCloseAll: types.MsgAdminCloseAll{Signer: "did:fury:g1azpar20ck9lpys89r8x7zc8yu0qzgvtpewrjzt", TakeMarginFund: true},
 			msgOpen: types.MsgOpen{
 				CollateralAsset: "fury",
 				BorrowAsset:     "xxx",
@@ -45,7 +45,7 @@ func TestMsgServer_AdminCloseAll(t *testing.T) {
 		},
 		{
 			name:             "admin close and not take funds",
-			msgAdminCloseAll: types.MsgAdminCloseAll{Signer: "did:fury:g1azpar20ck9lpys89r8x7zc8yu0qzgvtp48ng5v", TakeMarginFund: false},
+			msgAdminCloseAll: types.MsgAdminCloseAll{Signer: "did:fury:g1azpar20ck9lpys89r8x7zc8yu0qzgvtpewrjzt", TakeMarginFund: false},
 			msgOpen: types.MsgOpen{
 				CollateralAsset: "fury",
 				BorrowAsset:     "xxx",
