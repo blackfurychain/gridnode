@@ -10,7 +10,7 @@ gridnoded tx margin update-pools ./data/temp_pools.json \
 	--broadcast-mode block \
 	--yes
 
-gridnoded tx margin whitelist grid1mwmrarhynjuau437d07p42803rntfxqjun3pfu \
+gridnoded tx margin whitelist did:fury:g1mwmrarhynjuau437d07p42803rntfxqjun3pfu \
   --from=$ADMIN_KEY \
 	--gas=500000 \
 	--gas-prices=0.5fury \

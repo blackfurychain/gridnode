@@ -37,7 +37,7 @@ type TestCase struct {
 
 func TC1(t *testing.T) TestCase {
 	externalAsset := "cusdc"
-	address := "grid1syavy2npfyt9tcncdtsdzf7kny9lh777vuvqz8"
+	address := "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777vuvqz8"
 
 	externalAssetBalance, ok := sdk.NewIntFromString("1000000000000000")
 	require.True(t, ok)
@@ -113,7 +113,7 @@ func TC1(t *testing.T) TestCase {
 func TC2(t *testing.T) TestCase {
 	gridapp.SetConfig(false)
 	externalAsset := "cusdc"
-	address := "grid1syavy2npfyt9tcncdtsdzf7kny9lh777vuvqz8"
+	address := "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777vuvqz8"
 	addresses, _ := ethtest.CreateTestAddrs(1)
 
 	externalAssetBalance, ok := sdk.NewIntFromString("1000000000000000000") // 1,000,000,000,000.000000
@@ -219,7 +219,7 @@ func TC2(t *testing.T) TestCase {
 func TC3(t *testing.T) TestCase {
 	gridapp.SetConfig(false)
 	externalAsset := "cusdc"
-	address := "grid1syavy2npfyt9tcncdtsdzf7kny9lh777vuvqz8"
+	address := "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777vuvqz8"
 	addresses, _ := ethtest.CreateTestAddrs(2)
 
 	externalAssetBalance, ok := sdk.NewIntFromString("1000000000000000000") // 1,000,000,000,000.000000
