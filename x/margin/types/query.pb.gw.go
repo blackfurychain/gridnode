@@ -730,19 +730,19 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 }
 
 var (
-	pattern_Query_GetPositions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"gridchain", "margin", "v1", "positions", "pagination.key"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetPositions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"gridironchain", "margin", "v1", "positions", "pagination.key"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_GetPositionsForAddress_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"gridchain", "margin", "v1", "mtps-for-address", "address", "pagination.key"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetPositionsForAddress_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"gridironchain", "margin", "v1", "mtps-for-address", "address", "pagination.key"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_GetPositionsByPool_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"gridchain", "margin", "v1", "mtps-by-pool", "asset", "pagination.key"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetPositionsByPool_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"gridironchain", "margin", "v1", "mtps-by-pool", "asset", "pagination.key"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_GetParams_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"gridchain", "margin", "v1", "params"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetParams_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"gridironchain", "margin", "v1", "params"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_GetStatus_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"gridchain", "margin", "v1", "status"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetStatus_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"gridironchain", "margin", "v1", "status"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_GetWhitelist_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"gridchain", "margin", "v1", "whitelist"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetWhitelist_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"gridironchain", "margin", "v1", "whitelist"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_IsWhitelisted_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"gridchain", "margin", "v1", "is-whitelisted"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_IsWhitelisted_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"gridironchain", "margin", "v1", "is-whitelisted"}, "", runtime.AssumeColonVerbOpt(true)))
 )
 
 var (

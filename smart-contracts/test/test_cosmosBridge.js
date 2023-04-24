@@ -93,7 +93,7 @@ contract("CosmosBridge", function (accounts) {
     beforeEach(async function () {
       // Set up ProphecyClaim values
       this.cosmosSender = web3.utils.utf8ToHex(
-        "grid1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace"
+        "did:fury:g1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace"
       );
       this.cosmosSenderSequence = 1;
       this.ethereumReceiver = userThree;
@@ -153,9 +153,9 @@ contract("CosmosBridge", function (accounts) {
       this.token = await BridgeToken.new(this.actualSymbol);
       this.amount = 100;
 
-      // gridchain address
+      // gridironchain address
       this.cosmosRecipient = web3.utils.utf8ToHex(
-        "grid1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace"
+        "did:fury:g1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace"
       );
 
       // address 0
@@ -319,7 +319,7 @@ contract("CosmosBridge", function (accounts) {
     beforeEach(async function () {
       // Set up ProphecyClaim values
       this.cosmosSender = web3.utils.utf8ToHex(
-        "grid1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace"
+        "did:fury:g1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace"
       );
       this.cosmosSenderSequence = 1;
       this.ethereumReceiver = userOne;

@@ -5,7 +5,7 @@ import {inject, injectable} from "tsyringe";
 import {isHardhatRuntimeEnvironment} from "./hardhatSupport";
 
 /**
- * The accounts necessary for testing a gridchain system
+ * The accounts necessary for testing a gridironchain system
  */
 export class GridironchainAccounts {
     constructor(

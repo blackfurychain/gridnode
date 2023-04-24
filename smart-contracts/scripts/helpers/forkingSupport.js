@@ -8,7 +8,7 @@ const { print } = require("./utils");
 // By default, this will work with a mainnet fork,
 // but it can also be used to fork Ropsten
 const DEPLOYMENT_DIRECTORY = "deployments";
-const DEFAULT_DEPLOYMENT_NAME = "gridchain-1";
+const DEFAULT_DEPLOYMENT_NAME = "gridironchain-1";
 
 // The address of the Proxy admin (used to impersonate the account that has permission to upgrade proxies)
 const PROXY_ADMIN_ADDRESS = "0x7c6c6ea036e56efad829af5070c8fb59dc163d88";

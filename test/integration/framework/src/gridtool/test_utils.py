@@ -10,8 +10,8 @@ from web3.eth import Contract
 from hexbytes import HexBytes
 from web3.types import TxReceipt
 
-from gridtool import eth, truffle, hardhat, run_env, gridchain, cosmos, command
-from gridtool.gridchain import FURY, CETH
+from gridtool import eth, truffle, hardhat, run_env, gridironchain, cosmos, command
+from gridtool.gridironchain import FURY, CETH
 from gridtool.common import *
 
 # These are utilities to interact with running environment (running agains local ganache-cli/hardhat/gridnoded).
@@ -70,27 +70,27 @@ def get_env_ctx_peggy2():
         env_vars = json.loads(cmd.read_text_file(env_file))
         global_mnemonic = env_vars.get("mnemonic", None)
 
-        gridchain_config = env_vars["gridchain"]
-        gridnode_url = gridchain_config["rpc_url"]
-        gridnode_chain_id = gridchain_config["chain_id"]
-        gridnoded_home = gridchain_config.get("home")
+        gridironchain_config = env_vars["gridironchain"]
+        gridnode_url = gridironchain_config["rpc_url"]
+        gridnode_chain_id = gridironchain_config["chain_id"]
+        gridnoded_home = gridironchain_config.get("home")
 
         # Supported scenarios regarding fury_source:
         # (1) no fury_source, no mnemonic => set fury_source to None and assume it will not be used
         # (1) fury_source without mnemonic => assume private key is already in keystore
         # (2) mnemonic without fury source => create it if it doesn't exist yet
-        fury_source = gridchain_config.get("fury_source")
+        fury_source = gridironchain_config.get("fury_source")
         if not fury_source:
-            if "fury_source_mnemonic" in gridchain_config:
-                fury_source_mnemonic = gridchain_config["fury_source_mnemonic"]
+            if "fury_source_mnemonic" in gridironchain_config:
+                fury_source_mnemonic = gridironchain_config["fury_source_mnemonic"]
             elif global_mnemonic:
                 fury_source_mnemonic = global_mnemonic
             else:
                 fury_source_mnemonic = None
             if fury_source_mnemonic:
                 fury_source_mnemonic = fury_source_mnemonic.split(" ")
-                fury_source = gridchain.mnemonic_to_address(cmd, fury_source_mnemonic)
-                gridnoded = gridchain.Gridnoded(cmd, home=gridnoded_home)
+                fury_source = gridironchain.mnemonic_to_address(cmd, fury_source_mnemonic)
+                gridnoded = gridironchain.Gridnoded(cmd, home=gridnoded_home)
                 if not [x for x in gridnoded.keys_list() if x["address"] == fury_source]:
                     gridnoded.keys_add(None, fury_source_mnemonic)
 
@@ -155,7 +155,7 @@ def get_env_ctx_peggy2():
     w3_conn = eth.web3_connect(w3_url)
 
     generic_erc20_contract = "BridgeToken"
-    ceth_symbol = gridchain.gridchain_denom_hash(ethereum_network_descriptor, eth.NULL_ADDRESS)
+    ceth_symbol = gridironchain.gridironchain_denom_hash(ethereum_network_descriptor, eth.NULL_ADDRESS)
 
     abi_files_root = cmd.project.project_dir("smart-contracts/artifacts/contracts")
     abi_provider = hardhat.HardhatAbiProvider(cmd, abi_files_root, smart_contract_addresses)
@@ -176,7 +176,7 @@ def get_env_ctx_peggy2():
     # assert ctx.eth.fixed_gas_args["gasPrice"] == 1 * eth.GWEI + 7
 
     # Monkeypatching for peggy2 extras
-    # TODO These are set in run_env.py:Peggy2Environment.init_gridchain(), specifically "gridnoded tx ethbridge set-cross-chain-fee"
+    # TODO These are set in run_env.py:Peggy2Environment.init_gridironchain(), specifically "gridnoded tx ethbridge set-cross-chain-fee"
     # Consider passing them via environment
     ctx.eth.cross_chain_fee_base = 1
     ctx.eth.cross_chain_lock_fee = 1
@@ -252,7 +252,7 @@ def get_env_ctx_peggy1(cmd=None, env_file=None, env_vars=None):
         artifacts_dir = env_vars["SMART_CONTRACT_ARTIFACT_DIR"]
     elif deployment_name:
         artifacts_dir = cmd.project.project_dir("smart-contracts/deployments/{}/build/contracts".format(deployment_name))
-        if deployment_name == "gridchain-1":
+        if deployment_name == "gridironchain-1":
             # Special case for Betanet because GridironchainTestToken is not deployed there.
             # It's only available on Testnet, Devnet and in local environment.
             # However, BridgeToken will work on Betanet meaning that name(), symbol() and decimals() return meaningful values.
@@ -337,15 +337,15 @@ class EnvCtx:
         self.eth: eth.EthereumTxWrapper = ctx_eth
         self.abi_provider: hardhat.HardhatAbiProvider = abi_provider
         self.operator = operator
-        self.gridnode = gridchain.Gridnoded(self.cmd, home=gridnoded_home, node=gridnode_url, chain_id=gridnode_chain_id)
+        self.gridnode = gridironchain.Gridnoded(self.cmd, home=gridnoded_home, node=gridnode_url, chain_id=gridnode_chain_id)
         # Refactoring in progress: moving stuff into separate client that encapsulates things like url, home and chain_id
-        self.gridnode_client = gridchain.GridnodeClient(self, self.gridnode, grpc_port=9090)
+        self.gridnode_client = gridironchain.GridnodeClient(self, self.gridnode, grpc_port=9090)
         self.fury_source = fury_source
         self.ceth_symbol = ceth_symbol
         self.generic_erc20_contract = generic_erc20_contract
         self.available_test_eth_accounts = None
         self.eth_faucet = eth_faucet
-        self.gridchain_ethbridge_admin_account = self.fury_source
+        self.gridironchain_ethbridge_admin_account = self.fury_source
 
     def get_current_block_number(self) -> int:
         return self.eth.w3_conn.eth.block_number
@@ -582,7 +582,7 @@ class EnvCtx:
         return token_sc.address
 
     # TODO Obsolete, use self.bridge_bank_lock_eth()
-    def send_eth_from_ethereum_to_gridchain(self, from_eth_addr, to_grid_addr, amount):
+    def send_eth_from_ethereum_to_gridironchain(self, from_eth_addr, to_grid_addr, amount):
         # recipient = to_grid_addr.encode("UTF-8")
         # coin_denom = eth.NULL_ADDRESS  # For "eth", otherwise use coin's address
         #
@@ -596,7 +596,7 @@ class EnvCtx:
         assert False  # TODO
 
     # TODO Obsolete, use self.bridge_bank_lock_eth()
-    def send_erc20_from_ethereum_to_gridchain(self, from_eth_addr, dest_sichain_addr, erc20_token_addr, amount):
+    def send_erc20_from_ethereum_to_gridironchain(self, from_eth_addr, dest_sichain_addr, erc20_token_addr, amount):
         # recipient = dest_sichain_addr.encode("UTF-8")
         #
         # max_gas_required = 200000
@@ -618,12 +618,12 @@ class EnvCtx:
         self.bridge_bank_lock_eth(from_eth_addr, dest_sichain_addr, amount)
 
     # TODO Decouple; we want to use this with just "gridnoded" running, move to Gridnoded class?
-    def create_gridchain_addr(self, moniker: str = None,
+    def create_gridironchain_addr(self, moniker: str = None,
         fund_amounts: Union[cosmos.Balance, cosmos.LegacyBalance, None] = None
     ) -> cosmos.Address:
         """
-        Generates a new gridchain address in test keyring. If moniker is given, uses it, otherwise
-        generates a random one 'test-xxx'. If fund_amounts is given, the gridchain funds are transferred
+        Generates a new gridironchain address in test keyring. If moniker is given, uses it, otherwise
+        generates a random one 'test-xxx'. If fund_amounts is given, the gridironchain funds are transferred
         from fury_source to the account before returning.
         """
         moniker = moniker or "test-" + random_string(20)
@@ -631,26 +631,26 @@ class EnvCtx:
         grid_address = acct["address"]
         if fund_amounts:
             fund_amounts = cosmos.balance_normalize(fund_amounts)  # Convert from old format if neccessary
-            fury_source_balances = self.get_gridchain_balance(self.fury_source)
+            fury_source_balances = self.get_gridironchain_balance(self.fury_source)
             for denom, required_amount in fund_amounts.items():
                 available_amount = fury_source_balances.get(denom, 0)
                 assert available_amount >= required_amount, "Fury source {} would need {}, but only has {}".format(
                     self.fury_source, grid_format_amount(required_amount, denom), grid_format_amount(available_amount, denom))
-            old_balances = self.get_gridchain_balance(grid_address)
-            self.send_from_gridchain_to_gridchain(self.fury_source, grid_address, fund_amounts)
+            old_balances = self.get_gridironchain_balance(grid_address)
+            self.send_from_gridironchain_to_gridironchain(self.fury_source, grid_address, fund_amounts)
             self.gridnode.wait_for_balance_change(grid_address, old_balances, min_changes=fund_amounts)
-            new_balances = self.get_gridchain_balance(grid_address)
+            new_balances = self.get_gridironchain_balance(grid_address)
             assert cosmos.balance_zero(cosmos.balance_sub(new_balances, fund_amounts))
         return grid_address
 
     # TODO Clean up
-    def send_from_gridchain_to_gridchain(self, from_grid_addr: cosmos.Address, to_grid_addr: cosmos.Address,
+    def send_from_gridironchain_to_gridironchain(self, from_grid_addr: cosmos.Address, to_grid_addr: cosmos.Address,
         amounts: cosmos.Balance
     ) -> Mapping:
         return self.gridnode.send(from_grid_addr, to_grid_addr, amounts)
 
     # TODO Clean up
-    def get_gridchain_balance(self, grid_addr: cosmos.Address, height: Optional[int] = None,
+    def get_gridironchain_balance(self, grid_addr: cosmos.Address, height: Optional[int] = None,
         disable_log: bool = False, retries_on_error: Optional[int] = None, delay_on_error: int = 3
     ) -> cosmos.Balance:
         return self.gridnode.get_balance(grid_addr, height=height, disable_log=disable_log,
@@ -666,7 +666,7 @@ class EnvCtx:
 
     def eth_symbol_to_grid_symbol(self, eth_token_symbol):
         assert not on_peggy2_branch
-        # TODO gridchain.use gridchain_denom_hash() if on_peggy2_branch
+        # TODO gridironchain.use gridironchain_denom_hash() if on_peggy2_branch
         # E.g. "usdt" -> "cusdt"
         if eth_token_symbol == "efury":
             return FURY
@@ -678,7 +678,7 @@ class EnvCtx:
     # See https://github.com/Gridironchain/gridnode/pull/1802#discussion_r697403408
     # The corresponding denom should be "fury".
     @property
-    def gridchain_fees(self):
+    def gridironchain_fees(self):
         return 200000
 
     def __enter__(self):
@@ -771,8 +771,8 @@ class EnvCtx:
     # TODO At the moment this is only for Ethereum-native assets (ETH and ERC20 tokens) which always use "lock".
     # For Gridironchain-native assets (fury) we need to use "burn".
     # Compare: smart-contracts/scripts/test/{sendLockTx.js OR sendBurnTx.js}
-    # sendBurnTx is called when gridchain_symbol == "fury", sendLockTx otherwise
-    def send_from_ethereum_to_gridchain(self, from_eth_acct: str, to_grid_acct: str, amount: int, token_sc: Contract = None, isLock: bool = True) -> TxReceipt:
+    # sendBurnTx is called when gridironchain_symbol == "fury", sendLockTx otherwise
+    def send_from_ethereum_to_gridironchain(self, from_eth_acct: str, to_grid_acct: str, amount: int, token_sc: Contract = None, isLock: bool = True) -> TxReceipt:
         if token_sc is None:
             # ETH transfer
             self.bridge_bank_lock_eth(from_eth_acct, to_grid_acct, amount)
@@ -806,8 +806,8 @@ class EnvCtx:
         if on_peggy2_branch:
             pass
         else:
-            assert (self.gridnode.chain_id != "gridchain-testnet-1") or (bridge_bank_sc.address == "0x6CfD69783E3fFb44CBaaFF7F509a4fcF0d8e2835")
-            assert (self.gridnode.chain_id != "gridchain-devnet-1") or (bridge_bank_sc.address == "0x96DC6f02C66Bbf2dfbA934b8DafE7B2c08715A73")
+            assert (self.gridnode.chain_id != "gridironchain-testnet-1") or (bridge_bank_sc.address == "0x6CfD69783E3fFb44CBaaFF7F509a4fcF0d8e2835")
+            assert (self.gridnode.chain_id != "gridironchain-devnet-1") or (bridge_bank_sc.address == "0x96DC6f02C66Bbf2dfbA934b8DafE7B2c08715A73")
             assert (self.gridnode.chain_id != "localnet") or (bridge_bank_sc.address == "0x30753E4A8aad7F8597332E813735Def5dD395028")
         assert bridge_bank_sc.functions.owner().call() == self.operator, \
             "BridgeBank owner is {}, but OPERATOR is {}".format(bridge_bank_sc.functions.owner().call(), self.operator)
@@ -820,7 +820,7 @@ class EnvCtx:
             "FURY_SOURCE {}".format(self.fury_source)
         if len(fury_source_account) != 1:
             raise Exception
-        fury_source_balance = self.get_gridchain_balance(self.fury_source).get(FURY, 0)
+        fury_source_balance = self.get_gridironchain_balance(self.fury_source).get(FURY, 0)
         min_fury_source_balance = 10 * 10**18
         assert fury_source_balance > min_fury_source_balance, "FURY_SOURCE should have at least {}fury balance, " \
             "but has only {}fury".format(min_fury_source_balance, fury_source_balance)

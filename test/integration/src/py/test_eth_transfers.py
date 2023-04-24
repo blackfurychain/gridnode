@@ -25,7 +25,7 @@ def test_eth_to_ceth_and_back_to_eth(
         ethereum_network,
         smart_contracts_dir,
         bridgetoken_address,
-        gridchain_fees_int,
+        gridironchain_fees_int,
 ):
     basic_transfer_request.ethereum_address = source_ethereum_address
     basic_transfer_request.check_wait_blocks = True
@@ -37,23 +37,23 @@ def test_eth_to_ceth_and_back_to_eth(
         fury_source_integrationtest_env_transfer_request,
         fury_source_integrationtest_env_credentials,
         target_ceth_balance=test_utilities.burn_gas_cost + test_utilities.lock_gas_cost + small_amount,
-        target_fury_balance=gridchain_fees_int * 2 + small_amount
+        target_fury_balance=gridironchain_fees_int * 2 + small_amount
     )
     # send some test account ceth back to a new ethereum address
     request.ethereum_address, _ = test_utilities.create_ethereum_address(
         smart_contracts_dir, ethereum_network
     )
-    request.gridchain_symbol = "fury"
+    request.gridironchain_symbol = "fury"
     request.ethereum_symbol = bridgetoken_address
     request.amount = small_amount
-    burn_lock_functions.transfer_gridchain_to_ethereum(request, credentials)
+    burn_lock_functions.transfer_gridironchain_to_ethereum(request, credentials)
     test_utilities.get_eth_balance(request)
 
     logging.info("send eth back to ethereum chain")
-    request.gridchain_symbol = "ceth"
+    request.gridironchain_symbol = "ceth"
     request.ethereum_symbol = "eth"
     request.amount = small_amount
-    burn_lock_functions.transfer_gridchain_to_ethereum(request, credentials)
+    burn_lock_functions.transfer_gridironchain_to_ethereum(request, credentials)
 
 def test_transfer_eth_to_ceth_over_limit(
         basic_transfer_request: EthereumToGridironchainTransferRequest,

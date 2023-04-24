@@ -9,7 +9,7 @@ import (
 
 func main() {
 	var channelsResponse ChannelsResponse
-	res, err := http.Get("https://api.gridchain.finance/ibc/core/channel/v1/channels")
+	res, err := http.Get("https://api.gridironchain.finance/ibc/core/channel/v1/channels")
 	if err != nil {
 		panic(err)
 	}
@@ -24,7 +24,7 @@ func main() {
 	}
 
 	var connectionsResponse ConnectionsResponse
-	conRes, err := http.Get("https://api.gridchain.finance/ibc/core/connection/v1/connections")
+	conRes, err := http.Get("https://api.gridironchain.finance/ibc/core/connection/v1/connections")
 	if err != nil {
 		panic(err)
 	}
@@ -76,7 +76,7 @@ type ClientResponse struct {
 
 func GetClientState(clientID string) ClientResponse {
 	var clientResponse ClientResponse
-	clientsRes, err := http.Get("https://api.gridchain.finance/ibc/core/client/v1/client_states/" + clientID)
+	clientsRes, err := http.Get("https://api.gridironchain.finance/ibc/core/client/v1/client_states/" + clientID)
 	if err != nil {
 		panic(err)
 	}

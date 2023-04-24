@@ -6,7 +6,7 @@ set -e
 COMMIT=$(git rev-parse HEAD)
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
-IMAGE_ROOT=ghcr.io/gridchain/gridnode/ui-stack
+IMAGE_ROOT=ghcr.io/gridironchain/gridnode/ui-stack
 IMAGE_NAME=$IMAGE_ROOT:$COMMIT
 STABLE_TAG=$IMAGE_ROOT:${BRANCH//\//__}
 

@@ -8,7 +8,7 @@ const BIN_PATH = "/tmp/localnet/bin";
 const CHAIN_A_NODE = "http://localhost:11000";
 const CHAIN_B_NODE = "http://localhost:11001";
 
-const chainAProps = getChainProps({ chain: "gridchain", network: "testnet-1" });
+const chainAProps = getChainProps({ chain: "gridironchain", network: "testnet-1" });
 const chainBProps = getChainProps({ chain: "cosmos" });
 
 const chainAHome = `${CONFIG_PATH}/${chainAProps.chain}/${chainAProps.chainId}`;
@@ -47,7 +47,7 @@ test("ibc transfer between two chains", async () => {
   const connection =
     await $`cat ${chainBHome}/relayer/app.yaml | grep srcConnection | cut -d ' ' -f 2`;
   const channel =
-    await $`ibc-setup channels --chain gridchain --home ${chainBHome}/relayer/ | grep ${connection} | cut -d ' ' -f 1`;
+    await $`ibc-setup channels --chain gridironchain --home ${chainBHome}/relayer/ | grep ${connection} | cut -d ' ' -f 1`;
 
   const chainAAddress = await getAddress({
     binary: chainAProps.binary,

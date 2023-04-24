@@ -24,7 +24,7 @@ const (
 	DefaultParamspace  = ModuleName
 	MaxMintAmount      = "350000000000000000000000000"
 	MintAmountPerBlock = "225000000000000000000"
-	EcoPool            = "grid1ct2s3t8u2kffjpaekhtngzv6yc4vm97xajqyl3"
+	EcoPool            = "did:fury:g1ct2s3t8u2kffjpaekhtngzv6yc4vm97xajqyl3"
 	MaxRecordsPerBlock = 20
 )
 

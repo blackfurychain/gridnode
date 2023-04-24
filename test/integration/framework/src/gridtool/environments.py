@@ -1,7 +1,7 @@
 from typing import Tuple
 from gridtool.common import *
-from gridtool.gridchain import FURY, FURY_DECIMALS, STAKE
-from gridtool import gridchain, command, cosmos
+from gridtool.gridironchain import FURY, FURY_DECIMALS, STAKE
+from gridtool import gridironchain, command, cosmos
 
 
 # Environment for load test test_many_pools_and_liquidity_providers and for testing min commission/max voting power
@@ -21,7 +21,7 @@ class GridnodedEnvironment:
         self.running_processes = []
         self.open_log_files = []
         self._state = 0
-        self.gridnoded = gridchain.Gridnoded(self.cmd, home=self.keyring_dir, chain_id=self.chain_id)
+        self.gridnoded = gridironchain.Gridnoded(self.cmd, home=self.keyring_dir, chain_id=self.chain_id)
 
     def add_validator(self, /,  binary: Optional[str] = None, admin_name: Optional[str] = None,
         admin_mnemonic: Optional[Sequence[str]] = None, moniker: Optional[str] = None, home: Optional[str] = None,
@@ -190,8 +190,8 @@ class GridnodedEnvironment:
         for node_info in other_validators:
             self._broadcast_create_validator_msg(node_info)
 
-        self.gridnoded = gridchain.Gridnoded(self.cmd, home=self.keyring_dir, chain_id=self.chain_id,
-            node=gridchain.format_node_url(self.node_info[0]["host"], self.node_info[0]["ports"]["rpc"]),
+        self.gridnoded = gridironchain.Gridnoded(self.cmd, home=self.keyring_dir, chain_id=self.chain_id,
+            node=gridironchain.format_node_url(self.node_info[0]["host"], self.node_info[0]["ports"]["rpc"]),
             binary = self.node_info[0]["binary"])
 
         self._state = 2
@@ -218,7 +218,7 @@ class GridnodedEnvironment:
         proposals_before = gridnoded.query_gov_proposals()
         res = gridnoded.gov_submit_software_upgrade(new_version, admin_addr, deposit, upgrade_height, upgrade_info,
             "test_release", "Test Release", broadcast_mode="block")
-        gridchain.check_raw_log(res)
+        gridironchain.check_raw_log(res)
         gridnoded.wait_for_last_transaction_to_be_mined()
         proposals_after = gridnoded.query_gov_proposals()
         new_proposal_ids = {p["proposal_id"] for p in proposals_after}.difference({p["proposal_id"] for p in proposals_before})
@@ -226,7 +226,7 @@ class GridnodedEnvironment:
         proposal_id = int(active_proposal["proposal_id"])
 
         res = gridnoded.gov_vote(proposal_id, True, admin_addr, broadcast_mode="block")
-        gridchain.check_raw_log(res)
+        gridironchain.check_raw_log(res)
 
         gridnoded.wait_for_block(upgrade_height)
         time.sleep(5)
@@ -240,8 +240,8 @@ class GridnodedEnvironment:
         gridnoded = self._gridnoded_for(node_info)  # Probably we could still use an older version of the client, but let's be consistent
         assert gridnoded.version() == new_version
 
-        self.gridnoded = gridchain.Gridnoded(self.cmd, home=self.keyring_dir, chain_id=self.chain_id,
-            node=gridchain.format_node_url(self.node_info[0]["host"], self.node_info[0]["ports"]["rpc"]),
+        self.gridnoded = gridironchain.Gridnoded(self.cmd, home=self.keyring_dir, chain_id=self.chain_id,
+            node=gridironchain.format_node_url(self.node_info[0]["host"], self.node_info[0]["ports"]["rpc"]),
             binary = self.node_info[0]["binary"])
 
     # Adjust configuration files for i != 0node.
@@ -249,13 +249,13 @@ class GridnodedEnvironment:
         gridnoded = self._gridnoded_for(node_info)
         # According to gzukel, nodes need just one peer to make sync work.
         # Star topology also makes it simpler to add additional nodes.
-        peers = [gridchain.format_peer_address(i["node_id"], LOCALHOST, i["ports"]["p2p"])
+        peers = [gridironchain.format_peer_address(i["node_id"], LOCALHOST, i["ports"]["p2p"])
             for i in peers_node_info]
         app_toml = gridnoded.load_app_toml()
         config_toml = gridnoded.load_config_toml()
         app_toml["minimum-gas-prices"] = grid_format_amount(0.5, FURY)
         app_toml['api']['enable'] = True
-        app_toml["api"]["address"] = gridchain.format_node_url(ANY_ADDR, node_info["ports"]["api"])
+        app_toml["api"]["address"] = gridironchain.format_node_url(ANY_ADDR, node_info["ports"]["api"])
         config_toml["log_level"] = node_info["log_level"]  # TODO Probably redundant
         config_toml['p2p']["external_address"] = "{}:{}".format(node_info["host"], node_info["ports"]["p2p"])
         if peers:
@@ -272,12 +272,12 @@ class GridnodedEnvironment:
     # node_info. Typically you want a CLI wrapper associated with a single running validator, but in some cases such as
     # delegation or creating a new validator you want to use validator's own --home, but --node pointing to a
     # different/existing validator.
-    def _gridnoded_for(self, node_info: JsonDict, to_node_info: Optional[JsonDict] = None) -> gridchain.Gridnoded:
+    def _gridnoded_for(self, node_info: JsonDict, to_node_info: Optional[JsonDict] = None) -> gridironchain.Gridnoded:
         binary = node_info["binary"]
         home = node_info["home"]
         to_node_info = to_node_info if to_node_info is not None else node_info
-        node = gridchain.format_node_url(to_node_info["host"], to_node_info["ports"]["rpc"])
-        return gridchain.Gridnoded(self.cmd, binary=binary, home=home, chain_id=self.chain_id, node=node)
+        node = gridironchain.format_node_url(to_node_info["host"], to_node_info["ports"]["rpc"])
+        return gridironchain.Gridnoded(self.cmd, binary=binary, home=home, chain_id=self.chain_id, node=node)
 
     def _gridnoded_start(self, node_info: JsonDict):
         gridnoded = self._gridnoded_for(node_info)
@@ -312,14 +312,14 @@ class GridnodedEnvironment:
         assert moniker not in validators_before
 
         admin_balance = gridnoded_tmp.get_balance(admin_addr)
-        assert cosmos.balance_exceeds(admin_balance, {FURY: gridchain.grid_tx_fee_in_fury}), \
+        assert cosmos.balance_exceeds(admin_balance, {FURY: gridironchain.grid_tx_fee_in_fury}), \
             "Validator admin {} needs at least one grid_tx_fee_in_fury to fund the transaction".format(admin_addr)
         assert cosmos.balance_exceeds(admin_balance, stake), \
             "Validator needs at least {} for staking".format(cosmos.balance_format(stake))
 
         res = gridnoded_tmp.staking_create_validator(stake, pubkey, moniker, commission_rate, commission_max_rate,
             commission_max_change_rate, min_self_delegation, admin_addr, broadcast_mode="block")
-        gridchain.check_raw_log(res)
+        gridironchain.check_raw_log(res)
 
         # Check that the new validator was actually added and that its moniker and commission rates are correct.
         # To find which operator is the new one we look at the difference between operator_addresses before and after.
@@ -340,7 +340,7 @@ class GridnodedEnvironment:
         # - because it is also in self.keyring_dir all admin names have to be unique.
         admin_name = node_info["admin_name"]
         admin_mnemonic = node_info.get("admin_mnemonic", None)
-        gridnoded = gridchain.Gridnoded(self.cmd, home=self.keyring_dir)
+        gridnoded = gridironchain.Gridnoded(self.cmd, home=self.keyring_dir)
         admin_acct, admin_mnemonic = gridnoded._keys_add(admin_name, mnemonic=admin_mnemonic)
         admin_addr = admin_acct["address"]
         node_info["admin_addr"] = admin_addr
@@ -377,14 +377,14 @@ class GridnodedEnvironment:
             # We need to give clp_admin enough funds (fury + external) to create pools
             gridnoded.send_batch(self.faucet, self.clp_admin, cosmos.balance_add(
                 {denom: external_amount for denom, (_, _, external_amount) in pool_definitions.items()},
-                {gridchain.FURY: sum(native_amount for _, (_, native_amount, _) in pool_definitions.items())}))
+                {gridironchain.FURY: sum(native_amount for _, (_, native_amount, _) in pool_definitions.items())}))
 
         # Add tokens to token registry. The minimum required permissions are CLP.
         # TODO Might want to use `tx tokenregistry set-registry` to do it in one step (faster)
         #      According to @sheokapr `tx tokenregistry set-registry` also works for only one entry
         #      But`tx tokenregistry register-all` also works only for one entry.
         # We need to register fury too, otherwise swaps from/to fury will error out with
-        # "token not supported by gridchain"
+        # "token not supported by gridironchain"
         # Note: original_entry = {
         #     "decimals": str(FURY_DECIMALS),
         #     "denom": FURY,

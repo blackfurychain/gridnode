@@ -10,19 +10,19 @@ from test_utilities import create_new_currency
 
 
 # This file is for setting up an installation with a set of currencies given
-# in a json file like ui/core/src/assets.gridchain.mainnet.json.
+# in a json file like ui/core/src/assets.gridironchain.mainnet.json.
 #
 # Run example:
 #
-#  TOKENS_FILE=$BASEDIR/ui/core/src/assets.gridchain.mainnet.json python3 -m pytest src/py/token_setup.py
+#  TOKENS_FILE=$BASEDIR/ui/core/src/assets.gridironchain.mainnet.json python3 -m pytest src/py/token_setup.py
 
-def build_request_for_new_gridchain_address(basic_transfer_request, source_ethereum_address, new_currency, amount):
+def build_request_for_new_gridironchain_address(basic_transfer_request, source_ethereum_address, new_currency, amount):
     gridaddress, credentials = create_new_gridaddr_and_credentials()
     request = copy.deepcopy(basic_transfer_request)
     request.ethereum_symbol = new_currency["newtoken_address"]
     request.ethereum_address = source_ethereum_address
-    request.gridchain_symbol = "c" + new_currency["newtoken_symbol"]
-    request.gridchain_address = gridaddress
+    request.gridironchain_symbol = "c" + new_currency["newtoken_symbol"]
+    request.gridironchain_address = gridaddress
     request.amount = amount
     return request, credentials
 
@@ -44,7 +44,7 @@ def test_can_create_a_new_token_and_peg_it(
 
     gridaddress, credentials = create_new_gridaddr_and_credentials()
     request = copy.deepcopy(basic_transfer_request)
-    request.gridchain_address = gridaddress
+    request.gridironchain_address = gridaddress
     request.ethereum_address = source_ethereum_address
     amount_in_tokens = 10 ** 9  # one billion of the token; note that this is not 1/(10 **18) of a token
 

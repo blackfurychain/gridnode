@@ -10,14 +10,14 @@ const BN = require('bn.js');
 module.exports = async (cb) => {
     const Web3 = require("web3");
 
-    const gridchainUtilities = require('./gridchainUtilities')
+    const gridironchainUtilities = require('./gridironchainUtilities')
     const contractUtilites = require('./contractUtilities');
 
-    const logging = gridchainUtilities.configureLogging(this);
+    const logging = gridironchainUtilities.configureLogging(this);
 
-    const argv = gridchainUtilities.processArgs(this, {
-        ...gridchainUtilities.sharedYargOptions,
-        ...gridchainUtilities.bridgeBankAddressYargOptions,
+    const argv = gridironchainUtilities.processArgs(this, {
+        ...gridironchainUtilities.sharedYargOptions,
+        ...gridironchainUtilities.bridgeBankAddressYargOptions,
     });
 
     const bridgeBankContract = await contractUtilites.buildContract(this, argv, logging, "BridgeBank", argv.bridgebank_address);

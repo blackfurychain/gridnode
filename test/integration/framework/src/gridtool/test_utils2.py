@@ -3,34 +3,34 @@
 
 import random
 from typing import Sequence, Any
-from gridtool import eth, test_utils, cosmos, gridchain, command
+from gridtool import eth, test_utils, cosmos, gridironchain, command
 from gridtool.common import *
-from gridtool.gridchain import FURY
+from gridtool.gridironchain import FURY
 
 
 def get_grid_tx_fees(ctx):
-    return {FURY: gridchain.grid_tx_fee_in_fury}
+    return {FURY: gridironchain.grid_tx_fee_in_fury}
 
 
 def get_grid_burn_fees(ctx):
-    return {FURY: gridchain.grid_tx_burn_fee_in_fury, ctx.ceth_symbol: gridchain.grid_tx_burn_fee_in_ceth}
+    return {FURY: gridironchain.grid_tx_burn_fee_in_fury, ctx.ceth_symbol: gridironchain.grid_tx_burn_fee_in_ceth}
 
 
 # TODO Obsolete
-def send_from_gridchain_to_gridchain(ctx: test_utils.EnvCtx, from_addr: cosmos.Address, to_addr: cosmos.Address,
+def send_from_gridironchain_to_gridironchain(ctx: test_utils.EnvCtx, from_addr: cosmos.Address, to_addr: cosmos.Address,
     amounts: cosmos.Balance
 ) -> cosmos.Balance:
     return ctx.gridnode.send_and_check(from_addr, to_addr, amounts)
 
-def send_erc20_from_gridchain_to_ethereum(ctx: test_utils.EnvCtx, from_addr: cosmos.Address, to_addr: eth.Address,
+def send_erc20_from_gridironchain_to_ethereum(ctx: test_utils.EnvCtx, from_addr: cosmos.Address, to_addr: eth.Address,
     amount: int, denom: str
 ):
     token_address = get_erc20_token_address(ctx, denom)
-    grid_balance_before = ctx.get_gridchain_balance(from_addr)
+    grid_balance_before = ctx.get_gridironchain_balance(from_addr)
     eth_balance_before = ctx.get_erc20_token_balance(token_address, to_addr)
-    ctx.gridnode_client.send_from_gridchain_to_ethereum(from_addr, to_addr, amount, denom)
+    ctx.gridnode_client.send_from_gridironchain_to_ethereum(from_addr, to_addr, amount, denom)
     ctx.wait_for_eth_balance_change(to_addr, eth_balance_before, token_addr=token_address)
-    grid_balance_after = ctx.get_gridchain_balance(from_addr)
+    grid_balance_after = ctx.get_gridironchain_balance(from_addr)
     eth_balance_after = ctx.get_erc20_token_balance(token_address, to_addr)
     grid_burn_fees = get_grid_burn_fees(ctx)
     assert cosmos.balance_equal(grid_balance_after, cosmos.balance_sub(grid_balance_before, {denom: amount},  grid_burn_fees))
@@ -39,7 +39,7 @@ def send_erc20_from_gridchain_to_ethereum(ctx: test_utils.EnvCtx, from_addr: cos
 
 def get_erc20_token_address(ctx: test_utils.EnvCtx, grid_denom_hash: str) -> eth.Address:
     assert on_peggy2_branch
-    ethereum_network_descriptor, token_address = gridchain.gridchain_denom_hash_to_token_contract_address(grid_denom_hash)
+    ethereum_network_descriptor, token_address = gridironchain.gridironchain_denom_hash_to_token_contract_address(grid_denom_hash)
     assert ethereum_network_descriptor == ctx.eth.ethereum_network_descriptor  # Note: peggy2 only
     return token_address
 
@@ -73,7 +73,7 @@ class PredefinedWallets:
 
     @staticmethod
     def create(cmd: command.Command, count: int, path: str):
-        gridnoded = gridchain.Gridnoded(cmd, home=path)
+        gridnoded = gridironchain.Gridnoded(cmd, home=path)
         entries = []
         for i in range(count):
             account, mnemonic = gridnoded._keys_add("test-{}".format(i))

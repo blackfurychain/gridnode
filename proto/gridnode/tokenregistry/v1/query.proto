@@ -10,7 +10,7 @@ option go_package = "github.com/Gridironchain/gridnode/x/tokenregistry/types";
 // Query defines the gRPC querier service.
 service Query {
   rpc Entries(QueryEntriesRequest) returns (QueryEntriesResponse) {
-    option (google.api.http).get = "/gridchain/tokenregistry/v1beta1/entries";
+    option (google.api.http).get = "/gridironchain/tokenregistry/v1beta1/entries";
   }
 }
 

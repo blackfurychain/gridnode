@@ -36,17 +36,17 @@ def do_currency_test(
         target_ceth_balance=10**17,
         target_fury_balance=10**18)
     test_amount = 39000
-    logging.info(f"transfer some of the new currency {new_currency_symbol} to the test gridchain address")
+    logging.info(f"transfer some of the new currency {new_currency_symbol} to the test gridironchain address")
     request.ethereum_symbol = new_currency["newtoken_address"]
-    request.gridchain_symbol = ("c" + new_currency["newtoken_symbol"]).lower()
+    request.gridironchain_symbol = ("c" + new_currency["newtoken_symbol"]).lower()
     request.amount = test_amount
-    burn_lock_functions.transfer_ethereum_to_gridchain(request)
+    burn_lock_functions.transfer_ethereum_to_gridironchain(request)
 
     logging.info("send some new currency to ethereum")
     request.ethereum_address, _ = test_utilities.create_ethereum_address(
         ctx.smart_contracts_dir, ctx.ethereum_network)
     request.amount = test_amount - 1
-    burn_lock_functions.transfer_gridchain_to_ethereum(request, credentials)
+    burn_lock_functions.transfer_gridironchain_to_ethereum(request, credentials)
 
 
 @pytest.mark.usefixtures("with_snapshot")

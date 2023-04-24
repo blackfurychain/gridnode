@@ -56,7 +56,7 @@
                     "@type": "/cosmos.auth.v1beta1.ModuleAccount",
                     "base_account": {
                         "account_number": "1",
-                        "address": "grid1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3sxxeku",
+                        "address": "did:fury:g1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3sxxeku",
                         "pub_key": null,
                         "sequence": "0"
                     },
@@ -70,7 +70,7 @@
                     "@type": "/cosmos.auth.v1beta1.ModuleAccount",
                     "base_account": {
                         "account_number": "2",
-                        "address": "grid1tygms3xhhs3yv487phx3dw4a95jn7t7lyx6gqg",
+                        "address": "did:fury:g1tygms3xhhs3yv487phx3dw4a95jn7t7lyx6gqg",
                         "pub_key": null,
                         "sequence": "0"
                     },
@@ -84,7 +84,7 @@
                     "@type": "/cosmos.auth.v1beta1.ModuleAccount",
                     "base_account": {
                         "account_number": "7",
-                        "address": "grid10d07y265gmmuvt4z0w9aw880jnsr700jllunec",
+                        "address": "did:fury:g10d07y265gmmuvt4z0w9aw880jnsr700jllunec",
                         "pub_key": null,
                         "sequence": "0"
                     },
@@ -97,7 +97,7 @@
                 {
                     "@type": "/cosmos.auth.v1beta1.BaseAccount",
                     "account_number": "3",
-                    "address": "grid1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd",
+                    "address": "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd",
                     "pub_key": {
                         "@type": "/cosmos.crypto.secp256k1.PubKey",
                         "key": "AvUEsFHbsr40nTSmWh7CWYRZHGwf4cpRLtJlaRO4VAoq"
@@ -108,7 +108,7 @@
                     "@type": "/cosmos.auth.v1beta1.ModuleAccount",
                     "base_account": {
                         "account_number": "0",
-                        "address": "grid1jv65s3grqf6v6jl3dp4t6c9t9rk99cd8zzt2x5",
+                        "address": "did:fury:g1jv65s3grqf6v6jl3dp4t6c9t9rk99cd8zzt2x5",
                         "pub_key": null,
                         "sequence": "0"
                     },
@@ -118,7 +118,7 @@
                 {
                     "@type": "/cosmos.auth.v1beta1.BaseAccount",
                     "account_number": "5",
-                    "address": "grid1kkdqp4dtqmc7wh59vchqr0zdzk8w2ydukjugkz",
+                    "address": "did:fury:g1kkdqp4dtqmc7wh59vchqr0zdzk8w2ydukjugkz",
                     "pub_key": null,
                     "sequence": "0"
                 },
@@ -126,7 +126,7 @@
                     "@type": "/cosmos.auth.v1beta1.ModuleAccount",
                     "base_account": {
                         "account_number": "8",
-                        "address": "grid17xpfvakm2amg962yls6f84z3kell8c5l4yvkyk",
+                        "address": "did:fury:g17xpfvakm2amg962yls6f84z3kell8c5l4yvkyk",
                         "pub_key": null,
                         "sequence": "0"
                     },
@@ -136,14 +136,14 @@
                 {
                     "@type": "/cosmos.auth.v1beta1.BaseAccount",
                     "account_number": "6",
-                    "address": "grid17s95c5jpc6x2l3edwh4dm8yhac68yru7a7kr3x",
+                    "address": "did:fury:g17s95c5jpc6x2l3edwh4dm8yhac68yru7a7kr3x",
                     "pub_key": null,
                     "sequence": "0"
                 },
                 {
                     "@type": "/cosmos.auth.v1beta1.BaseAccount",
                     "account_number": "4",
-                    "address": "grid1l7hypmqk2yc334vc6vmdwzp5sdefygj2ad93p5",
+                    "address": "did:fury:g1l7hypmqk2yc334vc6vmdwzp5sdefygj2ad93p5",
                     "pub_key": null,
                     "sequence": "0"
                 }
@@ -159,7 +159,7 @@
         "bank": {
             "balances": [
                 {
-                    "address": "grid1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3sxxeku",
+                    "address": "did:fury:g1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3sxxeku",
                     "coins": [
                         {
                             "amount": "1000000000000000000000000",
@@ -168,15 +168,15 @@
                     ]
                 },
                 {
-                    "address": "grid1tygms3xhhs3yv487phx3dw4a95jn7t7lyx6gqg",
+                    "address": "did:fury:g1tygms3xhhs3yv487phx3dw4a95jn7t7lyx6gqg",
                     "coins": []
                 },
                 {
-                    "address": "grid10d07y265gmmuvt4z0w9aw880jnsr700jllunec",
+                    "address": "did:fury:g10d07y265gmmuvt4z0w9aw880jnsr700jllunec",
                     "coins": []
                 },
                 {
-                    "address": "grid1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd",
+                    "address": "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd",
                     "coins": [
                         {
                             "amount": "500000000000000000000000",
@@ -209,11 +209,11 @@
                     ]
                 },
                 {
-                    "address": "grid1jv65s3grqf6v6jl3dp4t6c9t9rk99cd8zzt2x5",
+                    "address": "did:fury:g1jv65s3grqf6v6jl3dp4t6c9t9rk99cd8zzt2x5",
                     "coins": []
                 },
                 {
-                    "address": "grid1kkdqp4dtqmc7wh59vchqr0zdzk8w2ydukjugkz",
+                    "address": "did:fury:g1kkdqp4dtqmc7wh59vchqr0zdzk8w2ydukjugkz",
                     "coins": [
                         {
                             "amount": "5000000000000000000000000000000",
@@ -222,11 +222,11 @@
                     ]
                 },
                 {
-                    "address": "grid17xpfvakm2amg962yls6f84z3kell8c5l4yvkyk",
+                    "address": "did:fury:g17xpfvakm2amg962yls6f84z3kell8c5l4yvkyk",
                     "coins": []
                 },
                 {
-                    "address": "grid17s95c5jpc6x2l3edwh4dm8yhac68yru7a7kr3x",
+                    "address": "did:fury:g17s95c5jpc6x2l3edwh4dm8yhac68yru7a7kr3x",
                     "coins": [
                         {
                             "amount": "100000000000000000000000",
@@ -235,7 +235,7 @@
                     ]
                 },
                 {
-                    "address": "grid1l7hypmqk2yc334vc6vmdwzp5sdefygj2ad93p5",
+                    "address": "did:fury:g1l7hypmqk2yc334vc6vmdwzp5sdefygj2ad93p5",
                     "coins": [
                         {
                             "amount": "500000000000000000000000",
@@ -306,9 +306,9 @@
         },
         "clp": {
             "address_whitelist": [
-                "grid1ny48eeuk4dm9f63dy0lwfgjhnvud9yvtzkhtjq",
-                "grid1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd",
-                "grid1l7hypmqk2yc334vc6vmdwzp5sdefygj2ad93p5"
+                "did:fury:g1ny48eeuk4dm9f63dy0lwfgjhnvud9yvtzkhtjq",
+                "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd",
+                "did:fury:g1l7hypmqk2yc334vc6vmdwzp5sdefygj2ad93p5"
             ],
             "liquidity_provider_list": null,
             "params": {
@@ -322,7 +322,7 @@
         "distribution": {
             "delegator_starting_infos": [
                 {
-                    "delegator_address": "grid1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd",
+                    "delegator_address": "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd",
                     "starting_info": {
                         "height": "0",
                         "previous_period": "1",
@@ -445,7 +445,7 @@
         "staking": {
             "delegations": [
                 {
-                    "delegator_address": "grid1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd",
+                    "delegator_address": "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd",
                     "shares": "1000000000000000000000000.000000000000000000",
                     "validator_address": "gridvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna"
                 }

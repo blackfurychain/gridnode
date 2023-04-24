@@ -38,7 +38,7 @@ def test_blocklist_eth(ctx):
 
     acct1, acct2 = [ctx.create_and_fund_eth_account(fund_amount=amount_to_fund) for _ in range(2)]
 
-    to_grid_acct = ctx.create_gridchain_addr()
+    to_grid_acct = ctx.create_gridironchain_addr()
     grid_symbol = test_utils.CETH
 
     bridge_bank = ctx.get_bridge_bank_sc()
@@ -57,11 +57,11 @@ def test_blocklist_eth(ctx):
 
         assert len(filter.get_new_entries()) == 0
 
-    # Valid positive test outcome: event emitted, optionally: funds appear on gridchain
+    # Valid positive test outcome: event emitted, optionally: funds appear on gridironchain
     def assert_not_blocked(addr):
         assert len(filter.get_new_entries()) == 0
 
-        balances_before = ctx.get_gridchain_balance(to_grid_acct)
+        balances_before = ctx.get_gridironchain_balance(to_grid_acct)
         txrcpt = bridge_bank_lock_eth(ctx, addr, to_grid_acct, amount_to_send)
         ctx.advance_blocks()
         balances_after = ctx.gridnode.wait_for_balance_change(to_grid_acct, balances_before)
@@ -121,7 +121,7 @@ def test_blocklist_erc20(ctx):
         # TODO Move to Peggy1EnvCtx.bridge_bank_lock_erc20() as they should always be together
         ctx.eth.transact_sync(test_token.functions.approve, acct)(bridge_bank.address, 10)
 
-    to_grid_acct = ctx.create_gridchain_addr()
+    to_grid_acct = ctx.create_gridironchain_addr()
 
     filter = bridge_bank.events.LogLock.createFilter(fromBlock="latest")
 
@@ -139,7 +139,7 @@ def test_blocklist_erc20(ctx):
     def assert_not_blocked(addr):
         assert len(filter.get_new_entries()) == 0
 
-        balances_before = ctx.get_gridchain_balance(to_grid_acct)
+        balances_before = ctx.get_gridironchain_balance(to_grid_acct)
         txrcpt = bridge_bank_lock_erc20(ctx, test_token, addr, to_grid_acct, amount_to_send)
         ctx.advance_blocks()
         balances_after = ctx.gridnode.wait_for_balance_change(to_grid_acct, balances_before)

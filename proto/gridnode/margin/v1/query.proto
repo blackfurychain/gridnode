@@ -11,27 +11,27 @@ option go_package = "github.com/Gridironchain/gridnode/x/margin/types";
 service Query {
   rpc GetMTP(MTPRequest) returns (MTPResponse) {}
   rpc GetPositions(PositionsRequest) returns (PositionsResponse) {
-    option (google.api.http).get = "/gridchain/margin/v1/positions/{pagination.key}";
+    option (google.api.http).get = "/gridironchain/margin/v1/positions/{pagination.key}";
   }
   rpc GetPositionsForAddress(PositionsForAddressRequest)
       returns (PositionsForAddressResponse) {
-    option (google.api.http).get = "/gridchain/margin/v1/mtps-for-address/{address}/{pagination.key}";
+    option (google.api.http).get = "/gridironchain/margin/v1/mtps-for-address/{address}/{pagination.key}";
   }
   rpc GetPositionsByPool(PositionsByPoolRequest) returns (PositionsByPoolResponse) {
-    option (google.api.http).get = "/gridchain/margin/v1/mtps-by-pool/{asset}/{pagination.key}";
+    option (google.api.http).get = "/gridironchain/margin/v1/mtps-by-pool/{asset}/{pagination.key}";
   }
   rpc GetParams(ParamsRequest) returns (ParamsResponse) {
-    option (google.api.http).get = "/gridchain/margin/v1/params";
+    option (google.api.http).get = "/gridironchain/margin/v1/params";
   }
   rpc GetStatus(StatusRequest) returns (StatusResponse) {
-    option (google.api.http).get = "/gridchain/margin/v1/status";
+    option (google.api.http).get = "/gridironchain/margin/v1/status";
   }
   rpc GetSQParams(GetSQParamsRequest) returns (GetSQParamsResponse) {}
   rpc GetWhitelist(WhitelistRequest) returns (WhitelistResponse) {
-    option (google.api.http).get = "/gridchain/margin/v1/whitelist";
+    option (google.api.http).get = "/gridironchain/margin/v1/whitelist";
   }
   rpc IsWhitelisted(IsWhitelistedRequest) returns (IsWhitelistedResponse) {
-    option (google.api.http).get = "/gridchain/margin/v1/is-whitelisted";
+    option (google.api.http).get = "/gridironchain/margin/v1/is-whitelisted";
   }
 }
 

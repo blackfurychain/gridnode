@@ -8,13 +8,13 @@ from test_utilities import get_shell_output, amount_in_wei, \
     create_new_currency
 
 
-def build_request_for_new_gridchain_address(basic_transfer_request, source_ethereum_address, new_currency, amount):
+def build_request_for_new_gridironchain_address(basic_transfer_request, source_ethereum_address, new_currency, amount):
     gridaddress, _ = create_new_gridaddr_and_credentials()
     request = copy.deepcopy(basic_transfer_request)
     request.ethereum_symbol = new_currency["newtoken_address"]
     request.ethereum_address = source_ethereum_address
-    request.gridchain_symbol = "c" + new_currency["newtoken_symbol"]
-    request.gridchain_address = gridaddress
+    request.gridironchain_symbol = "c" + new_currency["newtoken_symbol"]
+    request.gridironchain_address = gridaddress
     request.amount = amount
     return request
 
@@ -45,10 +45,10 @@ def test_can_create_a_new_token_and_peg_it(
         operator_address=operator_address,
         ethereum_network=ethereum_network
     )
-    request = build_request_for_new_gridchain_address(
+    request = build_request_for_new_gridironchain_address(
         basic_transfer_request,
         source_ethereum_address,
         new_currency,
         amount / 10
     )
-    burn_lock_functions.transfer_ethereum_to_gridchain(request)
+    burn_lock_functions.transfer_ethereum_to_gridironchain(request)

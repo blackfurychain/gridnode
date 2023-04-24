@@ -41,10 +41,10 @@ func NewGetStuckTransfersCmd() *cobra.Command {
 		Short: "get stuck IBC transfers",
 		Long: `get stuck IBC transfers
 
-Example: Getting stuck transfers between gridchain and terra
+Example: Getting stuck transfers between gridironchain and terra
 
 gridnoded ibc-diag stuck-txs \
-  --src-node http://rpc.gridchain.finance:80 \
+  --src-node http://rpc.gridironchain.finance:80 \
   --dst-node http://public-node.terra.dev:26657 \
   --src-channel channel-18 \ 
   --dst-channel channel-7

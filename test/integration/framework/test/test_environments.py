@@ -1,6 +1,6 @@
 import contextlib
 from gridtool.common import *
-from gridtool import command, environments, project, gridchain, cosmos
+from gridtool import command, environments, project, gridironchain, cosmos
 
 
 def get_validators(env):
@@ -10,7 +10,7 @@ def get_validators(env):
 
 def test_transfer(env):
     gridnoded = env.gridnoded
-    gridnoded.send_and_check(env.faucet, gridnoded.create_addr(), {gridchain.FURY: 10 ** gridchain.FURY_DECIMALS})
+    gridnoded.send_and_check(env.faucet, gridnoded.create_addr(), {gridironchain.FURY: 10 ** gridironchain.FURY_DECIMALS})
 
 
 def assert_validators_working(env, expected_monikers):
@@ -57,7 +57,7 @@ class TestGridnodedEnvironment:
             exception = e
         # The validator will exit immediately, writing error to the log.
         # What we get here is a "timeout waiting for gridnoded to come up".
-        assert type(exception) == gridchain.GridnodedException
+        assert type(exception) == gridironchain.GridnodedException
 
     def test_need_2_out_of_3_validators_running_for_consensus(self):
         env = environments.GridnodedEnvironment(self.cmd, gridnoded_home_root=self.gridnoded_home_root)
@@ -84,7 +84,7 @@ class TestGridnodedEnvironment:
             test_transfer(env)  # 2 out of 4 => should fail
         except Exception as e:
             exception = e
-        assert type(exception) == gridchain.GridnodedException
+        assert type(exception) == gridironchain.GridnodedException
 
     def test_can_have_validators_with_same_moniker(self):
         env = environments.GridnodedEnvironment(self.cmd, gridnoded_home_root=self.gridnoded_home_root)
@@ -107,11 +107,11 @@ class TestGridnodedEnvironment:
         number_of_denoms = 10  # > 1
         number_of_wallets = 100
         faucet_balance = cosmos.balance_add({"foo{}".format(i): (i + 1) * 10**30 for i in range(10)},
-            {gridchain.FURY: 10**30})
+            {gridironchain.FURY: 10**30})
 
         tmpdir = self.cmd.mktempdir()
         try:
-            gridnoded = gridchain.Gridnoded(self.cmd, home=tmpdir)
+            gridnoded = gridironchain.Gridnoded(self.cmd, home=tmpdir)
             extra_accounts = {gridnoded.create_addr(): {"bar{}".format(j): (i * number_of_denoms + j + 1) * 10**25
                 for j in range(number_of_denoms)} for i in range(number_of_wallets)}
             env = environments.GridnodedEnvironment(self.cmd, gridnoded_home_root=self.gridnoded_home_root)
@@ -141,7 +141,7 @@ class TestGridnodedEnvironment:
 
             # On each node, do a sample transfer of one fury from admin to a new wallet and check that the change of
             # balances is visible on all nodes
-            test_transfer_amount = {gridchain.FURY: 10**gridchain.FURY_DECIMALS}
+            test_transfer_amount = {gridironchain.FURY: 10**gridironchain.FURY_DECIMALS}
             for i in range(number_of_validators):
                 gridnoded_i = env._gridnoded_for(env.node_info[i])
                 test_addr = gridnoded_i.create_addr()

@@ -35,7 +35,7 @@ func (s *IntegrationTestSuite) SetupSuite() {
 	gridapp.SetConfig(false)
 
 	s.mnemonic = "race draft rival universe maid cheese steel logic crowd fork comic easy truth drift tomorrow eye buddy head time cash swing swift midnight borrow"
-	s.address = "grid1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd"
+	s.address = "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd"
 
 	s.cfg.Mnemonics = []string{s.mnemonic}
 	amount, _ := sdk.NewIntFromString("999000000000000000000000000000000")

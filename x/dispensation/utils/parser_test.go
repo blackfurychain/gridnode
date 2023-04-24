@@ -34,9 +34,9 @@ func SetConfig() {
 }
 
 func createInput(t *testing.T, filename string) {
-	in, err := sdk.AccAddressFromBech32("grid1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd")
+	in, err := sdk.AccAddressFromBech32("did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd")
 	assert.NoError(t, err)
-	out, err := sdk.AccAddressFromBech32("grid1l7hypmqk2yc334vc6vmdwzp5sdefygj2ad93p5")
+	out, err := sdk.AccAddressFromBech32("did:fury:g1l7hypmqk2yc334vc6vmdwzp5sdefygj2ad93p5")
 	assert.NoError(t, err)
 	coin := sdk.NewCoins(sdk.NewCoin("fury", sdk.NewInt(10)))
 	inputList := []types.Input{types.NewInput(in, coin), types.NewInput(out, coin)}

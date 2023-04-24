@@ -82,7 +82,7 @@ for policy in policies:
         "create_pool": True,
         "create_lps": True,
         "pool_asset": "ceth",
-        "address": "grid1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd",
+        "address": "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd",
         "native_balance": "1000000000000000000",
         "external_balance": "1000000000000000000",
         "native_asset_amount": "49352380611368792060339203",

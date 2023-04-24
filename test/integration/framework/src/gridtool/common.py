@@ -68,8 +68,8 @@ def project_dir(*paths):
 def yaml_load(s):
     return yaml.load(s, Loader=yaml.SafeLoader)
 
-# TODO Move to gridchain.py
-# TODO Refactoring in progress. This should be moved to gridchain.py and only used for gas (float amount) + renamed
+# TODO Move to gridironchain.py
+# TODO Refactoring in progress. This should be moved to gridironchain.py and only used for gas (float amount) + renamed
 def grid_format_amount(amount: Union[int, float], denom: str) -> str:
     return "{}{}".format(amount, denom)
 

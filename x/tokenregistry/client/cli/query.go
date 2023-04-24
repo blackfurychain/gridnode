@@ -207,7 +207,7 @@ func GetCmdGenerateEntry() *cobra.Command {
 		},
 	}
 	cmd.Flags().String(flagDenom, "",
-		"The IBC hash / denom  stored on gridchain - to generate this hash for IBC token, leave blank and specify base_denom and ibc_channel_id")
+		"The IBC hash / denom  stored on gridironchain - to generate this hash for IBC token, leave blank and specify base_denom and ibc_channel_id")
 	cmd.Flags().String(flagBaseDenom, "",
 		"The base denom native to our chain, or native to an original chain (ie not the ibc hash)")
 	cmd.Flags().String(flagIbcChannelID, "",

@@ -1,23 +1,23 @@
 {
-  "gridchain": {
+  "gridironchain": {
     "binary": "gridnoded",
     "binaryUrl": "https://github.com/Gridironchain/gridnode/releases/download/betanet-0.9.10/gridnoded-betanet-0.9.10-linux-amd64.zip",
     "denom": "fury",
     "prefix": "grid",
     "fees": 100000,
-    "node": "https://rpc-testnet.gridchain.finance:443",
-    "chainId": "gridchain-testnet-1",
+    "node": "https://rpc-testnet.gridironchain.finance:443",
+    "chainId": "gridironchain-testnet-1",
     "devnet-1": {
-      "node": "https://rpc-devnet.gridchain.finance:443",
-      "chainId": "gridchain-devnet-1"
+      "node": "https://rpc-devnet.gridironchain.finance:443",
+      "chainId": "gridironchain-devnet-1"
     },
     "testnet-1": {
-      "node": "https://rpc-testnet.gridchain.finance:443",
-      "chainId": "gridchain-testnet-1"
+      "node": "https://rpc-testnet.gridironchain.finance:443",
+      "chainId": "gridironchain-testnet-1"
     },
     "betanet": {
-      "node": "https://rpc.gridchain.finance:443",
-      "chainId": "gridchain-1"
+      "node": "https://rpc.gridironchain.finance:443",
+      "chainId": "gridironchain-1"
     }
   },
   "cosmos": {

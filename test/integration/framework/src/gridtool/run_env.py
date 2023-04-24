@@ -11,7 +11,7 @@ from gridtool.geth import Geth
 from gridtool.truffle import Ganache
 from gridtool.localnet import Localnet
 from gridtool.command import Command
-from gridtool.gridchain import Gridgen, Gridnoded, Ebrelayer, gridchain_denom_hash, FURY
+from gridtool.gridironchain import Gridgen, Gridnoded, Ebrelayer, gridironchain_denom_hash, FURY
 from gridtool.project import Project, killall, force_kill_processes
 from gridtool.common import *
 
@@ -134,14 +134,14 @@ class Integrator(Ganache, Command):
         self.truffle_exec("setTokenLockBurnLimit", str(amount), env=env)
 
     # Peggy1 only
-    def gridchain_init_integration(self, gridnode, validator_moniker, validator_mnemonic, denom_whitelist_file):
+    def gridironchain_init_integration(self, gridnode, validator_moniker, validator_mnemonic, denom_whitelist_file):
         # now we have to add the validator key to the test keyring so the tests can send fury from validator1
         gridnode0 = Gridnoded(self)
         gridnode0.keys_add(validator_moniker, validator_mnemonic)
         valoper = gridnode.keys_show(validator_moniker, bech="val")[0]["address"]
-        assert valoper == gridnode0.get_val_address(validator_moniker)  # This does not use "home"; if it the assertion holds it could be grouped with gridchain_init_peggy
+        assert valoper == gridnode0.get_val_address(validator_moniker)  # This does not use "home"; if it the assertion holds it could be grouped with gridironchain_init_peggy
 
-        # This was deleted in commit f00242302dd226bc9c3060fb78b3de771e3ff429 from gridchain_start_daemon.sh because
+        # This was deleted in commit f00242302dd226bc9c3060fb78b3de771e3ff429 from gridironchain_start_daemon.sh because
         # it was not working. But we assume that we want to keep it.
         gridnode.gridnoded_exec(["add-genesis-validators", valoper] + gridnode._home_args())
 
@@ -229,7 +229,7 @@ class UIStackEnvironment:
     def __init__(self, cmd):
         self.cmd = cmd
         self.project = cmd.project
-        self.chain_id = "gridchain-local"
+        self.chain_id = "gridironchain-local"
         self.network_name = "develop"
         self.network_id = 5777
         self.keyring_backend = "test"
@@ -435,7 +435,7 @@ class UIStackEnvironment:
         commit = exactly_one(stdout_lines(self.cmd.execst(["git", "rev-parse", "HEAD"], cwd=project_dir())))
         branch = exactly_one(stdout_lines(self.cmd.execst(["git", "rev-parse", "--abbrev-ref", "HEAD"], cwd=project_dir())))
 
-        image_root = "ghcr.io/gridchain/gridnode/ui-stack"
+        image_root = "ghcr.io/gridironchain/gridnode/ui-stack"
         image_name = "{}:{}".format(image_root, commit)
         stable_tag = "{}:{}".format(image_root, branch.replace("/", "__"))
 
@@ -554,7 +554,7 @@ class IntegrationTestsEnvironment:
         bridge_token_sc_addr, bridge_registry_sc_addr, bridge_bank_sc_addr = \
             self.cmd.get_bridge_smart_contract_addresses(self.network_id)
 
-        # # TODO This should be last (after return from setup_gridchain.sh)
+        # # TODO This should be last (after return from setup_gridironchain.sh)
         # burn_limits = [
         #     [eth.NULL_ADDRESS, 31*10**18],
         #     [bridge_token_sc_addr, 10**25],
@@ -569,7 +569,7 @@ class IntegrationTestsEnvironment:
         #         env_file_vars["LOCAL_PROVIDER"],  # for web3.js to connect to ganache
         #     )
 
-        # test/integration/setup_gridchain.sh:
+        # test/integration/setup_gridironchain.sh:
         networks_dir = project_dir("deploy/networks")
         self.cmd.rmdir(networks_dir)  # networks_dir has many directories without write permission, so change those before deleting it
         self.cmd.mkdir(networks_dir)
@@ -598,7 +598,7 @@ class IntegrationTestsEnvironment:
 
         gridnode = Gridnoded(self.cmd, home=gridnoded_home)
 
-        adminuser_addr = self.cmd.gridchain_init_integration(gridnode, validator1_moniker, validator1_mnemonic,
+        adminuser_addr = self.cmd.gridironchain_init_integration(gridnode, validator1_moniker, validator1_mnemonic,
             denom_whitelist_file)
 
         # Start gridnoded
@@ -606,18 +606,18 @@ class IntegrationTestsEnvironment:
             log_file=gridnoded_log_file, trace=True)
 
         # TODO: wait for gridnoded to come up before continuing
-        # in gridchain_start_daemon.sh: "sleep 10"
-        # in gridchain_run_ebrelayer.sh (also run_ebrelayer here) we already wait for connection to port 26657 and grid account validator1_addr
+        # in gridironchain_start_daemon.sh: "sleep 10"
+        # in gridironchain_run_ebrelayer.sh (also run_ebrelayer here) we already wait for connection to port 26657 and grid account validator1_addr
 
         # Removed
         # # TODO Process exits immediately with returncode 1
         # # TODO Why does it not stop start-integration-env.sh?
         # # rest_server_proc = self.cmd.popen(["gridnoded", "rest-server", "--laddr", "tcp://0.0.0.0:1317"])  # TODO cwd
 
-        # test/integration/gridchain_start_ebrelayer.sh -> test/integration/gridchain_run_ebrelayer.sh
+        # test/integration/gridironchain_start_ebrelayer.sh -> test/integration/gridironchain_run_ebrelayer.sh
         # This script is also called from tests
 
-        relayer_db_path = os.path.join(self.test_integration_dir, "gridchainrelayerdb")
+        relayer_db_path = os.path.join(self.test_integration_dir, "gridironchainrelayerdb")
 
         # Prevent starting over dirty/existing relayer_db_path
         if self.cmd.exists(relayer_db_path):
@@ -637,7 +637,7 @@ class IntegrationTestsEnvironment:
             "NETWORKDIR": networks_dir,
             "GANACHE_DB_DIR": ganache_db_path,
             "EBRELAYER_ETHEREUM_ADDR": ebrelayer_ethereum_addr,
-            "EBRELAYER_ETHEREUM_PRIVATE_KEY": ebrelayer_ethereum_private_key,  # Needed by gridchain_run_ebrelayer.sh
+            "EBRELAYER_ETHEREUM_PRIVATE_KEY": ebrelayer_ethereum_private_key,  # Needed by gridironchain_run_ebrelayer.sh
             "BRIDGE_REGISTRY_ADDRESS": bridge_registry_sc_addr,
             "BRIDGE_TOKEN_ADDRESS": bridge_token_sc_addr,
             "BRIDGE_BANK_ADDRESS": bridge_bank_sc_addr,
@@ -649,7 +649,7 @@ class IntegrationTestsEnvironment:
             "MNEMONIC": " ".join(validator1_mnemonic),
             "CHAINDIR": os.path.join(networks_dir, "validators", self.chainnet, validator1_moniker),
             "GRIDCHAIN_ADMIN_ACCOUNT": adminuser_addr,  # Needed by test_peggy_fees.py (via conftest.py)
-            "EBRELAYER_DB": relayer_db_path,  # Created by gridchain_run_ebrelayer.sh, does not appear to be used anywhere at the moment
+            "EBRELAYER_DB": relayer_db_path,  # Created by gridironchain_run_ebrelayer.sh, does not appear to be used anywhere at the moment
         }
         self.project.write_vagrantenv_sh(self.state_vars, self.data_dir, self.ethereum_websocket_address, self.chainnet)
 
@@ -707,7 +707,7 @@ class IntegrationTestsEnvironment:
             raise Exception(f"Directory '{named_snapshot_dir}' already exists")
         self.cmd.mkdir(named_snapshot_dir)
         self.cmd.tar_create(self.state_vars["GANACHE_DB_DIR"], os.path.join(named_snapshot_dir, "ganache.tar.gz"))
-        self.cmd.tar_create(self.state_vars["EBRELAYER_DB"], os.path.join(named_snapshot_dir, "gridchainrelayerdb.tar.gz"))
+        self.cmd.tar_create(self.state_vars["EBRELAYER_DB"], os.path.join(named_snapshot_dir, "gridironchainrelayerdb.tar.gz"))
         self.cmd.tar_create(project_dir("deploy/networks"), os.path.join(named_snapshot_dir, "networks.tar.gz"))
         self.cmd.tar_create(project_dir("smart-contracts/build"), os.path.join(named_snapshot_dir, "smart-contracts.tar.gz"))
         self.cmd.tar_create(self.cmd.get_user_home(".gridnoded"), os.path.join(named_snapshot_dir, "gridnoded.tar.gz"))
@@ -724,9 +724,9 @@ class IntegrationTestsEnvironment:
 
         ganache_db_dir = self.cmd.mktempdir()
         relayer_db_path = state_vars["EBRELAYER_DB"]  # TODO use /tmp
-        assert os.path.realpath(relayer_db_path) == os.path.realpath(os.path.join(self.test_integration_dir, "gridchainrelayerdb"))
+        assert os.path.realpath(relayer_db_path) == os.path.realpath(os.path.join(self.test_integration_dir, "gridironchainrelayerdb"))
         extract("ganache.tar.gz", ganache_db_dir)
-        extract("gridchainrelayerdb.tar.gz", relayer_db_path)
+        extract("gridironchainrelayerdb.tar.gz", relayer_db_path)
         deploy_networks_dir = project_dir("deploy/networks")
         extract("networks.tar.gz", deploy_networks_dir)
         smart_contracts_build_dir = project_dir("smart-contracts/build")
@@ -793,7 +793,7 @@ class Peggy2Environment(IntegrationTestsEnvironment):
         self.ethereum_ws_port = ethereum_ws_port
         self.ethereum_chain_id = ethereum_chain_id
         self.chain_id = grid_chain_id
-        self.ceth_symbol = gridchain_denom_hash(self.ethereum_chain_id, eth.NULL_ADDRESS)
+        self.ceth_symbol = gridironchain_denom_hash(self.ethereum_chain_id, eth.NULL_ADDRESS)
         assert self.ceth_symbol == "gridBridge99990x0000000000000000000000000000000000000000"
 
         # This goes to validator0, i.e. gridnode_validators[0]["address"]
@@ -851,9 +851,9 @@ class Peggy2Environment(IntegrationTestsEnvironment):
         # self.project._make_go_binaries()
 
         # Ordering (for possible parallelisation):
-        # - build_golang_binaries before start_gridchain
+        # - build_golang_binaries before start_gridironchain
         # - start_hardhat before deploy_smart_contracts
-        # - start_gridchain before start_witnesses_and_relayers
+        # - start_gridironchain before start_witnesses_and_relayers
         # - deploy_smart_contracts before start_witnesses_and_relayers
         # - start_witnesses_and_relayers before return
         # - write_env_file before return
@@ -1012,7 +1012,7 @@ class Peggy2Environment(IntegrationTestsEnvironment):
         self.cmd.mkdir(gridnoded_network_dir)
         network_config_file, gridnoded_exec_args, gridnoded_proc, tcp_url, admin_account_address, gridnode_validators, \
             gridnode_relayers, gridnode_witnesses, gridnode_validator0_home, chain_dir = \
-                self.init_gridchain(gridnoded_network_dir, gridnoded_log_file, self.validator_mint_amounts,
+                self.init_gridironchain(gridnoded_network_dir, gridnoded_log_file, self.validator_mint_amounts,
                     validator_power, seed_ip_address, tendermint_port, denom_whitelist_file,
                     self.admin_account_mint_amounts, registry_json, admin_account_name, self.ceth_symbol)
 
@@ -1069,7 +1069,7 @@ class Peggy2Environment(IntegrationTestsEnvironment):
 
         return hardhat_proc, gridnoded_proc, relayer0_proc, witness_procs
 
-    def init_gridchain(self, gridnoded_network_dir: str, gridnoded_log_file: TextIO,
+    def init_gridironchain(self, gridnoded_network_dir: str, gridnoded_log_file: TextIO,
         validator_mint_amounts: cosmos.Balance, validator_power: int, seed_ip_address: str, tendermint_port: int,
         denom_whitelist_file: str, admin_account_mint_amounts: cosmos.Balance, registry_json: str,
         admin_account_name: str, ceth_symbol: str
@@ -1590,8 +1590,8 @@ class IBCEnvironment(IntegrationTestsEnvironment):
         super().__init__(cmd)
 
     def run(self):
-        chainnet0 = "gridchain-ibc-0"
-        chainnet1 = "gridchain-ibc-1"
+        chainnet0 = "gridironchain-ibc-0"
+        chainnet1 = "gridironchain-ibc-1"
         ipaddr0 = "192.168.65.2"
         ipaddr1 = "192.168.65.3"
         subnet = "192.168.65.1/24"

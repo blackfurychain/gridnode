@@ -78,8 +78,8 @@ export async function setupDeployment(c: DependencyContainer) {
     const hre = c.resolve(HardhatRuntimeEnvironmentToken) as HardhatRuntimeEnvironment
     let deploymentName = process.env["DEPLOYMENT_NAME"];
     switch(deploymentName) {
-        case "gridchain":
-        case "gridchain-1":
+        case "gridironchain":
+        case "gridironchain-1":
             setupGridironchainMainnetDeployment(c, hre, deploymentName)
             break
         case undefined:
@@ -90,7 +90,7 @@ export async function setupDeployment(c: DependencyContainer) {
     }
 }
 
-export async function setupGridironchainMainnetDeployment(c: DependencyContainer, hre: HardhatRuntimeEnvironment, deploymentName: "gridchain" | "gridchain-1") {
+export async function setupGridironchainMainnetDeployment(c: DependencyContainer, hre: HardhatRuntimeEnvironment, deploymentName: "gridironchain" | "gridironchain-1") {
     c.register(DeploymentDirectory, {useValue: "./deployments"})
     c.register(DeploymentName, {useValue: deploymentName})
     // We'd like to be able to use chainId from the provider,

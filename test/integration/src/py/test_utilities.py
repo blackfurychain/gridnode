@@ -18,16 +18,16 @@ gridnoded_binary = "gridnoded"
 
 @dataclass
 class EthereumToGridironchainTransferRequest:
-    gridchain_address: str = ""
-    gridchain_destination_address: str = ""
+    gridironchain_address: str = ""
+    gridironchain_destination_address: str = ""
     ethereum_address: str = ""
     ethereum_private_key_env_var: str = "not required for localnet"
-    gridchain_symbol: str = "ceth"
+    gridironchain_symbol: str = "ceth"
     ethereum_symbol: str = "eth"
     ethereum_network: str = ""  # mainnet, ropsten, http:// for localnet
     amount: int = 0
     ceth_amount: int = 0
-    gridchain_fees: str = ""  # Deprecated, see https://github.com/Gridironchain/gridnode/pull/1802#discussion_r697403408
+    gridironchain_fees: str = ""  # Deprecated, see https://github.com/Gridironchain/gridnode/pull/1802#discussion_r697403408
     smart_contracts_dir: str = ""
     ethereum_chain_id: str = "5777"
     chain_id: str = "localnet"  # cosmos chain id
@@ -51,10 +51,10 @@ class EthereumToGridironchainTransferRequest:
     @staticmethod
     def from_args(args):
         return EthereumToGridironchainTransferRequest(
-            gridchain_address=args.gridchain_address[0],
-            gridchain_destination_address=args.gridchain_destination_address[0],
+            gridironchain_address=args.gridironchain_address[0],
+            gridironchain_destination_address=args.gridironchain_destination_address[0],
             ethereum_address=args.ethereum_address[0],
-            gridchain_symbol=args.gridchain_symbol[0],
+            gridironchain_symbol=args.gridironchain_symbol[0],
             ethereum_symbol=args.ethereum_symbol[0],
             bridgebank_address=args.bridgebank_address[0],
             amount=int(args.amount[0]),
@@ -184,7 +184,7 @@ def kill_ebrelayer():
 
 def start_ebrelayer():
     integration_dir = get_required_env_var("TEST_INTEGRATION_DIR")
-    return get_shell_output(f"{integration_dir}/gridchain_start_ebrelayer.sh")
+    return get_shell_output(f"{integration_dir}/gridironchain_start_ebrelayer.sh")
 
 
 # converts a key to a grid address.
@@ -263,7 +263,7 @@ def mint_tokens(transfer_request: EthereumToGridironchainTransferRequest, operat
     return run_yarn_command(command_line)
 
 
-def get_gridchain_addr_balance(gridaddress, gridnoded_node, denom):
+def get_gridironchain_addr_balance(gridaddress, gridnoded_node, denom):
     node = f"--node {gridnoded_node}" if gridnoded_node else ""
     command_line = f"{gridnoded_binary} query bank balances {node} {gridaddress} --output json --limit 100000000"
     json_str = get_shell_output_json(command_line)
@@ -340,20 +340,20 @@ def normalize_symbol(symbol: str):
     return symbol.lower()
 
 
-def wait_for_gridchain_addr_balance(
-        gridchain_address,
+def wait_for_gridironchain_addr_balance(
+        gridironchain_address,
         symbol,
         target_balance,
-        gridchaincli_node,
+        gridironchaincli_node,
         max_seconds=30,
         debug_prefix=""
 ):
     normalized_symbol = normalize_symbol(symbol)
     if not max_seconds:
         max_seconds = 90
-    logging.debug(f"wait_for_gridchain_addr_balance for node {gridchaincli_node}, {normalized_symbol}, {target_balance}")
+    logging.debug(f"wait_for_gridironchain_addr_balance for node {gridironchaincli_node}, {normalized_symbol}, {target_balance}")
     return wait_for_balance(
-        lambda: int(get_gridchain_addr_balance(gridchain_address, gridchaincli_node, normalized_symbol)),
+        lambda: int(get_gridironchain_addr_balance(gridironchain_address, gridironchaincli_node, normalized_symbol)),
         int(target_balance),
         max_seconds,
         debug_prefix
@@ -368,27 +368,27 @@ def detect_errors_in_gridnoded_output(result):
             raise Exception(f"should not have error in output: {result}")
 
 
-def send_from_gridchain_to_gridchain_cmd(
+def send_from_gridironchain_to_gridironchain_cmd(
         transfer_request: EthereumToGridironchainTransferRequest,
         credentials: GridironchaincliCredentials
 ):
-    logging.debug(f"send_from_gridchain_to_gridchain {transfer_request} {credentials}")
+    logging.debug(f"send_from_gridironchain_to_gridironchain {transfer_request} {credentials}")
     yes_entry = f"yes {credentials.keyring_passphrase} | " if credentials.keyring_passphrase else ""
     keyring_backend_entry = f"--keyring-backend {credentials.keyring_backend}" if credentials.keyring_backend else ""
     chain_id_entry = f"--chain-id {transfer_request.chain_id}" if transfer_request.chain_id else ""
     node = f"--node {transfer_request.gridnoded_node}" if transfer_request.gridnoded_node else ""
-    gridchain_fees_entry = f"--fees {transfer_request.gridchain_fees}" if transfer_request.gridchain_fees else ""  # Deprecated, see https://github.com/Gridironchain/gridnode/pull/1802#discussion_r697403408
+    gridironchain_fees_entry = f"--fees {transfer_request.gridironchain_fees}" if transfer_request.gridironchain_fees else ""  # Deprecated, see https://github.com/Gridironchain/gridnode/pull/1802#discussion_r697403408
     home_entry = f"--home {credentials.gridnoded_homedir}" if credentials.gridnoded_homedir else ""
     cmd = " ".join([
         yes_entry,
         f"{gridnoded_binary} tx bank send",
-        transfer_request.gridchain_address,
-        transfer_request.gridchain_destination_address,
+        transfer_request.gridironchain_address,
+        transfer_request.gridironchain_destination_address,
         keyring_backend_entry,
         chain_id_entry,
         node,
-        f"{transfer_request.amount}{transfer_request.gridchain_symbol}",
-        gridchain_fees_entry,
+        f"{transfer_request.amount}{transfer_request.gridironchain_symbol}",
+        gridironchain_fees_entry,
         home_entry,
         "--gas auto",
         "-y -o json",
@@ -396,11 +396,11 @@ def send_from_gridchain_to_gridchain_cmd(
     return cmd
 
 
-def send_from_gridchain_to_gridchain(
+def send_from_gridironchain_to_gridironchain(
         transfer_request: EthereumToGridironchainTransferRequest,
         credentials: GridironchaincliCredentials
 ):
-    cmd = send_from_gridchain_to_gridchain_cmd(transfer_request, credentials)
+    cmd = send_from_gridironchain_to_gridironchain_cmd(transfer_request, credentials)
     result = get_shell_output_json(cmd)
     # detect_errors_in_gridnoded_output(result)
     time.sleep(4)
@@ -408,7 +408,7 @@ def send_from_gridchain_to_gridchain(
     return result
 
 
-def send_from_gridchain_to_ethereum_cmd(
+def send_from_gridironchain_to_ethereum_cmd(
         transfer_request: EthereumToGridironchainTransferRequest,
         credentials: GridironchaincliCredentials,
 ):
@@ -421,8 +421,8 @@ def send_from_gridchain_to_ethereum_cmd(
     yes_entry = f"yes {credentials.keyring_passphrase} | " if credentials.keyring_passphrase else ""
     keyring_backend_entry = f"--keyring-backend {credentials.keyring_backend}" if credentials.keyring_backend else ""
     node = f"--node {transfer_request.gridnoded_node}" if transfer_request.gridnoded_node else ""
-    gridchain_fees_entry = f"--fees {transfer_request.gridchain_fees}" if transfer_request.gridchain_fees else ""  # Deprecated, see https://github.com/Gridironchain/gridnode/pull/1802#discussion_r697403408
-    direction = "lock" if transfer_request.gridchain_symbol == "fury" else "burn"
+    gridironchain_fees_entry = f"--fees {transfer_request.gridironchain_fees}" if transfer_request.gridironchain_fees else ""  # Deprecated, see https://github.com/Gridironchain/gridnode/pull/1802#discussion_r697403408
+    direction = "lock" if transfer_request.gridironchain_symbol == "fury" else "burn"
     home_entry = f"--home {credentials.gridnoded_homedir}" if credentials.gridnoded_homedir else ""
     from_entry = f"--from {credentials.from_key} " if credentials.from_key else ""
     if not transfer_request.ceth_amount:
@@ -432,13 +432,13 @@ def send_from_gridchain_to_ethereum_cmd(
             ceth_charge = burn_gas_cost
     command_line = f"{yes_entry} " \
                    f"{gridnoded_binary} tx ethbridge {direction} {node} " \
-                   f"{transfer_request.gridchain_address} " \
+                   f"{transfer_request.gridironchain_address} " \
                    f"{transfer_request.ethereum_address} " \
                    f"{int(transfer_request.amount):0} " \
-                   f"{transfer_request.gridchain_symbol} " \
+                   f"{transfer_request.gridironchain_symbol} " \
                    f"{ceth_charge} " \
                    f"{keyring_backend_entry} " \
-                   f"{gridchain_fees_entry} " \
+                   f"{gridironchain_fees_entry} " \
                    f"--ethereum-chain-id={transfer_request.ethereum_chain_id} " \
                    f"--chain-id={transfer_request.chain_id} " \
                    f"{home_entry} " \
@@ -447,19 +447,19 @@ def send_from_gridchain_to_ethereum_cmd(
     return command_line
 
 
-def send_from_gridchain_to_ethereum(transfer_request: EthereumToGridironchainTransferRequest,
+def send_from_gridironchain_to_ethereum(transfer_request: EthereumToGridironchainTransferRequest,
                                    credentials: GridironchaincliCredentials):
-    command_line = send_from_gridchain_to_ethereum_cmd(transfer_request, credentials)
+    command_line = send_from_gridironchain_to_ethereum_cmd(transfer_request, credentials)
     result = get_shell_output(command_line)
     detect_errors_in_gridnoded_output(result)
     return result
 
 
 # this does not wait for the transaction to complete
-def send_from_ethereum_to_gridchain(transfer_request: EthereumToGridironchainTransferRequest) -> int:
-    direction = "sendBurnTx" if transfer_request.gridchain_symbol == "fury" else "sendLockTx"
+def send_from_ethereum_to_gridironchain(transfer_request: EthereumToGridironchainTransferRequest) -> int:
+    direction = "sendBurnTx" if transfer_request.gridironchain_symbol == "fury" else "sendLockTx"
     command_line = f"yarn -s --cwd {transfer_request.smart_contracts_dir} integrationtest:{direction} " \
-                   f"--gridchain_address {transfer_request.gridchain_address} " \
+                   f"--gridironchain_address {transfer_request.gridironchain_address} " \
                    f"--symbol {transfer_request.ethereum_symbol} " \
                    f"--amount {int(transfer_request.amount):0} " \
                    f"--bridgebank_address {transfer_request.bridgebank_address} " \
@@ -488,10 +488,10 @@ def mirror_of(currency):
     return currency_pairs.get(currency)
 
 
-def wait_for_grid_account(grid_addr, gridchaincli_node, max_seconds=90):
+def wait_for_grid_account(grid_addr, gridironchaincli_node, max_seconds=90):
     def fn():
         try:
-            get_gridchain_addr_balance(grid_addr, gridchaincli_node, "eth")
+            get_gridironchain_addr_balance(grid_addr, gridironchaincli_node, "eth")
             return True
         except:
             return False
@@ -686,7 +686,7 @@ def ganache_private_key(ganache_private_keys_file: str, address):
     return pks[address]
 
 
-def gridchain_symbol_to_ethereum_symbol(s: str):
+def gridironchain_symbol_to_ethereum_symbol(s: str):
     if s == "fury":
         return "efury"
     elif s == "ceth":
@@ -701,7 +701,7 @@ def update_ceth_receiver_account(
         transfer_request: EthereumToGridironchainTransferRequest,
         credentials: GridironchaincliCredentials
 ):
-    cmd = build_gridchain_command(
+    cmd = build_gridironchain_command(
         f"{gridnoded_binary} tx ethbridge update_ceth_receiver_account -y {admin_account} {receiver_account}",
         transfer_request=transfer_request,
         credentials=credentials
@@ -717,7 +717,7 @@ def rescue_ceth(
         transfer_request: EthereumToGridironchainTransferRequest,
         credentials: GridironchaincliCredentials
 ):
-    cmd = build_gridchain_command(
+    cmd = build_gridironchain_command(
         f"{gridnoded_binary} tx ethbridge rescue_ceth -y {admin_account} {receiver_account} {amount:d}",
         transfer_request=transfer_request,
         credentials=credentials
@@ -725,7 +725,7 @@ def rescue_ceth(
     return get_shell_output(cmd)
 
 
-def build_gridchain_command(
+def build_gridironchain_command(
         command_contents: str,
         transfer_request: EthereumToGridironchainTransferRequest,
         credentials: GridironchaincliCredentials
@@ -736,7 +736,7 @@ def build_gridchain_command(
     node_entry = f"--node {transfer_request.gridnoded_node}" if transfer_request.gridnoded_node else ""
     home_entry = f"--home {credentials.gridnoded_homedir}" if credentials.gridnoded_homedir else ""
     from_entry = f"--from {credentials.from_key} " if credentials.from_key else ""
-    gridchain_fees_entry = f"--fees {transfer_request.gridchain_fees}" if transfer_request.gridchain_fees else ""  # Deprecated, see https://github.com/Gridironchain/gridnode/pull/1802#discussion_r697403408
+    gridironchain_fees_entry = f"--fees {transfer_request.gridironchain_fees}" if transfer_request.gridironchain_fees else ""  # Deprecated, see https://github.com/Gridironchain/gridnode/pull/1802#discussion_r697403408
     return " ".join([
         yes_entry,
         command_contents,
@@ -745,5 +745,5 @@ def build_gridchain_command(
         node_entry,
         home_entry,
         from_entry,
-        gridchain_fees_entry,
+        gridironchain_fees_entry,
     ])

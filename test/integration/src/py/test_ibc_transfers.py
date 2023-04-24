@@ -21,7 +21,7 @@ def test_burn_ibc_coins(
         smart_contracts_dir,
         bridgebank_address,
         solidity_json_path,
-        gridchain_fees_int,
+        gridironchain_fees_int,
 ):
     basic_transfer_request.ethereum_address = source_ethereum_address
     basic_transfer_request.check_wait_blocks = True
@@ -33,7 +33,7 @@ def test_burn_ibc_coins(
         fury_source_integrationtest_env_transfer_request,
         fury_source_integrationtest_env_credentials,
         target_ceth_balance=test_utilities.burn_gas_cost + test_utilities.lock_gas_cost + small_amount,
-        target_fury_balance=gridchain_fees_int * 2 + small_amount
+        target_fury_balance=gridironchain_fees_int * 2 + small_amount
     )
 
     logging.info("create an ERC20 token for use by FEEDFACE")
@@ -49,10 +49,10 @@ def test_burn_ibc_coins(
 
     # send some test account FEEDFACE to ethereum
     request.ethereum_address = source_ethereum_address
-    request.gridchain_symbol = feedface_token
+    request.gridironchain_symbol = feedface_token
     request.ethereum_symbol = new_currency["newtoken_address"]
     request.amount = small_amount
-    burn_lock_functions.transfer_gridchain_to_ethereum(request, credentials)
+    burn_lock_functions.transfer_gridironchain_to_ethereum(request, credentials)
     feedface_ethereum_balance = test_utilities.get_eth_balance(request)
     assert feedface_ethereum_balance == small_amount
 
@@ -65,7 +65,7 @@ def test_lock_ibc_coins(
         smart_contracts_dir,
         bridgebank_address,
         solidity_json_path,
-        gridchain_fees_int,
+        gridironchain_fees_int,
         fury_source
 ):
     basic_transfer_request.ethereum_address = source_ethereum_address
@@ -78,23 +78,23 @@ def test_lock_ibc_coins(
         fury_source_integrationtest_env_transfer_request,
         fury_source_integrationtest_env_credentials,
         target_ceth_balance=test_utilities.burn_gas_cost + test_utilities.lock_gas_cost + small_amount,
-        target_fury_balance=gridchain_fees_int * 2 + small_amount
+        target_fury_balance=gridironchain_fees_int * 2 + small_amount
     )
     logging.info("transfer some FEEDFACE to the new test account")
     feedface_transfer_request = copy.deepcopy(request)
-    feedface_transfer_request.gridchain_address = fury_source
-    feedface_transfer_request.gridchain_destination_address = request.gridchain_address
-    feedface_transfer_request.gridchain_symbol = feedface_token
+    feedface_transfer_request.gridironchain_address = fury_source
+    feedface_transfer_request.gridironchain_destination_address = request.gridironchain_address
+    feedface_transfer_request.gridironchain_symbol = feedface_token
     feedface_transfer_request.amount = 100
 
-    burn_lock_functions.send_from_gridchain_to_gridchain(feedface_transfer_request, fury_source_integrationtest_env_credentials)
+    burn_lock_functions.send_from_gridironchain_to_gridironchain(feedface_transfer_request, fury_source_integrationtest_env_credentials)
 
     logging.info(
         "send some test account FEEDFACE back to a new ethereum address, requiring the deployment of a new ERC20 contract")
     request.ethereum_address = source_ethereum_address
-    request.gridchain_symbol = feedface_token
+    request.gridironchain_symbol = feedface_token
     request.amount = small_amount
-    burn_lock_functions.send_from_gridchain_to_ethereum(request, credentials)
+    burn_lock_functions.send_from_gridironchain_to_ethereum(request, credentials)
 
     feedface_token_data = test_utilities.wait_for_ethereum_token(request, "Face")
     request.ethereum_symbol = feedface_token_data["token"]
@@ -103,5 +103,5 @@ def test_lock_ibc_coins(
         return test_utilities.get_eth_balance(request) >= small_amount
     test_utilities.wait_for_success(wait_for_enough_tokens)
 
-    logging.info("send FEEDFACE back to gridchain")
-    burn_lock_functions.transfer_ethereum_to_gridchain(request, 10)
+    logging.info("send FEEDFACE back to gridironchain")
+    burn_lock_functions.transfer_ethereum_to_gridironchain(request, 10)

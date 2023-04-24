@@ -86,16 +86,16 @@ class IntegrationTestContext:
     # Using those parameters is the best way to have the fees set robustly after the .42 upgrade.
     # See https://github.com/Gridironchain/gridnode/pull/1802#discussion_r697403408
     @property
-    def gridchain_fees_int(self):
+    def gridironchain_fees_int(self):
         return 100000000000000000
 
     # Deprecated: gridnoded accepts --gas-prices=0.5fury along with --gas-adjustment=1.5 instead of a fixed fee.
     # Using those parameters is the best way to have the fees set robustly after the .42 upgrade.
     # See https://github.com/Gridironchain/gridnode/pull/1802#discussion_r697403408
     @property
-    def gridchain_fees(self):
+    def gridironchain_fees(self):
         """returns a string suitable for passing to gridnoded"""
-        return f"{self.gridchain_fees_int}fury"
+        return f"{self.gridironchain_fees_int}fury"
 
     @property
     def solidity_json_path(self):
@@ -135,7 +135,7 @@ class IntegrationTestContext:
 
     @property
     def fury_source(self):
-        """A gridchain address or key that has fury and can send that fury to other address"""
+        """A gridironchain address or key that has fury and can send that fury to other address"""
         result = self.get_optional_var("FURY_SOURCE", None)
         if result:
             return result
@@ -193,8 +193,8 @@ class IntegrationTestContext:
         for a transfer of fury from an account that already has fury.
         """
         result: test_utilities.EthereumToGridironchainTransferRequest = copy.deepcopy(basic_transfer_request)
-        result.gridchain_address = self.fury_source
-        result.gridchain_symbol = "fury"
+        result.gridironchain_address = self.fury_source
+        result.gridironchain_symbol = "fury"
         return result
 
     @property
@@ -211,5 +211,5 @@ class IntegrationTestContext:
             gridnoded_node=self.gridnoded_node,
             manual_block_advance=self.is_ganache,
             chain_id=self.chain_id,
-            gridchain_fees=self.gridchain_fees,
+            gridironchain_fees=self.gridironchain_fees,
             solidity_json_path=self.solidity_json_path)

@@ -209,7 +209,7 @@ class Project:
 
         # Created by npx hardhat run scripts/devenv.ts and/or gridtool run-env
         self.__rm(self.project_dir("smart-contracts", "relayerdb"))  # peggy1 only
-        self.__rm(self.project_dir("test", "integration", "gridchainrelayerdb"))  # Probably obsolete on peggy2 TODO move to /tmp
+        self.__rm(self.project_dir("test", "integration", "gridironchainrelayerdb"))  # Probably obsolete on peggy2 TODO move to /tmp
         self.__rm(self.project_dir("smart-contracts", "environment.json"))
         self.__rm(self.project_dir("smart-contracts", "env.json"))
         self.__rm(self.project_dir("smart-contracts", ".env"))

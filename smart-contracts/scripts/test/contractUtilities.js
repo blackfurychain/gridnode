@@ -3,7 +3,7 @@ const BN = require('bn.js');
 function buildProvider(context, argv, logging) {
     const HDWalletProvider = context.require("@truffle/hdwallet-provider");
     const Web3 = context.require("web3");
-    const {getRequiredEnvironmentVariable} = context.require('./gridchainUtilities');
+    const {getRequiredEnvironmentVariable} = context.require('./gridironchainUtilities');
 
     let provider;
     if (!argv.ethereum_network)
@@ -85,14 +85,14 @@ function buildContract(context, argv, logging, name, address) {
 }
 
 async function setAllowance(context, coinDenom, amount, argv, logging, requestParameters) {
-    const gridchainUtilities = context.require('./gridchainUtilities');
+    const gridironchainUtilities = context.require('./gridironchainUtilities');
 
-    if (coinDenom != gridchainUtilities.NULL_ADDRESS) {
+    if (coinDenom != gridironchainUtilities.NULL_ADDRESS) {
         const newToken = await buildContract(context, argv, logging, "BridgeToken", coinDenom);
         const currentAllowance = await newToken.allowance(argv.ethereum_address, argv.bridgebank_address, requestParameters);
         logging.info(`currentAllowance is ${currentAllowance}, amount is ${amount}, ${amount.toString(10)}`);
         if (new BN(currentAllowance).lt(new BN(amount))) {
-            const approveResult = await newToken.approve(argv.bridgebank_address, gridchainUtilities.SOLIDITY_MAX_INT, requestParameters);
+            const approveResult = await newToken.approve(argv.bridgebank_address, gridironchainUtilities.SOLIDITY_MAX_INT, requestParameters);
             logging.info(`approve result is ${JSON.stringify(approveResult)}`);
         }
     }

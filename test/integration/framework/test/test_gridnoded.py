@@ -1,5 +1,5 @@
 from gridtool.common import *
-from gridtool import command, cosmos, gridchain, project, environments
+from gridtool import command, cosmos, gridironchain, project, environments
 
 
 class TestGridnodedCLIWrapper:
@@ -24,10 +24,10 @@ class TestGridnodedCLIWrapper:
         # TODO Apparently we need more than 5000 denoms to actually trigger the paging in "query bank balances"
         denoms = ["test-{}".format(i) for i in range(1000)]
         try:
-            gridnoded = gridchain.Gridnoded(self.cmd, home=tmpdir)
+            gridnoded = gridironchain.Gridnoded(self.cmd, home=tmpdir)
             test_addr = gridnoded.create_addr()
             test_coins_balance = {denom: 10**18 for denom in denoms}
-            test_addr_balance = cosmos.balance_add({gridchain.FURY: 10**30}, test_coins_balance)
+            test_addr_balance = cosmos.balance_add({gridironchain.FURY: 10**30}, test_coins_balance)
 
             env = environments.GridnodedEnvironment(self.cmd, gridnoded_home_root=self.gridnoded_home_root)
             env.add_validator()
@@ -37,8 +37,8 @@ class TestGridnodedCLIWrapper:
             validator0_admin = env.node_info[0]["admin_addr"]
             clp_admin = validator0_admin
 
-            gridnoded = gridchain.Gridnoded(self.cmd, home=tmpdir, chain_id=env.chain_id,
-                node=gridchain.format_node_url(env.node_info[0]["host"], env.node_info[0]["ports"]["rpc"]))
+            gridnoded = gridironchain.Gridnoded(self.cmd, home=tmpdir, chain_id=env.chain_id,
+                node=gridironchain.format_node_url(env.node_info[0]["host"], env.node_info[0]["ports"]["rpc"]))
             test_addr_actual_balance = gridnoded.get_balance(test_addr)
             assert test_addr_actual_balance == test_addr_balance
 

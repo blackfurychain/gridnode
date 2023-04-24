@@ -162,12 +162,12 @@ func CreateTestKeepers(t *testing.T, consensusNeeded float64, validatorAmounts [
 }
 
 func CreateTestApp(isCheckTx bool) (*app.GridironchainApp, sdk.Context) {
-	gridchainApp := app.Setup(isCheckTx)
-	ctx := gridchainApp.BaseApp.NewContext(isCheckTx, tmproto.Header{})
-	gridchainApp.AccountKeeper.SetParams(ctx, authtypes.DefaultParams())
+	gridironchainApp := app.Setup(isCheckTx)
+	ctx := gridironchainApp.BaseApp.NewContext(isCheckTx, tmproto.Header{})
+	gridironchainApp.AccountKeeper.SetParams(ctx, authtypes.DefaultParams())
 	initTokens := sdk.TokensFromConsensusPower(1000, sdk.DefaultPowerReduction)
-	_ = app.AddTestAddrs(gridchainApp, ctx, 6, initTokens)
-	return gridchainApp, ctx
+	_ = app.AddTestAddrs(gridironchainApp, ctx, 6, initTokens)
+	return gridironchainApp, ctx
 }
 
 // nolint: unparam
@@ -226,9 +226,9 @@ const (
 
 //// returns context and app with params set on account keeper
 func CreateSimulatorApp(isCheckTx bool) (sdk.Context, *app.GridironchainApp) {
-	gridchainApp := app.Setup(isCheckTx)
-	ctx := gridchainApp.BaseApp.NewContext(isCheckTx, tmproto.Header{})
-	gridchainApp.TokenRegistryKeeper.SetRegistry(ctx, tokenregistryTypes.Registry{
+	gridironchainApp := app.Setup(isCheckTx)
+	ctx := gridironchainApp.BaseApp.NewContext(isCheckTx, tmproto.Header{})
+	gridironchainApp.TokenRegistryKeeper.SetRegistry(ctx, tokenregistryTypes.Registry{
 		Entries: []*tokenregistryTypes.RegistryEntry{
 			{Denom: "ceth", Decimals: 18, Permissions: []tokenregistryTypes.Permission{tokenregistryTypes.Permission_CLP}},
 			{Denom: "cdash", Decimals: 18, Permissions: []tokenregistryTypes.Permission{tokenregistryTypes.Permission_CLP}},
@@ -239,7 +239,7 @@ func CreateSimulatorApp(isCheckTx bool) (sdk.Context, *app.GridironchainApp) {
 			{Denom: "cusdc", Decimals: 18, Permissions: []tokenregistryTypes.Permission{tokenregistryTypes.Permission_CLP}},
 		},
 	})
-	return ctx, gridchainApp
+	return ctx, gridironchainApp
 }
 
 func CreateTestAppEthBridge(isCheckTx bool) (sdk.Context, keeper.Keeper) {

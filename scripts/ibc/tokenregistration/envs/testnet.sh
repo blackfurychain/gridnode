@@ -1,8 +1,8 @@
 #!/bin/sh
 
-GRIDCHAIN_ID=gridchain-testnet-1 \
+GRIDCHAIN_ID=gridironchain-testnet-1 \
   KEYRING_BACKEND=test \
-  GRID_NODE=https://rpc-testnet.gridchain.finance:443 \
+  GRID_NODE=https://rpc-testnet.gridironchain.finance:443 \
   COSMOS_BASE_DENOM=uphoton \
   COSMOS_CHANNEL_ID=channel-11 \
   COSMOS_COUNTERPARTY_CHANNEL_ID=channel-27 \

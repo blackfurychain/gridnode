@@ -64,7 +64,7 @@ binPath               ${binPath}
   const genesis = cleanUpGenesisState({ remoteGenesis, defaultGenesis });
   await createGenesisFiles({ home, genesis, remoteGenesis, defaultGenesis });
 
-  if (chain === "gridchain") {
+  if (chain === "gridironchain") {
     const denoms = getDenoms();
     await createDenomsFile({ home, denoms });
     await $`${binPath}/${binary} set-gen-denom-whitelist ${home}/config/denoms.json --home ${home}`;

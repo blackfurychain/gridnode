@@ -1,15 +1,15 @@
 module.exports = async (cb) => {
     const Web3 = require("web3");
 
-    const gridchainUtilities = require('./gridchainUtilities')
+    const gridironchainUtilities = require('./gridironchainUtilities')
     const contractUtilites = require('./contractUtilities');
 
-    const logging = gridchainUtilities.configureLogging(this);
+    const logging = gridironchainUtilities.configureLogging(this);
 
     try {
-        const argv = gridchainUtilities.processArgs(this, {
-            ...gridchainUtilities.sharedYargOptions,
-            ...gridchainUtilities.transactionYargOptions,
+        const argv = gridironchainUtilities.processArgs(this, {
+            ...gridironchainUtilities.sharedYargOptions,
+            ...gridironchainUtilities.transactionYargOptions,
         });
 
         logging.info(`sendBurnTx: ${JSON.stringify(argv, undefined, 2)}`);
@@ -27,7 +27,7 @@ module.exports = async (cb) => {
         logging.info(`sendBurnTx ${JSON.stringify(argv)}}`);
 
         result.burn = await bridgeBankContract.burn(
-            Web3.utils.utf8ToHex(argv.gridchain_address),
+            Web3.utils.utf8ToHex(argv.gridironchain_address),
             argv.symbol,
             argv.amount,
             transactionParameters,

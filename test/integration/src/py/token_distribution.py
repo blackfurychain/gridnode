@@ -6,7 +6,7 @@ import time
 
 import burn_lock_functions
 import test_utilities
-from integration_env_credentials import gridchain_cli_credentials_for_test
+from integration_env_credentials import gridironchain_cli_credentials_for_test
 from test_utilities import EthereumToGridironchainTransferRequest, GridironchaincliCredentials
 
 
@@ -35,9 +35,9 @@ def test_token_distribution(
                 destination_symbol = "fury"
             request.amount = int(amount_in_tokens * (10 ** int(t["decimals"])))
             request.ethereum_symbol = t["token"]
-            request.gridchain_symbol = destination_symbol
-            request.gridchain_address = fury_source
-            request.gridchain_destination_address = test_utilities.get_required_env_var("DESTINATION_ACCOUNT")
-            test_utilities.send_from_gridchain_to_gridchain(request, fury_source_integrationtest_env_credentials)
+            request.gridironchain_symbol = destination_symbol
+            request.gridironchain_address = fury_source
+            request.gridironchain_destination_address = test_utilities.get_required_env_var("DESTINATION_ACCOUNT")
+            test_utilities.send_from_gridironchain_to_gridironchain(request, fury_source_integrationtest_env_credentials)
         except Exception as e:
             logging.error(f"error: {e}")

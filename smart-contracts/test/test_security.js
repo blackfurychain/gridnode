@@ -19,7 +19,7 @@ const { expect } = require('chai');
 
 const NULL_ADDRESS = "0x0000000000000000000000000000000000000000";
 const gridRecipient = web3.utils.utf8ToHex(
-  "grid1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace"
+  "did:fury:g1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace"
 );
 
 require("chai")
@@ -196,7 +196,7 @@ contract("Security Test", function (accounts) {
   });
 
   // This entire scenario is mimicking the mainnet scenario where there will be
-  // cosmos assets on gridchain, and then we hook into an existing ERC20 contract on mainnet
+  // cosmos assets on gridironchain, and then we hook into an existing ERC20 contract on mainnet
   // that is eFury. Then we will try to transfer fury to eFury to ensure that
   // everything is set up correctly.
   // We will do this by making a new prophecy claim, validating it with the validators
@@ -245,7 +245,7 @@ contract("Security Test", function (accounts) {
 
       const symbol = 'eFury'
       const amount = 100000;
-      const gridAddress = "0x" + convertToHex("grid12qfvgsq76eghlagyfcfyt9md2s9nunsn40zu2h");
+      const gridAddress = "0x" + convertToHex("did:fury:g12qfvgsq76eghlagyfcfyt9md2s9nunsn40zu2h");
       
       // create new fake eFury token
       const bridgeToken = await BridgeToken.new("eFury");

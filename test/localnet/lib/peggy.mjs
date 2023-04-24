@@ -3,7 +3,7 @@ import { getChainProps } from "../utils/getChainProps.mjs";
 import { getAddress } from "./getAddress.mjs";
 
 export async function ibc(props) {
-  const gridChainProps = getChainProps({ chain: "gridchain" });
+  const gridChainProps = getChainProps({ chain: "gridironchain" });
 
   const {
     node,
@@ -24,7 +24,7 @@ export async function ibc(props) {
     memo = undefined,
   } = getChainProps({
     ...props,
-    chain: props.type === "issuer" ? props.chain : "gridchain",
+    chain: props.type === "issuer" ? props.chain : "gridironchain",
     node: props.type === "issuer" ? props.node : undefined,
     chainId: props.type === "issuer" ? props.chainId : undefined,
     binary: props.type === "issuer" ? props.binary : undefined,

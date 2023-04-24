@@ -1,5 +1,5 @@
 FROM ubuntu:20.04
-LABEL org.opencontainers.image.source https://github.com/gridchain/gridnode
+LABEL org.opencontainers.image.source https://github.com/gridironchain/gridnode
 RUN apt-get update && apt-get install -y sudo
 RUN yes | sudo unminimize
 RUN useradd -m vagrant

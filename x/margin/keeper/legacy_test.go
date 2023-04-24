@@ -32,7 +32,7 @@ func TestKeeper_NewLegacyHandler(t *testing.T) {
 	ctx, app := test.CreateTestAppMargin(false)
 	marginKeeper := app.MarginKeeper
 
-	marginKeeper.WhitelistAddress(ctx, "grid1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd")
+	marginKeeper.WhitelistAddress(ctx, "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd")
 
 	handler := keeper.NewLegacyHandler(marginKeeper)
 
@@ -40,7 +40,7 @@ func TestKeeper_NewLegacyHandler(t *testing.T) {
 	require.Equal(t, reflect.TypeOf(handler).String(), "types.Handler")
 
 	var (
-		msgOpen       sdk.Msg = &types.MsgOpen{Signer: "grid1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd"}
+		msgOpen       sdk.Msg = &types.MsgOpen{Signer: "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd"}
 		msgClose      sdk.Msg = &types.MsgClose{}
 		msgForceClose sdk.Msg = &types.MsgForceClose{}
 		msgOther      sdk.Msg

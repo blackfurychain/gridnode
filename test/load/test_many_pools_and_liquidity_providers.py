@@ -1,10 +1,10 @@
 # This is for load testing of LPD/rewardss (and in future, margin)
 #
-# Scenario description: https://www.notion.so/gridchain/Rewards-2-0-Load-Testing-972fbe73b04440cd87232aa60a3146c5
-# Ticket: https://app.zenhub.com/workspaces/current-sprint---engineering-615a2e9fe2abd5001befc7f9/issues/gridchain/gridnode/3020
+# Scenario description: https://www.notion.so/gridironchain/Rewards-2-0-Load-Testing-972fbe73b04440cd87232aa60a3146c5
+# Ticket: https://app.zenhub.com/workspaces/current-sprint---engineering-615a2e9fe2abd5001befc7f9/issues/gridironchain/gridnode/3020
 # How to run a validator in multi-node setup:
-# - https://docs.gridchain.finance/network-security/validators/running-gridnode-and-becoming-a-validator
-# - https://docs.gridchain.finance/developers/tutorials/setup-standalone-validator-node-manually
+# - https://docs.gridironchain.finance/network-security/validators/running-gridnode-and-becoming-a-validator
+# - https://docs.gridironchain.finance/developers/tutorials/setup-standalone-validator-node-manually
 #
 # Requirements: Python (3.9 is best, 3.8 and 3.10 should also work, support for other versions is currently unknownn)
 #
@@ -41,7 +41,7 @@
 # TODO - improvements
 #
 # (1) Log HTTP response for block_height, maybe we can get a bit more information like this:
-# $ curl -i "http://rpc-archive.gridchain.finance/block_results?height=9000000"
+# $ curl -i "http://rpc-archive.gridironchain.finance/block_results?height=9000000"
 # HTTP/1.1 500 Internal Server Error
 # ...
 # {
@@ -54,7 +54,7 @@
 #   }
 # }
 #
-# (2) use rocksb, see https://raw.githubusercontent.com/Gridironchain/gridchain-devops/1218ff79b22ab2a6bd22b81d6aa4385a247cafc9/scripts/gridnode/testing/gridnode_n_node_network_simulator.py?token=GHSAT0AAAAAABLH7LII5AAWD6YDWG7THBHGYW7DSVA
+# (2) use rocksb, see https://raw.githubusercontent.com/Gridironchain/gridironchain-devops/1218ff79b22ab2a6bd22b81d6aa4385a247cafc9/scripts/gridnode/testing/gridnode_n_node_network_simulator.py?token=GHSAT0AAAAAABLH7LII5AAWD6YDWG7THBHGYW7DSVA
 #
 # (3) Exceptions / printing of _debug...
 #
@@ -68,8 +68,8 @@ import sys
 import time
 import gridtool_path
 from gridtool.common import *
-from gridtool import command, gridchain, project, cosmos, environments, test_utils2
-from gridtool.gridchain import FURY, STAKE, FURY_DECIMALS
+from gridtool import command, gridironchain, project, cosmos, environments, test_utils2
+from gridtool.gridironchain import FURY, STAKE, FURY_DECIMALS
 
 
 log = gridtool_logger()
@@ -112,7 +112,7 @@ class Test:
 
         self.env = None
         self.custom_wallet_mnemonics = [
-            # grid1rruvw03utshn7ry3emeqf2gzkg6eap6hu5shun
+            # did:fury:g1rruvw03utshn7ry3emeqf2gzkg6eap6hu5shun
             "zebra sentence tape you spawn forget catalog veteran rocket steel ticket slender follow rubber spoil thing into liar twin document ring clock shell skirt",
         ]
 
@@ -155,7 +155,7 @@ class Test:
         # For rewards, the funds are minted and in case we opted for a distribution of the rewards to the LP wallet the
         # minted furys are transferred there, you can see the minting process here: https://github.com/Gridironchain/gridnode/blob/master/x/clp/keeper/rewards.go#L54
         # For LPD, we only transfer the existing funds in CLP to the LP's wallet, you can see here: https://github.com/Gridironchain/gridnode/blob/8b2f9c45130c79e07555735185fbe1d00279fab0/x/clp/keeper/pool.go#L128
-        gridnoded_client = gridchain.Gridnoded(self.cmd, home=client_home)
+        gridnoded_client = gridironchain.Gridnoded(self.cmd, home=client_home)
         denom_total_supply = 10000 * self.number_of_wallets * self.amount_of_denom_per_wallet
         wallets = {}
         extra_accounts = {}
@@ -186,7 +186,7 @@ class Test:
 
         self.env = env
         gridnoded = env._gridnoded_for(env.node_info[0])
-        gridnoded_client = gridchain.Gridnoded(self.cmd, home=client_home, node=gridchain.format_node_url(
+        gridnoded_client = gridironchain.Gridnoded(self.cmd, home=client_home, node=gridironchain.format_node_url(
             self.env.node_info[0]["host"], self.env.node_info[0]["ports"]["rpc"]), chain_id=env.chain_id)
         gridnoded_client.get_balance_default_retries = 5
 
@@ -205,7 +205,7 @@ class Test:
             for denom in denoms:
                 res = gridnoded_client.tx_clp_add_liquidity(addr, denom, self.amount_of_liquidity_added_by_wallet,
                     self.amount_of_liquidity_added_by_wallet, account_seq=(account_number, account_sequence))
-                gridchain.check_raw_log(res)
+                gridironchain.check_raw_log(res)
                 account_sequence += 1
         gridnoded_client.wait_for_last_transaction_to_be_mined()
         self.check_actual_liquidity_providers(gridnoded_client, env.clp_admin, wallets)
@@ -232,7 +232,7 @@ class Test:
 
         # Set up rewards
         if self.rewards_duration_blocks > 0:
-            reward_params = gridchain.create_rewards_descriptor("RP_1", rewards_start_block, rewards_end_block,
+            reward_params = gridironchain.create_rewards_descriptor("RP_1", rewards_start_block, rewards_end_block,
                 [(token, 1) for token in self.tokens][:self.reward_period_pool_count], 100000 * self.token_unit,
                 self.reward_period_default_multiplier, self.reward_period_distribute, self.reward_period_mod)
             gridnoded.clp_reward_period(admin_addr, reward_params)
@@ -243,7 +243,7 @@ class Test:
 
         # Set up LPD policies
         if self.lpd_duration_blocks > 0:
-            lppd_params = gridchain.create_lppd_params(lppd_start_block, lppd_end_block, 0.00045, self.lpd_period_mod)
+            lppd_params = gridironchain.create_lppd_params(lppd_start_block, lppd_end_block, 0.00045, self.lpd_period_mod)
             gridnoded.clp_set_lppd_params(admin_addr, lppd_params)
             gridnoded.wait_for_last_transaction_to_be_mined()
             wait_boundaries.add(lppd_start_block)
@@ -267,7 +267,7 @@ class Test:
                     wait_boundaries[i], wait_boundaries[i + 1], block_time_per_phase[i]))
 
         # TODO LPD and rewards assertions
-        # See https://www.notion.so/gridchain/Rewards-2-0-Load-Testing-972fbe73b04440cd87232aa60a3146c5#7392be2c1a034d2db83b9b38ab89ff9e
+        # See https://www.notion.so/gridironchain/Rewards-2-0-Load-Testing-972fbe73b04440cd87232aa60a3146c5#7392be2c1a034d2db83b9b38ab89ff9e
 
         # run_forever means we're not interested in average block times but want to run this
         # as an environment

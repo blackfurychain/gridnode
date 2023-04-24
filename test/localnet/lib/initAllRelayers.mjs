@@ -22,12 +22,12 @@ export async function initAllRelayers({
     configPath,
   });
   const chainsProps = getChainsProps({ chains, network });
-  const { gridchain: gridChainProps, ...otherChainsProps } = chainsProps;
+  const { gridironchain: gridChainProps, ...otherChainsProps } = chainsProps;
 
   // 1) create global registry for relayers
   await createRelayerRegistry({ chainsProps, registryFrom });
 
-  // 2) create relayer for each single chains connecting to gridchain
+  // 2) create relayer for each single chains connecting to gridironchain
   const createdRelayers = await Promise.all(
     Object.values(otherChainsProps).map(async (otherChainProps) => {
       return createRelayer({ gridChainProps, otherChainProps, registryFrom });

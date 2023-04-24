@@ -19,7 +19,7 @@ const BLOCKLIST_ADDRESS =
   process.env.BLOCKLIST_ADDRESS || addr("0x9C8a2011cCb697D7EDe3c94f9FBa5686a04DeACB");
 
 // If there is no DEPLOYMENT_NAME env var, we'll use the mainnet deployment
-const DEPLOYMENT_NAME = process.env.DEPLOYMENT_NAME || "gridchain-1";
+const DEPLOYMENT_NAME = process.env.DEPLOYMENT_NAME || "gridironchain-1";
 
 // If there is no FORKING_CHAIN_ID env var, we'll use the mainnet id
 const CHAIN_ID = process.env.CHAIN_ID || 1;
@@ -317,7 +317,7 @@ function copyManifest(injectChanges) {
   print("cyan", `👀 Fetching the correct manifest`);
 
   fs.copySync(
-    `./deployments/gridchain-1/.openzeppelin/mainnet.json`,
+    `./deployments/gridironchain-1/.openzeppelin/mainnet.json`,
     `./.openzeppelin/mainnet.json`
   );
 }

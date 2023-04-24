@@ -4,7 +4,7 @@
 
 rm -rf ~/.gridnoded
 
-gridnoded init test --chain-id=gridchain-local
+gridnoded init test --chain-id=gridironchain-local
 cp ./app.toml ~/.gridnoded/config
 
 echo "Generating deterministic account - ${SHADOWFIEND_NAME}"
@@ -22,7 +22,7 @@ gridnoded add-genesis-account $(gridnoded keys show ${JUNIPER_NAME} -a --keyring
 
 gridnoded add-genesis-validators $(gridnoded keys show ${SHADOWFIEND_NAME} -a --bech val --keyring-backend=test)
 
-gridnoded gentx ${SHADOWFIEND_NAME} 1000000000000000000000000stake --chain-id=gridchain-local --keyring-backend test
+gridnoded gentx ${SHADOWFIEND_NAME} 1000000000000000000000000stake --chain-id=gridironchain-local --keyring-backend test
 
 echo "Collecting genesis txs..."
 gridnoded collect-gentxs

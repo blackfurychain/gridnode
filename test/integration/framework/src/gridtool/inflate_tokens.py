@@ -1,6 +1,6 @@
 # This is a replacement for test/integration/inflate_tokens.sh.
-# The original script had a lot of problems as described in https://app.zenhub.com/workspaces/current-sprint---engineering-615a2e9fe2abd5001befc7f9/issues/gridchain/issues/719.
-# See https://www.notion.so/gridchain/TEST-TOKEN-DISTRIBUTION-PROCESS-41ad0861560c4be58918838dbd292497
+# The original script had a lot of problems as described in https://app.zenhub.com/workspaces/current-sprint---engineering-615a2e9fe2abd5001befc7f9/issues/gridironchain/issues/719.
+# See https://www.notion.so/gridironchain/TEST-TOKEN-DISTRIBUTION-PROCESS-41ad0861560c4be58918838dbd292497
 
 import json
 import re
@@ -145,7 +145,7 @@ class InflateTokens:
         self.wait_for_all(pending_txs)
 
     def transfer_from_eth_to_gridnode(self, from_eth_addr, to_grid_addr, tokens_to_transfer, amount_in_tokens, amount_eth_gwei):
-        grid_balances_before = self.ctx.get_gridchain_balance(to_grid_addr)
+        grid_balances_before = self.ctx.get_gridironchain_balance(to_grid_addr)
         sent_amounts = []
         pending_txs = []
         for token in tokens_to_transfer:
@@ -184,8 +184,8 @@ class InflateTokens:
                     batch_size = self.ctx.gridnode.max_send_batch_size
                 batch = remaining[:batch_size]
                 remaining = remaining[batch_size:]
-                grid_balance_before = self.ctx.get_gridchain_balance(grid_acct)
-                self.ctx.send_from_gridchain_to_gridchain(from_grid_account, grid_acct, batch)
+                grid_balance_before = self.ctx.get_gridironchain_balance(grid_acct)
+                self.ctx.send_from_gridironchain_to_gridironchain(from_grid_account, grid_acct, batch)
                 self.ctx.gridnode.wait_for_balance_change(grid_acct, grid_balance_before, min_changes=batch,
                     polling_time=2, timeout=0, change_timeout=self.wait_for_account_change_timeout)
                 progress_current += batch_size
@@ -225,7 +225,7 @@ class InflateTokens:
         log.debug("Estimated number of batches needed to transfer tokens from intermediate grid account to target grid wallet: {}".format(number_of_batches))
         log.debug("Estimated fury funding needed for intermediate account: {}".format(fund_fury))
         ether_faucet_account = self.ctx.operator
-        grid_broker_account = self.ctx.create_gridchain_addr(fund_amounts=[fund_fury])
+        grid_broker_account = self.ctx.create_gridironchain_addr(fund_amounts=[fund_fury])
         eth_broker_account = self.ctx.operator
 
         if (total_eth_amount_gwei > 0) and (ether_faucet_account != eth_broker_account):
@@ -274,7 +274,7 @@ class InflateTokens:
         log.info("Done.")
         log.info("To see newly minted tokens in UI, you need to edit 'scripts/ibc/tokenregistry/generate-erc20-jsons.sh' "
             "and add any tokens that are not already there. Then cd into the directory and run './generate-erc20-jsons.sh devnet' "\
-            "and commit the results in the gridchain-devnet-1 folder. @tim will pick up the PR and register it on "
+            "and commit the results in the gridironchain-devnet-1 folder. @tim will pick up the PR and register it on "
             "devnet by running './register-one.sh' with the registry key. In the future this might be open for anybody "
             "to do on their own for devnet and testnet.")
 

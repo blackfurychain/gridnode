@@ -301,7 +301,7 @@ func GetCmdUpdateWhiteListValidator() *cobra.Command {
 	return cmd
 }
 
-// GetCmdUpdateCethReceiverAccount is the CLI command to update the gridchain account that receives the ceth proceeds
+// GetCmdUpdateCethReceiverAccount is the CLI command to update the gridironchain account that receives the ceth proceeds
 func GetCmdUpdateCethReceiverAccount() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "update_ceth_receiver_account [cosmos-sender-address] [ceth_receiver_account]",

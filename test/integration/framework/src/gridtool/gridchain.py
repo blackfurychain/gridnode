@@ -20,9 +20,9 @@ FURY_DECIMALS = 18
 CETH = "ceth"  # Peggy1 only (Peggy2.0 uses denom hash)
 
 # Gridironchain public network endpoints
-BETANET = {"node": "https://rpc.gridchain.finance", "chain_id": "gridchain-1"}
-TESTNET = {"node": "https://rpc-testnet.gridchain.finance", "chain_id": "gridchain-testnet-1"}
-DEVNET = {"node": "https://rpc-devnet.gridchain.finance", "chain_id": "gridchain-devnet-1"}
+BETANET = {"node": "https://rpc.gridironchain.finance", "chain_id": "gridironchain-1"}
+TESTNET = {"node": "https://rpc-testnet.gridironchain.finance", "chain_id": "gridironchain-testnet-1"}
+DEVNET = {"node": "https://rpc-devnet.gridironchain.finance", "chain_id": "gridironchain-devnet-1"}
 
 GasFees = Tuple[float, str]  # Special case of cosmos.Balance with only one denom and float amount  # TODO Rename to something more neutral such as Amount
 
@@ -40,7 +40,7 @@ GRIDNODED_DEFAULT_GRPC_PORT = 9090  # In config/app.toml, section [grpc]
 GRIDNODED_DEFAULT_GRPC_WEB_PORT = 9091  # In config/app.toml, section [grpc-web]
 
 
-# Fees for gridchain -> gridchain transactions, paid by the sender.
+# Fees for gridironchain -> gridironchain transactions, paid by the sender.
 # TODO This should be dynamic (per-Gridnoded)
 grid_tx_fee_in_fury = 1 * 10**17
 
@@ -67,7 +67,7 @@ grid_tx_burn_fee_buffer_in_fury = 5 * grid_tx_fee_in_fury
 max_eth_transfer_fee = 10000000 * eth.GWEI
 
 
-def gridchain_denom_hash(network_descriptor: int, token_contract_address: eth.Address) -> str:
+def gridironchain_denom_hash(network_descriptor: int, token_contract_address: eth.Address) -> str:
     assert on_peggy2_branch
     assert token_contract_address.startswith("0x")
     assert type(network_descriptor) == int
@@ -75,10 +75,10 @@ def gridchain_denom_hash(network_descriptor: int, token_contract_address: eth.Ad
     denom = f"gridBridge{network_descriptor:04d}{token_contract_address.lower()}"
     return denom
 
-def gridchain_denom_hash_to_token_contract_address(token_hash: str) -> Tuple[int, eth.Address]:
+def gridironchain_denom_hash_to_token_contract_address(token_hash: str) -> Tuple[int, eth.Address]:
     m = re.match("^gridBridge(\\d{4})0x([0-9a-fA-F]{40})$", token_hash)
     if not m:
-        raise Exception("Invalid gridchain denom '{}'".format(token_hash))
+        raise Exception("Invalid gridironchain denom '{}'".format(token_hash))
     network_descriptor = int(m[1])
     token_address = web3.Web3.toChecksumAddress(m[2])
     return network_descriptor, token_address
@@ -440,15 +440,15 @@ class Gridnoded:
 
     # See scripts/ibc/tokenregistration for more information and examples.
     # JSON file can be generated with "gridnoded q tokenregistry generate"
-    def create_tokenregistry_entry(self, symbol: str, gridchain_symbol: str, decimals: int,
+    def create_tokenregistry_entry(self, symbol: str, gridironchain_symbol: str, decimals: int,
         permissions: Iterable[str] = None
     ) -> TokenRegistryParams:
         permissions = permissions if permissions is not None else ["CLP", "IBCEXPORT", "IBCIMPORT"]
         upper_symbol = symbol.upper()  # Like "USDT"
         return {
             "decimals": str(decimals),
-            "denom": gridchain_symbol,
-            "base_denom": gridchain_symbol,
+            "denom": gridironchain_symbol,
+            "base_denom": gridironchain_symbol,
             "path": "",
             "ibc_channel_id": "",
             "ibc_counterparty_channel_id": "",
@@ -1185,7 +1185,7 @@ class GridnodeClient:
         result = json.loads(stdout(self.gridnode.gridnoded_exec(["query", "account", grid_addr, "--output", "json"])))
         return result
 
-    def send_from_gridchain_to_ethereum(self, from_grid_addr: cosmos.Address, to_eth_addr: str, amount: int, denom: str,
+    def send_from_gridironchain_to_ethereum(self, from_grid_addr: cosmos.Address, to_eth_addr: str, amount: int, denom: str,
         generate_only: bool = False
     ) -> Mapping:
         """ Sends ETH from Gridironchain to Ethereum (burn) """
@@ -1234,13 +1234,13 @@ class GridnodeClient:
                 assert "failed to execute message" not in result["raw_log"]
             return result
 
-            # gridnoded tx ethbridge <direction> <node> <gridchain_addr> <ethereum_addr> <amount> <symbol> <keyring backend> <ethereum-chain-id>
+            # gridnoded tx ethbridge <direction> <node> <gridironchain_addr> <ethereum_addr> <amount> <symbol> <keyring backend> <ethereum-chain-id>
 
 
-    def send_from_gridchain_to_ethereum_grpc(self, from_grid_addr: cosmos.Address, to_eth_addr: str, amount: int,
+    def send_from_gridironchain_to_ethereum_grpc(self, from_grid_addr: cosmos.Address, to_eth_addr: str, amount: int,
         denom: str
     ):
-        tx = self.send_from_gridchain_to_ethereum(from_grid_addr, to_eth_addr, amount, denom, generate_only=True)
+        tx = self.send_from_gridironchain_to_ethereum(from_grid_addr, to_eth_addr, amount, denom, generate_only=True)
         signed_tx = self.gridnode.sign_transaction(tx, from_grid_addr)
         encoded_tx = self.gridnode.encode_transaction(signed_tx)
         result = self.broadcast_tx(encoded_tx)
@@ -1250,7 +1250,7 @@ class GridnodeClient:
         # See https://docs.cosmos.network/v0.44/core/proto-docs.html
         # See https://docs.cosmos.network/v0.44/core/grpc_rest.html
         # See https://app.swaggerhub.com/apis/Ivan-Verchenko/gridnode-swagger-api/1.1.1
-        # See https://raw.githubusercontent.com/Gridironchain/gridchain-ui/develop/ui/core/swagger.yaml
+        # See https://raw.githubusercontent.com/Gridironchain/gridironchain-ui/develop/ui/core/swagger.yaml
         return grpc.insecure_channel("{}:{}".format(LOCALHOST,
             self.grpc_port if self.grpc_port is not None else GRIDNODED_DEFAULT_GRPC_PORT))
 

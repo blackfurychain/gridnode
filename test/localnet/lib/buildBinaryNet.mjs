@@ -21,7 +21,7 @@ export async function buildBinaryNet({
     configPath,
   });
   const chainsProps = getChainsProps({ chains, network });
-  const gridChainProps = chainsProps.gridchain;
+  const gridChainProps = chainsProps.gridironchain;
   const otherChainProps = chainsProps[candidateOtherChainProps.chain];
 
   await $`rm -rf ${configPath}`;

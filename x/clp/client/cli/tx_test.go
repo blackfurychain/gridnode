@@ -5,7 +5,7 @@ package cli_test
 func SetupViper() {
 	viper.Set(flags.FlagKeyringBackend, flags.DefaultKeyringBackend)
 	viper.Set(flags.FlagGenerateOnly, true)
-	viper.Set(flags.FlagChainID, "gridchainTest")
+	viper.Set(flags.FlagChainID, "gridironchainTest")
 
 }
 

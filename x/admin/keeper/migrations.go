@@ -15,7 +15,7 @@ func NewMigrator(keeper Keeper) Migrator {
 
 func (m Migrator) InitialMigration(ctx sdk.Context) error {
 	var accounts []*types.AdminAccount
-	if ctx.ChainID() == "gridchain-1" {
+	if ctx.ChainID() == "gridironchain-1" {
 		accounts = types.ProdAdminAccounts()
 	} else {
 		accounts = types.InitialAdminAccounts()

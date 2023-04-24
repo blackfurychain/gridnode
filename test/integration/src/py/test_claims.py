@@ -12,14 +12,14 @@ query_block_claim, create_claim, query_created_claim
 # TEST CODE TO ASSERT TAGS GENERATED ON A BLOCK WHEN A NEW CLAIM IS CREATED
 @pytest.mark.parametrize("claimType", ['ValidatorSubsidy', 'LiquidityMining'])
 def test_create_new_claim(claimType):
-    gridchain_address, gridchain_name = create_new_gridaddr_and_key()
+    gridironchain_address, gridironchain_name = create_new_gridaddr_and_key()
     keyring_backend = 'test'
     chain_id = 'localnet'
     from_address = 'gridnodeadmin'
     amount = '100000000010000000fury'
-    send_sample_fury(from_address, gridchain_address, amount, keyring_backend, chain_id, "")
+    send_sample_fury(from_address, gridironchain_address, amount, keyring_backend, chain_id, "")
     time.sleep(5)
-    txnhash = (create_claim(gridchain_address, claimType, keyring_backend, chain_id))
+    txnhash = (create_claim(gridironchain_address, claimType, keyring_backend, chain_id))
     logging.info(f"txnhash= ${txnhash}")
     time.sleep(5)
     response = (query_block_claim(str(txnhash)))
@@ -34,7 +34,7 @@ def test_create_new_claim(claimType):
         assert expectedOutputTagsList[0] == 'userClaim_creator'
         assert expectedOutputTagsList[2] == 'userClaim_type'
         assert expectedOutputTagsList[4] == 'userClaim_creationTime'
-        assert str(expectedOutputTagsList[1]) == gridchain_address
+        assert str(expectedOutputTagsList[1]) == gridironchain_address
         assert str(expectedOutputTagsList[3]) in ['DISTRIBUTION_TYPE_VALIDATOR_SUBSIDY', 'DISTRIBUTION_TYPE_LIQUIDITY_MINING']
     except KeyError:
         with pytest.raises(Exception, match='User trying to create a duplicate claim'):

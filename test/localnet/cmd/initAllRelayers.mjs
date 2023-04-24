@@ -17,7 +17,7 @@ Usage:
 
   yarn initAllRelayers [options]
 
-Initiate all the IBC relayers connected to gridchain.
+Initiate all the IBC relayers connected to gridironchain.
 
 Options:
 

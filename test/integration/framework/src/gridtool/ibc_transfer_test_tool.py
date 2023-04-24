@@ -2,7 +2,7 @@
 #
 # Design document: https://docs.google.com/document/d/1yxxQ3RtftCvCJp_vDlSR5MiXvtOEJxlGXg3GLvf9dls/edit?skip_itp2_check=true
 # Test environment for testing the new Gridironchain public SDK: https://docs.google.com/document/d/1MAlg-I0xMnUvbavAZdAN---WuqbyuRyKw-6Lfgfe130/edit
-# IBC localnet tool: https://github.com/Gridironchain/gridchain-deploy/commit/0424d2ec81f6f739a3a2cbc77feba1a6f297430d
+# IBC localnet tool: https://github.com/Gridironchain/gridironchain-deploy/commit/0424d2ec81f6f739a3a2cbc77feba1a6f297430d
 # scripts/init-multichain.sh
 
 import json
@@ -15,14 +15,14 @@ chains = {
     "iris": {"binary": "iris", "relayer": "hermes"},
     "sentinel": {"binary": "sentinelhub", "relayer": "ibc"},
     "persistence": {"binary": "persistenceCore", "relayer": "hermes"},
-    "gridchain": {"binary": "gridnoded", "relayer": "ibc"},
+    "gridironchain": {"binary": "gridnoded", "relayer": "ibc"},
 }
 
 # TODO Define format and usage
 configs = {
     "local": {
         "akash": "http://127.0.0.1:26656",
-        "gridchain": "http://127.0.0.1:26657",
+        "gridironchain": "http://127.0.0.1:26657",
         "chainId": "akash-testnet-6",
         "fees": 5000,
         "gas": 1000,
@@ -117,10 +117,10 @@ def get_initial_account_and_sequence_number(config, chain, src_addr, node, chain
     return account_number, sequence
 
 def run_tests_for_one_chain_in_one_direction(config, other_chain, direction_flag, number_of_iterations):
-    # Assume we're always sending transactions between other_chain and gridchain.
+    # Assume we're always sending transactions between other_chain and gridironchain.
     # from_chain is chain sending the assets, to_chain is the receiving chain.
-    from_chain = "gridchain" if direction_flag else other_chain
-    to_chain = other_chain if direction_flag else "gridchain"
+    from_chain = "gridironchain" if direction_flag else other_chain
+    to_chain = other_chain if direction_flag else "gridironchain"
     broadcast_mode = "block"  # TODO
     chain_id = int(config["chain_id"])
     denom = config["denom"]
@@ -131,13 +131,13 @@ def run_tests_for_one_chain_in_one_direction(config, other_chain, direction_flag
     node = config[chain_id]["node"]
     fees = config["fees"]
     gas = config["gas"]
-    gridchain_proc = start_chain("gridchain")
+    gridironchain_proc = start_chain("gridironchain")
     other_chain_proc = start_chain(other_chain)
     if config["init_chain"]:
         init_chain(from_chain)
         init_chain(to_chain)
         relayer_proc = start_relayer(from_chain, to_chain, channel_id, counterchannel_id)
-    mnemonic = add_new_key_to_keyring("gridchain", from_account)
+    mnemonic = add_new_key_to_keyring("gridironchain", from_account)
     add_existing_key_to_keyring(other_chain, to_account, mnemonic)
     sequence, account_number = get_initial_account_and_sequence_number(config, from_chain, from_account, node, chain_id)
 
@@ -158,7 +158,7 @@ def run_tests_for_one_chain_in_one_direction(config, other_chain, direction_flag
     from_balance_after = query_bank_balance(from_chain, from_account, denom)
     to_balance_after = query_bank_balance(to_chain, to_account, denom)
     relayer_proc.stop()
-    gridchain_proc.stop()
+    gridironchain_proc.stop()
     other_chain_proc.stop()
     assert from_balance_after == from_balance_before - number_of_iterations * amount # TODO Account for fees and gas
     assert to_balance_after == to_balance_before + number_of_iterations * amount

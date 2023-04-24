@@ -14,7 +14,7 @@ Usage:
 
   yarn startRelayer [options]
 
-Start a relayer locally to pair a foreign IBC chain to gridchain.
+Start a relayer locally to pair a foreign IBC chain to gridironchain.
 
 Options:
 

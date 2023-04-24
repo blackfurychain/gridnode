@@ -27,7 +27,7 @@ gridnoded tx ethbridge burn $(gridnoded keys show akasha -a) 0x11111111262b236c9
 gridnoded q auth account $(gridnoded keys show akasha -a)
 
 ## Case 3
-## 1. lock akasha rwn in gridchain
+## 1. lock akasha rwn in gridironchain
 gridnoded tx ethbridge lock $(gridnoded keys show akasha -a) 0x11111111262b236c9ac9a9a8c8e4276b5cf6b2c9 \
 10 rwn  --ethereum-chain-id=3 --from=akasha --yes
 

@@ -9,10 +9,10 @@ from typing import List
 import sys
 import time
 
-from test_utilities import get_gridchain_addr_balance, advance_n_ethereum_blocks, \
-    n_wait_blocks, print_error_message, wait_for_gridchain_addr_balance, send_from_ethereum_to_gridchain, \
-    get_eth_balance, send_from_gridchain_to_ethereum, wait_for_eth_balance, \
-    wait_for_ethereum_block_number, send_from_gridchain_to_gridchain, wait_for_grid_account, \
+from test_utilities import get_gridironchain_addr_balance, advance_n_ethereum_blocks, \
+    n_wait_blocks, print_error_message, wait_for_gridironchain_addr_balance, send_from_ethereum_to_gridironchain, \
+    get_eth_balance, send_from_gridironchain_to_ethereum, wait_for_eth_balance, \
+    wait_for_ethereum_block_number, send_from_gridironchain_to_gridironchain, wait_for_grid_account, \
     get_shell_output_json, EthereumToGridironchainTransferRequest, GridironchaincliCredentials, RequestAndCredentials, \
     gridnoded_binary
 
@@ -34,11 +34,11 @@ def force_log_level(new_level):
     return existing_level
 
 
-def transfer_ethereum_to_gridchain(transfer_request: EthereumToGridironchainTransferRequest,
+def transfer_ethereum_to_gridironchain(transfer_request: EthereumToGridironchainTransferRequest,
                                   max_seconds: int = default_timeout_for_ganache):
-    logging.debug(f"transfer_ethereum_to_gridchain {transfer_request.as_json()}")
+    logging.debug(f"transfer_ethereum_to_gridironchain {transfer_request.as_json()}")
     assert transfer_request.ethereum_address
-    assert transfer_request.gridchain_address
+    assert transfer_request.gridironchain_address
 
     # it's possible that this is the first transfer to the address, so there's
     # no balance to retrieve.  Catch that exception.
@@ -46,26 +46,26 @@ def transfer_ethereum_to_gridchain(transfer_request: EthereumToGridironchainTran
     original_log_level = decrease_log_level()
 
     try:
-        gridchain_starting_balance = get_gridchain_addr_balance(
-            transfer_request.gridchain_address,
+        gridironchain_starting_balance = get_gridironchain_addr_balance(
+            transfer_request.gridironchain_address,
             transfer_request.gridnoded_node,
-            transfer_request.gridchain_symbol
+            transfer_request.gridironchain_symbol
         )
     except:
-        logging.debug(f"transfer_ethereum_to_gridchain failed to get starting balance, this is probably a new account")
-        gridchain_starting_balance = 0
+        logging.debug(f"transfer_ethereum_to_gridironchain failed to get starting balance, this is probably a new account")
+        gridironchain_starting_balance = 0
 
     status = {
-        "action": "transfer_ethereum_to_gridchain",
-        "gridchain_starting_balance": gridchain_starting_balance,
+        "action": "transfer_ethereum_to_gridironchain",
+        "gridironchain_starting_balance": gridironchain_starting_balance,
         "transfer_request": transfer_request.__dict__,
     }
-    logging.debug(f"transfer_ethereum_to_gridchain_json: {json.dumps(status)}", )
+    logging.debug(f"transfer_ethereum_to_gridironchain_json: {json.dumps(status)}", )
 
     force_log_level(original_log_level)
-    starting_block = send_from_ethereum_to_gridchain(transfer_request)
+    starting_block = send_from_ethereum_to_gridironchain(transfer_request)
     original_log_level = decrease_log_level()
-    logging.debug(f"send_from_ethereum_to_gridchain ethereum block number: {starting_block}")
+    logging.debug(f"send_from_ethereum_to_gridironchain ethereum block number: {starting_block}")
 
     half_n_wait_blocks = n_wait_blocks / 2
     logging.debug("wait half the blocks, transfer should not complete")
@@ -81,21 +81,21 @@ def transfer_ethereum_to_gridchain(transfer_request: EthereumToGridironchainTran
 
     # we still may not have an account
     try:
-        gridchain_balance_before_required_elapsed_blocks = get_gridchain_addr_balance(
-            transfer_request.gridchain_address,
+        gridironchain_balance_before_required_elapsed_blocks = get_gridironchain_addr_balance(
+            transfer_request.gridironchain_address,
             transfer_request.gridnoded_node,
-            transfer_request.gridchain_symbol
+            transfer_request.gridironchain_symbol
         )
     except:
-        gridchain_balance_before_required_elapsed_blocks = 0
+        gridironchain_balance_before_required_elapsed_blocks = 0
 
     # need to be able to turn off checking the balance after waiting half the blocks
     # because we want to be able to run some tests in parallel.  If parallel tests
     # are manually advancing blocks, you can't be sure where you are.
-    if transfer_request.check_wait_blocks and gridchain_balance_before_required_elapsed_blocks != gridchain_starting_balance:
+    if transfer_request.check_wait_blocks and gridironchain_balance_before_required_elapsed_blocks != gridironchain_starting_balance:
         print_error_message(
-            f"balance should not have changed yet.  Starting balance {gridchain_starting_balance},"
-            f" current balance {gridchain_balance_before_required_elapsed_blocks}"
+            f"balance should not have changed yet.  Starting balance {gridironchain_starting_balance},"
+            f" current balance {gridironchain_balance_before_required_elapsed_blocks}"
         )
 
     if transfer_request.manual_block_advance:
@@ -106,61 +106,61 @@ def transfer_ethereum_to_gridchain(transfer_request: EthereumToGridironchainTran
             transfer_request=transfer_request
         )
 
-    target_balance = gridchain_starting_balance + transfer_request.amount
+    target_balance = gridironchain_starting_balance + transfer_request.amount
 
     # You can't get the balance of an account that doesn't exist yet,
     # so wait for the account to be there before asking for the balance
-    logging.debug(f"wait for account {transfer_request.gridchain_address}")
+    logging.debug(f"wait for account {transfer_request.gridironchain_address}")
     wait_for_grid_account(
-        grid_addr=transfer_request.gridchain_address,
-        gridchaincli_node=transfer_request.gridnoded_node,
+        grid_addr=transfer_request.gridironchain_address,
+        gridironchaincli_node=transfer_request.gridnoded_node,
         max_seconds=max_seconds
     )
 
-    wait_for_gridchain_addr_balance(
-        gridchain_address=transfer_request.gridchain_address,
-        symbol=transfer_request.gridchain_symbol,
-        gridchaincli_node=transfer_request.gridnoded_node,
+    wait_for_gridironchain_addr_balance(
+        gridironchain_address=transfer_request.gridironchain_address,
+        symbol=transfer_request.gridironchain_symbol,
+        gridironchaincli_node=transfer_request.gridnoded_node,
         target_balance=target_balance,
         max_seconds=max_seconds,
-        debug_prefix=f"transfer_ethereum_to_gridchain waiting for balance {transfer_request}"
+        debug_prefix=f"transfer_ethereum_to_gridironchain waiting for balance {transfer_request}"
     )
 
     force_log_level(original_log_level)
 
     result = {
         **status,
-        "gridchain_ending_balance": target_balance,
+        "gridironchain_ending_balance": target_balance,
     }
-    logging.debug(f"transfer_ethereum_to_gridchain completed {json.dumps(result)}")
+    logging.debug(f"transfer_ethereum_to_gridironchain completed {json.dumps(result)}")
     return result
 
 
-def transfer_gridchain_to_ethereum(
+def transfer_gridironchain_to_ethereum(
         transfer_request: EthereumToGridironchainTransferRequest,
         credentials: GridironchaincliCredentials,
         max_seconds: int = 90
 ):
-    logging.debug(f"transfer_gridchain_to_ethereum_json: {transfer_request.as_json()}")
+    logging.debug(f"transfer_gridironchain_to_ethereum_json: {transfer_request.as_json()}")
 
     original_log_level = decrease_log_level()
     ethereum_starting_balance = get_eth_balance(transfer_request)
 
-    gridchain_starting_balance = get_gridchain_addr_balance(
-        transfer_request.gridchain_address,
+    gridironchain_starting_balance = get_gridironchain_addr_balance(
+        transfer_request.gridironchain_address,
         transfer_request.gridnoded_node,
-        transfer_request.gridchain_symbol
+        transfer_request.gridironchain_symbol
     )
 
     status = {
-        "action": "transfer_gridchain_to_ethereum",
+        "action": "transfer_gridironchain_to_ethereum",
         "ethereum_starting_balance": ethereum_starting_balance,
-        "gridchain_starting_balance": gridchain_starting_balance,
+        "gridironchain_starting_balance": gridironchain_starting_balance,
     }
     logging.debug(status)
 
     force_log_level(original_log_level)
-    raw_output = send_from_gridchain_to_ethereum(transfer_request, credentials)
+    raw_output = send_from_gridironchain_to_ethereum(transfer_request, credentials)
     original_log_level = decrease_log_level()
 
     target_balance = ethereum_starting_balance + transfer_request.amount
@@ -171,67 +171,67 @@ def transfer_gridchain_to_ethereum(
         max_seconds=max_seconds
     )
 
-    gridchain_ending_balance = get_gridchain_addr_balance(
-        transfer_request.gridchain_address,
+    gridironchain_ending_balance = get_gridironchain_addr_balance(
+        transfer_request.gridironchain_address,
         transfer_request.gridnoded_node,
-        transfer_request.gridchain_symbol
+        transfer_request.gridironchain_symbol
     )
 
     result = {
         **status,
-        "gridchain_ending_balance": gridchain_ending_balance,
+        "gridironchain_ending_balance": gridironchain_ending_balance,
         "ethereum_ending_balance": target_balance,
     }
-    logging.debug(f"transfer_gridchain_to_ethereum_complete_json: {json.dumps(result)}")
+    logging.debug(f"transfer_gridironchain_to_ethereum_complete_json: {json.dumps(result)}")
     force_log_level(original_log_level)
     return result
 
 
-def transfer_gridchain_to_gridchain(
+def transfer_gridironchain_to_gridironchain(
         transfer_request: EthereumToGridironchainTransferRequest,
         credentials: GridironchaincliCredentials,
         max_seconds: int = 30
 ):
-    logging.debug(f"transfer_gridchain_to_gridchain: {transfer_request.as_json()}")
+    logging.debug(f"transfer_gridironchain_to_gridironchain: {transfer_request.as_json()}")
 
     try:
-        gridchain_starting_balance = get_gridchain_addr_balance(
-            transfer_request.gridchain_destination_address,
+        gridironchain_starting_balance = get_gridironchain_addr_balance(
+            transfer_request.gridironchain_destination_address,
             transfer_request.gridnoded_node,
-            transfer_request.gridchain_symbol
+            transfer_request.gridironchain_symbol
         )
     except Exception as e:
         # this is a new account, so the balance is 0
-        gridchain_starting_balance = 0
+        gridironchain_starting_balance = 0
 
     status = {
-        "action": "transfer_gridchain_to_gridchain",
-        "gridchain_starting_balance": gridchain_starting_balance,
+        "action": "transfer_gridironchain_to_gridironchain",
+        "gridironchain_starting_balance": gridironchain_starting_balance,
     }
     logging.info(status)
 
-    send_from_gridchain_to_gridchain(
+    send_from_gridironchain_to_gridironchain(
         transfer_request,
         credentials
     )
-    target_balance = transfer_request.amount + gridchain_starting_balance
+    target_balance = transfer_request.amount + gridironchain_starting_balance
     wait_for_grid_account(
-        grid_addr=transfer_request.gridchain_destination_address,
-        gridchaincli_node=transfer_request.gridnoded_node,
+        grid_addr=transfer_request.gridironchain_destination_address,
+        gridironchaincli_node=transfer_request.gridnoded_node,
         max_seconds=max_seconds
     )
-    wait_for_gridchain_addr_balance(
-        gridchain_address=transfer_request.gridchain_destination_address,
-        symbol=transfer_request.gridchain_symbol,
+    wait_for_gridironchain_addr_balance(
+        gridironchain_address=transfer_request.gridironchain_destination_address,
+        symbol=transfer_request.gridironchain_symbol,
         target_balance=target_balance,
-        gridchaincli_node=transfer_request.gridnoded_node,
+        gridironchaincli_node=transfer_request.gridnoded_node,
         max_seconds=max_seconds,
-        debug_prefix=f"transfer_gridchain_to_gridchain {transfer_request}"
+        debug_prefix=f"transfer_gridironchain_to_gridironchain {transfer_request}"
     )
 
     return {
         **status,
-        "gridchain_ending_balance": target_balance,
+        "gridironchain_ending_balance": target_balance,
     }
 
 
@@ -242,19 +242,19 @@ def transfer_argument_parser() -> argparse.ArgumentParser:
     Transfer from Ethereum to Gridironchain
     """))
     parser.add_argument(
-        '--gridchain_address',
+        '--gridironchain_address',
         type=str,
         nargs=1,
         required=True,
-        help="A GridChain address like grid132tc0acwt8klntn53xatchqztl3ajfxxxsawn8"
+        help="A GridChain address like did:fury:g132tc0acwt8klntn53xatchqztl3ajfxxxsawn8"
     )
     parser.add_argument(
-        '--gridchain_destination_address',
+        '--gridironchain_destination_address',
         type=str,
         nargs=1,
         required=False,
         default=[""],
-        help="A GridChain address like grid132tc0acwt8klntn53xatchqztl3ajfxxxsawn8, used for transferring between gridchain addresses"
+        help="A GridChain address like did:fury:g132tc0acwt8klntn53xatchqztl3ajfxxxsawn8, used for transferring between gridironchain addresses"
     )
     parser.add_argument(
         '--ethereum_address',
@@ -271,7 +271,7 @@ def transfer_argument_parser() -> argparse.ArgumentParser:
         help="An ethereum symbol like eth"
     )
     parser.add_argument(
-        '--gridchain_symbol',
+        '--gridironchain_symbol',
         type=str,
         nargs=1,
         required=True,
@@ -418,7 +418,7 @@ def create_new_gridaddr(
         credentials: GridironchaincliCredentials,
         keyname
 ):
-    """returns something like {"name":"9cbf3bd4-f15c-4128-bae6-a534fc8d6877","type":"local","address":"grid19u4xtckuvy2zk9r2l4063g93s3r8qc4vw0a20t","pubkey":"gridpub1addwnpepqw88ns6dmy3xwjqh4mkvuda6ezn056nxy8ldrtpkrfuvuamexv9hxyzhxm7","mnemonic":"surprise fire cupboard orange scatter boat cruel ability oven gap accident purity delay"}"""
+    """returns something like {"name":"9cbf3bd4-f15c-4128-bae6-a534fc8d6877","type":"local","address":"did:fury:g19u4xtckuvy2zk9r2l4063g93s3r8qc4vw0a20t","pubkey":"gridpub1addwnpepqw88ns6dmy3xwjqh4mkvuda6ezn056nxy8ldrtpkrfuvuamexv9hxyzhxm7","mnemonic":"surprise fire cupboard orange scatter boat cruel ability oven gap accident purity delay"}"""
     keyring_passphrase = credentials.keyring_passphrase
     yes_subcmd = f"yes {keyring_passphrase} |" if keyring_passphrase else ""
     keyring_backend_subcmd = f"--keyring-backend {credentials.keyring_backend}" if credentials.keyring_backend else ""

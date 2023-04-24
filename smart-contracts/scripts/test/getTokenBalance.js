@@ -2,14 +2,14 @@ module.exports = async (cb) => {
     const Web3 = require("web3");
     const BN = require('bn.js');
 
-    const gridchainUtilities = require('./gridchainUtilities')
+    const gridironchainUtilities = require('./gridironchainUtilities')
     const contractUtilites = require('./contractUtilities');
 
-    const logging = gridchainUtilities.configureLogging(this);
+    const logging = gridironchainUtilities.configureLogging(this);
 
-    const argv = gridchainUtilities.processArgs(this, {
-        ...gridchainUtilities.sharedYargOptions,
-        ...gridchainUtilities.symbolYargOption,
+    const argv = gridironchainUtilities.processArgs(this, {
+        ...gridironchainUtilities.sharedYargOptions,
+        ...gridironchainUtilities.symbolYargOption,
         'ethereum_address': {
             type: "string",
             demandOption: true
@@ -20,7 +20,7 @@ module.exports = async (cb) => {
     const result = {};
     try {
         const web3instance = contractUtilites.buildWeb3(this, argv, logging);
-        if (argv.symbol === gridchainUtilities.NULL_ADDRESS) {
+        if (argv.symbol === gridironchainUtilities.NULL_ADDRESS) {
             balanceWei = await web3instance.eth.getBalance(argv.ethereum_address);
             result.symbol = "eth";
         } else {

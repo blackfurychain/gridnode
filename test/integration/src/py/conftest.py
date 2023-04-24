@@ -20,14 +20,14 @@ def gridnode_base_dir():
 
 
 @pytest.fixture
-def gridchain_admin_account():
+def gridironchain_admin_account():
     return test_utilities.get_required_env_var("GRIDCHAIN_ADMIN_ACCOUNT")
 
 
 @pytest.fixture
-def gridchain_admin_account_credentials(gridchain_admin_account):
+def gridironchain_admin_account_credentials(gridironchain_admin_account):
     return test_utilities.GridironchaincliCredentials(
-        from_key=gridchain_admin_account
+        from_key=gridironchain_admin_account
     )
 
 
@@ -79,7 +79,7 @@ def ethereum_network():
 
 
 @pytest.fixture
-def n_gridchain_accounts():
+def n_gridironchain_accounts():
     return int(test_utilities.get_optional_env_var("N_GRIDCHAIN_ACCOUNTS", 1))
 
 
@@ -106,7 +106,7 @@ def gridnoded_homedir(is_ropsten_testnet):
 
 @pytest.fixture
 def fury_source(is_ropsten_testnet, validator_address):
-    """A gridchain address or key that has fury and can send that fury to other address"""
+    """A gridironchain address or key that has fury and can send that fury to other address"""
     result = test_utilities.get_optional_env_var("FURY_SOURCE", None)
     if result:
         return result
@@ -119,7 +119,7 @@ def fury_source(is_ropsten_testnet, validator_address):
 
 @pytest.fixture
 def fury_source_key(is_ropsten_testnet, fury_source):
-    """A gridchain address or key that has fury and can send that fury to other address"""
+    """A gridironchain address or key that has fury and can send that fury to other address"""
     result = test_utilities.get_optional_env_var("FURY_SOURCE_KEY", fury_source)
     if result:
         return result
@@ -183,16 +183,16 @@ def is_ganache(ethereum_network):
 # Using those parameters is the best way to have the fees set robustly after the .42 upgrade.
 # See https://github.com/Gridironchain/gridnode/pull/1802#discussion_r697403408
 @pytest.fixture
-def gridchain_fees(gridchain_fees_int):
+def gridironchain_fees(gridironchain_fees_int):
     """returns a string suitable for passing to gridnoded"""
-    return f"{gridchain_fees_int}fury"
+    return f"{gridironchain_fees_int}fury"
 
 
 # Deprecated: gridnoded accepts --gas-prices=0.5fury along with --gas-adjustment=1.5 instead of a fixed fee.
 # Using those parameters is the best way to have the fees set robustly after the .42 upgrade.
 # See https://github.com/Gridironchain/gridnode/pull/1802#discussion_r697403408
 @pytest.fixture
-def gridchain_fees_int():
+def gridironchain_fees_int():
     return 100000000000000000
 
 
@@ -270,7 +270,7 @@ def basic_transfer_request(
         ethereum_network,
         gridnoded_node,
         chain_id,
-        gridchain_fees,
+        gridironchain_fees,
         solidity_json_path,
         is_ganache,
 ):
@@ -286,7 +286,7 @@ def basic_transfer_request(
         gridnoded_node=gridnoded_node,
         manual_block_advance=is_ganache,
         chain_id=chain_id,
-        gridchain_fees=gridchain_fees,
+        gridironchain_fees=gridironchain_fees,
         solidity_json_path=solidity_json_path
     )
 
@@ -320,31 +320,31 @@ def fury_source_integrationtest_env_transfer_request(
     for a transfer of fury from an account that already has fury.
     """
     result: test_utilities.EthereumToGridironchainTransferRequest = copy.deepcopy(basic_transfer_request)
-    result.gridchain_address = fury_source
-    result.gridchain_symbol = "fury"
+    result.gridironchain_address = fury_source
+    result.gridironchain_symbol = "fury"
     return result
 
 
 @pytest.fixture
 def ethbridge_module_address():
     """The hardcoded address of the gridnode ethbridge module"""
-    return "grid1l3dftf499u4gvdeuuzdl2pgv4f0xdtnuuwlzp8"
+    return "did:fury:g1l3dftf499u4gvdeuuzdl2pgv4f0xdtnuuwlzp8"
 
 
 @pytest.fixture(scope="function")
 def restore_default_rescue_location(
         ethbridge_module_address,
-        gridchain_admin_account,
-        gridchain_admin_account_credentials,
+        gridironchain_admin_account,
+        gridironchain_admin_account_credentials,
         basic_transfer_request
 ):
     """Restores the ethbridge module as the destination for ceth fees"""
     yield None
     test_utilities.update_ceth_receiver_account(
         receiver_account=ethbridge_module_address,
-        admin_account=gridchain_admin_account,
+        admin_account=gridironchain_admin_account,
         transfer_request=basic_transfer_request,
-        credentials=gridchain_admin_account_credentials
+        credentials=gridironchain_admin_account_credentials
     )
 
 

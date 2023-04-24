@@ -4,7 +4,7 @@ import {BigNumber, ContractFactory} from "ethers";
 import {HardhatRuntimeEnvironment} from "hardhat/types";
 import {EthereumAddress, NotNativeCurrencyAddress} from "../ethereumAddress";
 import {HardhatRuntimeEnvironmentToken,} from "./injectionTokens";
-import {GridironchainAccounts, GridironchainAccountsPromise} from "./gridchainAccounts";
+import {GridironchainAccounts, GridironchainAccountsPromise} from "./gridironchainAccounts";
 import {
     BridgeBank,
     BridgeBank__factory,
@@ -60,10 +60,10 @@ export class CosmosBridgeProxy {
 
     constructor(
         @inject(HardhatRuntimeEnvironmentToken) hardhatRuntimeEnvironment: HardhatRuntimeEnvironment,
-        gridchainContractFactories: GridironchainContractFactories,
+        gridironchainContractFactories: GridironchainContractFactories,
         cosmosBridgeArgumentsPromise: CosmosBridgeArgumentsPromise,
     ) {
-        this.contract = gridchainContractFactories.cosmosBridge.then(async cosmosBridgeFactory => {
+        this.contract = gridironchainContractFactories.cosmosBridge.then(async cosmosBridgeFactory => {
             const args = await cosmosBridgeArgumentsPromise.cosmosBridgeArguments
             const cosmosBridgeProxy = await hardhatRuntimeEnvironment.upgrades.deployProxy(cosmosBridgeFactory, args.asArray())
             await cosmosBridgeProxy.deployed()
@@ -72,13 +72,13 @@ export class CosmosBridgeProxy {
     }
 }
 
-export function defaultCosmosBridgeArguments(gridchainAccounts: GridironchainAccounts, power: number = 100): CosmosBridgeArguments {
-    const powers = gridchainAccounts.validatatorAccounts.map(_ => power)
+export function defaultCosmosBridgeArguments(gridironchainAccounts: GridironchainAccounts, power: number = 100): CosmosBridgeArguments {
+    const powers = gridironchainAccounts.validatatorAccounts.map(_ => power)
     const threshold = powers.reduce((acc, x) => acc + x)
     return new CosmosBridgeArguments(
-        new NotNativeCurrencyAddress(gridchainAccounts.operatorAccount.address),
+        new NotNativeCurrencyAddress(gridironchainAccounts.operatorAccount.address),
         threshold,
-        gridchainAccounts.validatatorAccounts.map(x => new NotNativeCurrencyAddress(x.address)),
+        gridironchainAccounts.validatatorAccounts.map(x => new NotNativeCurrencyAddress(x.address)),
         powers
     )
 }
@@ -99,13 +99,13 @@ export function defaultCosmosBridgeArguments(gridchainAccounts: GridironchainAcc
 export class BridgeBankArguments {
     constructor(
         private readonly cosmosBridgeProxy: CosmosBridgeProxy,
-        private readonly gridchainAccountsPromise: GridironchainAccountsPromise
+        private readonly gridironchainAccountsPromise: GridironchainAccountsPromise
     ) {
     }
 
     async asArray() {
         const cosmosBridge = await this.cosmosBridgeProxy.contract
-        const accts = await this.gridchainAccountsPromise.accounts
+        const accts = await this.gridironchainAccountsPromise.accounts
         const result = [
             accts.operatorAccount.address,
             cosmosBridge.address,
@@ -122,10 +122,10 @@ export class BridgeBankProxy {
 
     constructor(
         @inject(HardhatRuntimeEnvironmentToken) h: HardhatRuntimeEnvironment,
-        private gridchainContractFactories: GridironchainContractFactories,
+        private gridironchainContractFactories: GridironchainContractFactories,
         private bridgeBankArguments: BridgeBankArguments,
     ) {
-        this.contract = gridchainContractFactories.bridgeBank.then(async bridgeBankFactory => {
+        this.contract = gridironchainContractFactories.bridgeBank.then(async bridgeBankFactory => {
             const bridgeBankArguments = await this.bridgeBankArguments.asArray()
             const bridgeBankProxy = await h.upgrades.deployProxy(bridgeBankFactory, bridgeBankArguments, {initializer: "initialize(address,address,address,address)"}) as BridgeBank
             await bridgeBankProxy.deployed()
@@ -142,11 +142,11 @@ export class BridgeRegistryProxy {
 
     constructor(
         @inject(HardhatRuntimeEnvironmentToken) h: HardhatRuntimeEnvironment,
-        private gridchainContractFactories: GridironchainContractFactories,
+        private gridironchainContractFactories: GridironchainContractFactories,
         private cosmosBridgeProxy: CosmosBridgeProxy,
         private bridgeBankProxy: BridgeBankProxy,
     ) {
-        this.contract = gridchainContractFactories.bridgeRegistry.then(async bridgeRegistryFactory => {
+        this.contract = gridironchainContractFactories.bridgeRegistry.then(async bridgeRegistryFactory => {
             const bridgeRegistryProxy = await h.upgrades.deployProxy(bridgeRegistryFactory, [
                 (await cosmosBridgeProxy.contract).address,
                 (await bridgeBankProxy.contract).address
@@ -165,9 +165,9 @@ export class FuryContract {
     readonly contract: Promise<BridgeToken>
 
     constructor(
-        private gridchainContractFactories: GridironchainContractFactories,
+        private gridironchainContractFactories: GridironchainContractFactories,
     ) {
-        this.contract = gridchainContractFactories.bridgeToken.then(async bridgeToken => {
+        this.contract = gridironchainContractFactories.bridgeToken.then(async bridgeToken => {
             return await (bridgeToken as BridgeToken__factory).deploy("efury") as BridgeToken
         })
     }
@@ -180,15 +180,15 @@ export class BridgeTokenSetup {
     private async build(
         fury: FuryContract,
         bridgeBankProxy: BridgeBankProxy,
-        gridchainAccounts: GridironchainAccountsPromise
+        gridironchainAccounts: GridironchainAccountsPromise
     ) {
         const efury = await fury.contract
-        const owner = (await gridchainAccounts.accounts).ownerAccount
+        const owner = (await gridironchainAccounts.accounts).ownerAccount
         const bridgebank = (await bridgeBankProxy.contract).connect(owner)
         await bridgebank.addExistingBridgeToken(efury.address)
         await efury.approve(bridgebank.address, "10000000000000000000")
         await efury.addMinter(owner.address)
-        const accounts = await gridchainAccounts.accounts
+        const accounts = await gridironchainAccounts.accounts
         const muchFury = BigNumber.from(100000000).mul(BigNumber.from(10).pow(18))
         await efury.mint(accounts.operatorAccount.address, muchFury)
         return true
@@ -197,8 +197,8 @@ export class BridgeTokenSetup {
     constructor(
         fury: FuryContract,
         bridgeBankProxy: BridgeBankProxy,
-        gridchainAccounts: GridironchainAccountsPromise
+        gridironchainAccounts: GridironchainAccountsPromise
     ) {
-        this.complete = this.build(fury, bridgeBankProxy, gridchainAccounts)
+        this.complete = this.build(fury, bridgeBankProxy, gridironchainAccounts)
     }
 }

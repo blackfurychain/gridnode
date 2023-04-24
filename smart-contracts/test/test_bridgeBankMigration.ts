@@ -12,7 +12,7 @@ import {
     setupGridironchainMainnetDeployment,
     startImpersonateAccount
 } from "../src/hardhatFunctions"
-import {GridironchainAccountsPromise} from "../src/tsyringe/gridchainAccounts";
+import {GridironchainAccountsPromise} from "../src/tsyringe/gridironchainAccounts";
 import web3 from "web3";
 import {BigNumber, BigNumberish, ContractTransaction} from "ethers";
 import {SignerWithAddress} from "@nomiclabs/hardhat-ethers/signers";
@@ -107,7 +107,7 @@ describe("BridgeBank and CosmosBridge - updating to latest smart contracts", () 
                     // it("should turn random ERC20 pegged token back to unlock that token on mainnet")
 
                     // need to add a test token so we can burn it
-                    const recipient = web3.utils.utf8ToHex("grid1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace")
+                    const recipient = web3.utils.utf8ToHex("did:fury:g1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace")
                     await newBridgeBank.updateEthWhiteList(testToken.address, true)
                     await newBridgeBank.lock(
                         recipient,
@@ -141,7 +141,7 @@ async function executeNewProphecyClaimWithTestValues(
     cosmosBridge: CosmosBridge,
     validators: Array<SignerWithAddress>
 ): Promise<readonly ContractTransaction[]> {
-    const cosmosSender = web3.utils.utf8ToHex("grid1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace")
+    const cosmosSender = web3.utils.utf8ToHex("did:fury:g1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace")
     const claimTypeValue = {
         "burn": 1,
         "lock": 2

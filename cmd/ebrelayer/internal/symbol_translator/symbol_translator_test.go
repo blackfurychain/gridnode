@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	gridchainDenomFeedface = "ibc/FEEDFACEFEEDFACEFEEDFACEFEEDFACEFEEDFACEFEEDFACEFEEDFACEFEEDFACE"
+	gridironchainDenomFeedface = "ibc/FEEDFACEFEEDFACEFEEDFACEFEEDFACEFEEDFACEFEEDFACEFEEDFACEFEEDFACE"
 	ethereumSymbolFeeface = "Face"
 )
 
@@ -18,8 +18,8 @@ func TestNewSymbolTranslatorFromJsonBytes(t *testing.T) {
 	x, err := NewSymbolTranslatorFromJSONBytes([]byte(q))
 	assert.NoError(t, err)
 	assert.NotNil(t, x)
-	assert.Equal(t, x.GridironchainToEthereum(gridchainDenomFeedface), ethereumSymbolFeeface)
-	assert.Equal(t, x.EthereumToGridironchain(ethereumSymbolFeeface), gridchainDenomFeedface)
+	assert.Equal(t, x.GridironchainToEthereum(gridironchainDenomFeedface), ethereumSymbolFeeface)
+	assert.Equal(t, x.EthereumToGridironchain(ethereumSymbolFeeface), gridironchainDenomFeedface)
 	assert.Equal(t, x.GridironchainToEthereum("verbatim"), "verbatim")
 	assert.Equal(t, x.EthereumToGridironchain("verbatim"), "verbatim")
 }

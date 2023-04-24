@@ -21,7 +21,7 @@ import (
 func TestKeeper_CheckBalances(t *testing.T) {
 	nativeAmount, _ := sdk.NewIntFromString("999999000000000000000000000")
 	externalAmount, _ := sdk.NewIntFromString("500000000000000000000000")
-	const address = "grid1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd"
+	const address = "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd"
 
 	ctx, app := test.CreateTestAppClpFromGenesis(false, func(app *gridapp.GridironchainApp, genesisState gridapp.GenesisState) gridapp.GenesisState {
 		balances := []banktypes.Balance{
@@ -1397,7 +1397,7 @@ func TestKeeper_CalculatePoolUnitsSymmetric(t *testing.T) {
 }
 
 func TestKeeper_SwapOneFromGenesis(t *testing.T) {
-	const address = "grid1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd"
+	const address = "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd"
 	SwapPriceNative := sdk.ZeroDec()
 	SwapPriceExternal := sdk.ZeroDec()
 

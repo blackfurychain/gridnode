@@ -11,53 +11,53 @@ option go_package = "github.com/Gridironchain/gridnode/x/clp/types";
 
 service Query {
   rpc GetPool(PoolReq) returns (PoolRes) {
-    option (google.api.http).get = "/gridchain/clp/v1/pool/{symbol}";
+    option (google.api.http).get = "/gridironchain/clp/v1/pool/{symbol}";
   };
   rpc GetPools(PoolsReq) returns (PoolsRes) {
-    option (google.api.http).get = "/gridchain/clp/v1/pools";
+    option (google.api.http).get = "/gridironchain/clp/v1/pools";
   };
   rpc GetLiquidityProvider(LiquidityProviderReq)
       returns (LiquidityProviderRes) {
     option (google.api.http).get =
-        "/gridchain/clp/v1/liquidity_provider/{symbol}/{lp_address}";
+        "/gridironchain/clp/v1/liquidity_provider/{symbol}/{lp_address}";
   };
   rpc GetLiquidityProviderData(LiquidityProviderDataReq)
       returns (LiquidityProviderDataRes) {
     option (google.api.http).get =
-        "/gridchain/clp/v1/liquidity_provider_data/{lp_address}";
+        "/gridironchain/clp/v1/liquidity_provider_data/{lp_address}";
   };
   rpc GetAssetList(AssetListReq) returns (AssetListRes) {
-    option (google.api.http).get = "/gridchain/clp/v1/asset_list/{lp_address}";
+    option (google.api.http).get = "/gridironchain/clp/v1/asset_list/{lp_address}";
   };
   rpc GetLiquidityProviders(LiquidityProvidersReq)
       returns (LiquidityProvidersRes) {
-    option (google.api.http).get = "/gridchain/clp/v1/liquidity_providers";
+    option (google.api.http).get = "/gridironchain/clp/v1/liquidity_providers";
   };
   rpc GetLiquidityProviderList(LiquidityProviderListReq)
       returns (LiquidityProviderListRes) {
     option (google.api.http).get =
-        "/gridchain/clp/v1/liquidity_provider_list/{symbol}";
+        "/gridironchain/clp/v1/liquidity_provider_list/{symbol}";
   };
   rpc GetParams(ParamsReq) returns (ParamsRes) {
-    option (google.api.http).get = "/gridchain/clp/v1/params";
+    option (google.api.http).get = "/gridironchain/clp/v1/params";
   };
   rpc GetRewardParams(RewardParamsReq) returns (RewardParamsRes) {
-    option (google.api.http).get = "/gridchain/clp/v1/reward_params";
+    option (google.api.http).get = "/gridironchain/clp/v1/reward_params";
   };
   rpc GetPmtpParams(PmtpParamsReq) returns (PmtpParamsRes) {
-    option (google.api.http).get = "/gridchain/clp/v1/pmtp_params";
+    option (google.api.http).get = "/gridironchain/clp/v1/pmtp_params";
   };
   rpc GetLiquidityProtectionParams(LiquidityProtectionParamsReq) returns (LiquidityProtectionParamsRes) {
-    option (google.api.http).get = "/gridchain/clp/v1/liquidity_protection_params";
+    option (google.api.http).get = "/gridironchain/clp/v1/liquidity_protection_params";
   };
   rpc GetProviderDistributionParams(ProviderDistributionParamsReq) returns (ProviderDistributionParamsRes) {
-    option (google.api.http).get = "/gridchain/clp/v1/provider_distribution_params";
+    option (google.api.http).get = "/gridironchain/clp/v1/provider_distribution_params";
   };
   rpc GetSwapFeeParams(SwapFeeParamsReq) returns (SwapFeeParamsRes) {
-    option (google.api.http).get = "/gridchain/clp/v1/swap_fee_rate";
+    option (google.api.http).get = "/gridironchain/clp/v1/swap_fee_rate";
   };
   rpc GetPoolShareEstimate(PoolShareEstimateReq) returns (PoolShareEstimateRes) {
-    option (google.api.http).get = "/gridchain/clp/v1/pool_share_estimate";
+    option (google.api.http).get = "/gridironchain/clp/v1/pool_share_estimate";
   };
 }
 

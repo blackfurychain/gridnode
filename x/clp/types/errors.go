@@ -19,7 +19,7 @@ var (
 	ErrUnableToDestroyPool                             = sdkerrors.Register(ModuleName, 13, "Unable to destroy pool")
 	ErrUnableToCreatePool                              = sdkerrors.Register(ModuleName, 14, "Unable to create pool")
 	ErrBalanceNotAvailable                             = sdkerrors.Register(ModuleName, 18, "user does not have enough balance of the required coin")
-	ErrTokenNotSupported                               = sdkerrors.Register(ModuleName, 19, "Token not supported by gridchain")
+	ErrTokenNotSupported                               = sdkerrors.Register(ModuleName, 19, "Token not supported by gridironchain")
 	ErrUnableToAddBalance                              = sdkerrors.Register(ModuleName, 20, "unable to add balance")
 	ErrNotEnoughLiquidity                              = sdkerrors.Register(ModuleName, 21, "pool does not have sufficient balance")
 	ErrPoolTooShallow                                  = sdkerrors.Register(ModuleName, 23, "Cannot withdraw pool is too shallow")

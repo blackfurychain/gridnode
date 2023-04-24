@@ -24,7 +24,7 @@ async function createAssetRewardsFileFromParams({
 }) {
   const entries = (
     await (
-      await fetch("https://api.gridchain.finance/tokenregistry/entries")
+      await fetch("https://api.gridironchain.finance/tokenregistry/entries")
     ).json()
   ).result.registry.entries;
 

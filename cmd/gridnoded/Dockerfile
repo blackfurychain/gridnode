@@ -23,7 +23,7 @@ ENV CGO_ENABLED=0
 ENV GOOS=linux
 ENV CHAINNET=$chainnet
 
-WORKDIR /gridchain
+WORKDIR /gridironchain
 COPY go.mod go.sum ./
 RUN go mod download
 

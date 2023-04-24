@@ -6,9 +6,9 @@
 // (this will be obsolete when the frontend just gets it from the smart contracts
 // directly)
 //
-// For example, to get the gridchain version:
+// For example, to get the gridironchain version:
 // 
-//   node scripts/test/updateAddresses.js $BASEDIR/ui/core/src/tokenwhitelist.sandpit.json $BASEDIR/ui/core/src/assets.ethereum.ropsten.json | jq .gridchain
+//   node scripts/test/updateAddresses.js $BASEDIR/ui/core/src/tokenwhitelist.sandpit.json $BASEDIR/ui/core/src/assets.ethereum.ropsten.json | jq .gridironchain
 //
 //
 
@@ -35,17 +35,17 @@ const assets = targets["assets"].map(t => {
     return newElement;
 });
 
-const gridchainAssets = assets.map(t => {
+const gridironchainAssets = assets.map(t => {
     return {
         ...t,
         symbol: ((t.symbol === "efury") ? "fury" : `c${t.symbol}`).toLowerCase(),
-        network: "gridchain",
+        network: "gridironchain",
     }
 });
 
 const result = {
     ethereum: {assets},
-    gridchain: {assets: gridchainAssets},
+    gridironchain: {assets: gridironchainAssets},
 }
 
 console.log(JSON.stringify(result))

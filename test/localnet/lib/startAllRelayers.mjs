@@ -17,7 +17,7 @@ export async function startAllRelayers({
     configPath,
   });
   const chainsProps = getChainsProps({ chains, network });
-  const { gridchain: gridChainProps, ...otherChainsProps } = chainsProps;
+  const { gridironchain: gridChainProps, ...otherChainsProps } = chainsProps;
 
   // 1) start relayers
   return Promise.all(

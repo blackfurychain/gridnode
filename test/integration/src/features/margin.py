@@ -1,7 +1,7 @@
 from contextlib import contextmanager
 from gridtool.common import *
-from gridtool.gridchain import FURY, FURY_DECIMALS
-from gridtool import command, environments, project, gridchain, cosmos
+from gridtool.gridironchain import FURY, FURY_DECIMALS
+from gridtool import command, environments, project, gridironchain, cosmos
 
 
 def swap_pricing_formula(x, X, y, Y):
@@ -37,8 +37,8 @@ class TestMargin:
     @contextmanager
     def with_test_env(self, pool_setup):
         faucet_balance = cosmos.balance_add({
-            gridchain.FURY: 10**30,
-            gridchain.STAKE: 10**30,
+            gridironchain.FURY: 10**30,
+            gridironchain.STAKE: 10**30,
         }, {
             denom: external_amount + faucet_amount for denom, _, _, external_amount, faucet_amount in pool_setup
         })
@@ -83,7 +83,7 @@ class TestMargin:
             assert balance_after.get(dst_denom, 0) > 0
 
             # Account fury balance should change by 1 tx fee + amount swapped
-            assert src_balance_delta == - (gridchain.grid_tx_fee_in_fury + swap_amount)
+            assert src_balance_delta == - (gridironchain.grid_tx_fee_in_fury + swap_amount)
 
             # Pool native asset balance should increase by swapped amount
             assert int(pool_after["native_asset_balance"]) - int(pool_before["native_asset_balance"]) == swap_amount
@@ -145,7 +145,7 @@ class TestMargin:
             assert balance_before.get(dst_denom, 0) == 0
 
             # The account should pay a transaction fee in fury of 10**17
-            assert fury_delta == -gridchain.grid_tx_fee_in_fury
+            assert fury_delta == -gridironchain.grid_tx_fee_in_fury
 
             # Source pool's external asset should increase by swapped amount
             assert int(pools_after[src_denom]["external_asset_balance"]) - int(pools_before[src_denom]["external_asset_balance"]) == swap_amount

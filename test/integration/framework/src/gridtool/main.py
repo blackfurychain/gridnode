@@ -2,7 +2,7 @@ import argparse
 import sys
 import time
 
-from gridtool import test_utils, run_env, cosmos, diagnostics, gridchain, frontend, test_utils2
+from gridtool import test_utils, run_env, cosmos, diagnostics, gridironchain, frontend, test_utils2
 from gridtool.run_env import Integrator, UIStackEnvironment, Peggy2Environment, IBCEnvironment, IntegrationTestsEnvironment
 from gridtool.project import Project, killall, force_kill_processes
 from gridtool.common import *
@@ -183,7 +183,7 @@ def main(argv):
         argparser.add_argument("--from-block", type=int)
         argparser.add_argument("--to-block", type=int)
         args = argparser.parse_args(argv[1:])
-        gridnoded = gridchain.Gridnoded(cmd, node=args.node)
+        gridnoded = gridironchain.Gridnoded(cmd, node=args.node)
         from_block = args.from_block if args.from_block is not None else 1
         to_block = args.to_block if args.to_block is not None else gridnoded.get_current_block()
         block_times = diagnostics.get_block_times(gridnoded, from_block, to_block)

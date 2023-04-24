@@ -1,27 +1,27 @@
 import pytest
 
 import gridtool_path
-from gridtool import eth, gridchain
+from gridtool import eth, gridironchain
 from gridtool.inflate_tokens import InflateTokens
 from gridtool.common import *
 
 
 # Gridironchain wallets to which we want to distribute
 test_wallets = [
-    "grid1fpq67nw66thzmf2a5ng64cd8p8nxa5vl9d3cm4",
-    "grid1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd",
-    "grid1hjkgsq0wcmwdh8pr3snhswx5xyy4zpgs833akh",
-    "grid1ypc5qcq5ha562xlak4xw3g6v352k39t6868jhx",
-    "grid1u7cp5e5kty8xwuu7k234ah4jsknvkzazqagvl6",
-    "grid1lj3rsayj4xtrhp2e3elv4nf7lazxty272zqegr",
-    "grid1cffgyxgvw80rr6n9pcwpzrm6v8cd6dax8x32f5",
-    "grid1dlse3w2pxlmuvsj5eda344zp99fegual958qyr",
-    "grid1m7257566ehx7ya4ypeq7lj4y2h075z6u2xu79v",
-    "grid1qrxylp97p25wcqn4cs9nd02v672073ynpkt4yr",
-    "grid13rysrrdlhtmuc2pzve7jk0t4pwytwyxhaqcqcn",
-    "grid1shywxv2g8gvjcqknvkxu4p6lkqhfclwwj2qk6h",
-    "grid1gqm44p5ax4kgk6hksxgv4vuh2adue2acxvg542",
-    "grid1zwgc9frcfpt3hhkqfu9u7up94ag5rp30kwrwrj",
+    "did:fury:g1fpq67nw66thzmf2a5ng64cd8p8nxa5vl9d3cm4",
+    "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd",
+    "did:fury:g1hjkgsq0wcmwdh8pr3snhswx5xyy4zpgs833akh",
+    "did:fury:g1ypc5qcq5ha562xlak4xw3g6v352k39t6868jhx",
+    "did:fury:g1u7cp5e5kty8xwuu7k234ah4jsknvkzazqagvl6",
+    "did:fury:g1lj3rsayj4xtrhp2e3elv4nf7lazxty272zqegr",
+    "did:fury:g1cffgyxgvw80rr6n9pcwpzrm6v8cd6dax8x32f5",
+    "did:fury:g1dlse3w2pxlmuvsj5eda344zp99fegual958qyr",
+    "did:fury:g1m7257566ehx7ya4ypeq7lj4y2h075z6u2xu79v",
+    "did:fury:g1qrxylp97p25wcqn4cs9nd02v672073ynpkt4yr",
+    "did:fury:g13rysrrdlhtmuc2pzve7jk0t4pwytwyxhaqcqcn",
+    "did:fury:g1shywxv2g8gvjcqknvkxu4p6lkqhfclwwj2qk6h",
+    "did:fury:g1gqm44p5ax4kgk6hksxgv4vuh2adue2acxvg542",
+    "did:fury:g1zwgc9frcfpt3hhkqfu9u7up94ag5rp30kwrwrj",
 ]
 
 assets = [
@@ -99,9 +99,9 @@ def _test_inflate_tokens_parametrized(ctx, number_of_tokens):
 
     script = InflateTokens(ctx)
 
-    balances_before = [ctx.get_gridchain_balance(w) for w in wallets]
+    balances_before = [ctx.get_gridironchain_balance(w) for w in wallets]
     script.transfer(requested_tokens, amount_in_tokens, wallets, amount_gwei)
-    balances_delta = [gridchain.balance_delta(balances_before[i], ctx.get_gridchain_balance(w)) for i, w in enumerate(wallets)]
+    balances_delta = [gridironchain.balance_delta(balances_before[i], ctx.get_gridironchain_balance(w)) for i, w in enumerate(wallets)]
 
     for balances_delta in balances_delta:
         for t in requested_tokens:

@@ -29,7 +29,7 @@ gridnoded tx ethbridge burn $(gridnoded keys show user2 -a) 0x11111111262b236c9a
 gridnoded q auth account $(gridnoded keys show user2 -a)
 
 ## Case 3
-## 1. lock user2 rwn in gridchain
+## 1. lock user2 rwn in gridironchain
 gridnoded tx ethbridge lock $(gridnoded keys show user2 -a) 0x11111111262b236c9ac9a9a8c8e4276b5cf6b2c9 \
 10 rwn  --ethereum-chain-id=3 --from=user2 --yes
 

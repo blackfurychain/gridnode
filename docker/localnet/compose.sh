@@ -1,7 +1,7 @@
 #!/bin/sh
 
-CHAINNET0=gridchain-ibc-0
-CHAINNET1=gridchain-ibc-1
+CHAINNET0=gridironchain-ibc-0
+CHAINNET1=gridironchain-ibc-1
 IPADDR0=192.168.65.2
 IPADDR1=192.168.65.3
 IPADDR2=192.168.65.4

@@ -43,8 +43,8 @@ valoper=$(gridnoded keys show -a --bech val $MONIKER --home $CHAINDIR/.gridnoded
 gridnoded add-genesis-validators $valoper --home $CHAINDIR/.gridnoded
 
 mkdir -p $datadir/logs
-nohup $TEST_INTEGRATION_DIR/gridchain_start_daemon.sh < /dev/null > $GRIDNODED_LOG 2>&1 &
-# we don't have a great way to make sure gridchain itself has started
+nohup $TEST_INTEGRATION_DIR/gridironchain_start_daemon.sh < /dev/null > $GRIDNODED_LOG 2>&1 &
+# we don't have a great way to make sure gridironchain itself has started
 sleep 10
 set_persistant_env_var GRIDNODED_PID $! $envexportfile
-bash $TEST_INTEGRATION_DIR/gridchain_start_ebrelayer.sh
+bash $TEST_INTEGRATION_DIR/gridironchain_start_ebrelayer.sh

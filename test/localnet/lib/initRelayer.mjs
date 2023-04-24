@@ -6,8 +6,8 @@ import { setupRelayerChannelIds } from "../utils/setupRelayerChannelIds.mjs";
 import { send } from "./send.mjs";
 
 export async function initRelayer(props) {
-  // 0) retrieve gridchain props
-  const candidateGridChainProps = getChainProps({ chain: "gridchain" });
+  // 0) retrieve gridironchain props
+  const candidateGridChainProps = getChainProps({ chain: "gridironchain" });
 
   const {
     chainProps: candidateOtherChainProps,

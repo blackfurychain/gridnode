@@ -18,7 +18,7 @@ yarn \
     -s \
     --cwd ${smartContractsDirectory} \
     integrationtest:sendLockTx \
-    --gridchain_address ${srcAddr}
+    --gridironchain_address ${srcAddr}
     --symbol eth \
     --ethereum_private_key_env_var \
     --json_path ${smartContractsDirectory}/deployments/${deploymentName} \

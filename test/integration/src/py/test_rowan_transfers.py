@@ -34,7 +34,7 @@ def test_fury_to_efury(
     request.ethereum_address, _ = test_utilities.create_ethereum_address(
         smart_contracts_dir, ethereum_network
     )
-    request.gridchain_symbol = "fury"
+    request.gridironchain_symbol = "fury"
     request.ethereum_symbol = bridgetoken_address
     request.amount = int(target_fury_balance / 2)
-    burn_lock_functions.transfer_gridchain_to_ethereum(request, credentials)
+    burn_lock_functions.transfer_gridironchain_to_ethereum(request, credentials)

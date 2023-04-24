@@ -4,7 +4,7 @@ info:
   version: 1.1.1
 servers:
 # Added by API Auto Mocking Plugin
-- url: https://api-devnet-042.gridchain.finance
+- url: https://api-devnet-042.gridironchain.finance
   description: Gridnode API
 tags:
 - name: Dispensation
@@ -278,7 +278,7 @@ components:
           example: '0'
         signer:
           type: string
-          example: 'grid142ulelgzh0p6wphzhlzuxvt95h7red9lm4rwne'
+          example: 'did:fury:g142ulelgzh0p6wphzhlzuxvt95h7red9lm4rwne'
     LiquidityDetailsResponse:
       type: object
       properties:
@@ -316,7 +316,7 @@ components:
         signer:
           type: string
           description: Address of the signer.
-          example: 'grid142ulelgzh0p6wphzhlzuxvt95h7red9lm4rwne'
+          example: 'did:fury:g142ulelgzh0p6wphzhlzuxvt95h7red9lm4rwne'
         min_receiving_amount:
           type: string
           description: Min receiving amount.
@@ -339,7 +339,7 @@ components:
         signer:
           type: string
           description: Address of the signer.
-          example: 'grid142ulelgzh0p6wphzhlzuxvt95h7red9lm4rwne'
+          example: 'did:fury:g142ulelgzh0p6wphzhlzuxvt95h7red9lm4rwne'
     BurnOrLockReq:
       type: object
       properties:
@@ -356,7 +356,7 @@ components:
         cosmos_sender:
           type: string
           description: Address of the cosmos sender.
-          example: 'grid142ulelgzh0p6wphzhlzuxvt95h7red9lm4rwne'
+          example: 'did:fury:g142ulelgzh0p6wphzhlzuxvt95h7red9lm4rwne'
         ethereum_receiver:
           type: string
           description: Address of the ethereum receiver.
@@ -413,7 +413,7 @@ components:
           $ref: '#/components/schemas/BaseReq'
         claim_creator:
           type: string
-          example: 'grid142ulelgzh0p6wphzhlzuxvt95h7red9lm4rwne'
+          example: 'did:fury:g142ulelgzh0p6wphzhlzuxvt95h7red9lm4rwne'
         claim_type:
           $ref: '#/components/schemas/DistributionType'
     LiquidityProvider:
@@ -424,7 +424,7 @@ components:
           example: '123456'
         liquidity_provider_address:
           type: string
-          example: 'grid142ulelgzh0p6wphzhlzuxvt95h7red9lm4rwne'
+          example: 'did:fury:g142ulelgzh0p6wphzhlzuxvt95h7red9lm4rwne'
         asset:
           $ref: '#/components/schemas/external_asset'
     base_req:
@@ -435,8 +435,8 @@ components:
         chain_id:
           type: string
       example:
-        from: 'grid142ulelgzh0p6wphzhlzuxvt95h7red9lm4rwne'
-        chain_id: 'gridchain-devnet-042'
+        from: 'did:fury:g142ulelgzh0p6wphzhlzuxvt95h7red9lm4rwne'
+        chain_id: 'gridironchain-devnet-042'
     external_asset:
       type: object
       properties:
@@ -481,8 +481,8 @@ components:
         sequence:
           type: string
       example:
-        from: 'grid142ulelgzh0p6wphzhlzuxvt95h7red9lm4rwne'
-        chain_id: 'gridchain-devnet-042'
+        from: 'did:fury:g142ulelgzh0p6wphzhlzuxvt95h7red9lm4rwne'
+        chain_id: 'gridironchain-devnet-042'
         account_number: '1'
         sequence: '0'
     DistributionType:

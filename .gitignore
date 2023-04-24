@@ -27,5 +27,5 @@ deploy
 smart-contracts/combined.log
 smart-contracts/yarn-error.log
 test/integration/output.json
-test/integration/gridchainrelayerdb/*
+test/integration/gridironchainrelayerdb/*
 *.log

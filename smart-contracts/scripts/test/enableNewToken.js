@@ -3,16 +3,16 @@ const BN = require('bn.js');
 module.exports = async (cb) => {
     const Web3 = require("web3");
 
-    const gridchainUtilities = require('./gridchainUtilities')
+    const gridironchainUtilities = require('./gridironchainUtilities')
     const contractUtilites = require('./contractUtilities');
 
-    const logging = gridchainUtilities.configureLogging(this);
+    const logging = gridironchainUtilities.configureLogging(this);
 
-    const argv = gridchainUtilities.processArgs(this, {
-        ...gridchainUtilities.sharedYargOptions,
-        ...gridchainUtilities.bridgeBankAddressYargOptions,
-        ...gridchainUtilities.symbolYargOption,
-        ...gridchainUtilities.amountYargOption,
+    const argv = gridironchainUtilities.processArgs(this, {
+        ...gridironchainUtilities.sharedYargOptions,
+        ...gridironchainUtilities.bridgeBankAddressYargOptions,
+        ...gridironchainUtilities.symbolYargOption,
+        ...gridironchainUtilities.amountYargOption,
         'limit_amount': {
             describe: 'an amount',
             demandOption: true

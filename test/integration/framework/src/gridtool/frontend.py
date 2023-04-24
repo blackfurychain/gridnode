@@ -2,7 +2,7 @@ from gridtool import command, project
 from gridtool.common import *
 
 GIT_REPO_PROXIES = "git@github.com:Gridironchain/proxies.git"
-GITHUB_REPO_UI = "https://github.com/Gridironchain/gridchain-ui.git"
+GITHUB_REPO_UI = "https://github.com/Gridironchain/gridironchain-ui.git"
 
 
 # Vercel-based proxy to "hide" all URLs behind a single proxy due to CORS policy.
@@ -27,7 +27,7 @@ def run_local_ui(cmd: command.Command):
     working_dir = project_dir("test", "integration", "framework", "build", "repos")
     cmd.mkdir(working_dir)
     proxies_repo_dir = os.path.join(working_dir, "proxies")
-    ui_repo_dir = os.path.join(working_dir, "gridchain-ui")
+    ui_repo_dir = os.path.join(working_dir, "gridironchain-ui")
     cmd.rmdir(proxies_repo_dir)
     cmd.rmdir(ui_repo_dir)
     prj.git_clone(GIT_REPO_PROXIES, proxies_repo_dir)

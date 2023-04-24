@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #
-# Runs ebrelayer.  Normally, this is run by gridchain_start_ebrelayer.sh;
-# that file sets up the logs and runs gridchain_run_ebrelayer in the background.
+# Runs ebrelayer.  Normally, this is run by gridironchain_start_ebrelayer.sh;
+# that file sets up the logs and runs gridironchain_run_ebrelayer in the background.
 # Normally, you don't run this script directly.
 #
 
@@ -47,7 +47,7 @@ TCP_URL=tcp://0.0.0.0:26657
 yes | gridnoded keys delete $MONIKER --keyring-backend test || true
 echo $MNEMONIC | gridnoded keys add $MONIKER --keyring-backend test --recover
 
-set_persistant_env_var EBRELAYER_DB "${TEST_INTEGRATION_DIR}/gridchainrelayerdb" $envexportfile
+set_persistant_env_var EBRELAYER_DB "${TEST_INTEGRATION_DIR}/gridironchainrelayerdb" $envexportfile
 
 ETHEREUM_PRIVATE_KEY=$EBRELAYER_ETHEREUM_PRIVATE_KEY $runner init $TCP_URL "$ETHEREUM_WEBSOCKET_ADDRESS" \
   "$BRIDGE_REGISTRY_ADDRESS" \

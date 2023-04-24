@@ -8,7 +8,7 @@ import (
 
 var (
 	name             = "cool-frost"
-	address          = "grid1hu2lxzusgf4ezp9etyue34zusx82220997ucah"
+	address          = "did:fury:g1hu2lxzusgf4ezp9etyue34zusx82220997ucah"
 	validatorAddress = "gridvaloper1hu2lxzusgf4ezp9etyue34zusx822209vu5ja8"
 	consensusAddress = "gridvalcons1hu2lxzusgf4ezp9etyue34zusx822209c08w3x"
 	random           = "qY3XtZc4a16jTnQWsJUwDvxfC2giHmSB"

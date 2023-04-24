@@ -33,13 +33,13 @@ def run_localnet_hook():
     # /tmp/localnet/bin/gaiad add-genesis-account cosmos-validator 10000000000000000000uphoton --keyring-backend test --home /tmp/localnet/config/cosmos/cosmoshub-testnet
     # /tmp/localnet/bin/gaiad add-genesis-account cosmos-source 10000000000000000000uphoton --keyring-backend test --home /tmp/localnet/config/cosmos/cosmoshub-testnet
 
-    # rm -rf /tmp/localnet/config/gridchain/gridchain-testnet-1
-    # mkdir -p /tmp/localnet/config/gridchain/gridchain-testnet-1
-    # /tmp/localnet/bin/gridnoded init gridchain-testnet-1 --chain-id gridchain-testnet-1 --home /tmp/localnet/config/gridchain/gridchain-testnet-1
-    # /tmp/localnet/bin/gridnoded keys add gridchain-validator --keyring-backend test --home /tmp/localnet/config/gridchain/gridchain-testnet-1
-    # /tmp/localnet/bin/gridnoded keys add gridchain-source --keyring-backend test --home /tmp/localnet/config/gridchain/gridchain-testnet-1
-    # /tmp/localnet/bin/gridnoded add-genesis-account gridchain-validator 10000000000000000000fury --keyring-backend test --home /tmp/localnet/config/gridchain/gridchain-testnet-1
-    # /tmp/localnet/bin/gridnoded add-genesis-account gridchain-source 10000000000000000000fury --keyring-backend test --home /tmp/localnet/config/gridchain/gridchain-testnet-1
+    # rm -rf /tmp/localnet/config/gridironchain/gridironchain-testnet-1
+    # mkdir -p /tmp/localnet/config/gridironchain/gridironchain-testnet-1
+    # /tmp/localnet/bin/gridnoded init gridironchain-testnet-1 --chain-id gridironchain-testnet-1 --home /tmp/localnet/config/gridironchain/gridironchain-testnet-1
+    # /tmp/localnet/bin/gridnoded keys add gridironchain-validator --keyring-backend test --home /tmp/localnet/config/gridironchain/gridironchain-testnet-1
+    # /tmp/localnet/bin/gridnoded keys add gridironchain-source --keyring-backend test --home /tmp/localnet/config/gridironchain/gridironchain-testnet-1
+    # /tmp/localnet/bin/gridnoded add-genesis-account gridironchain-validator 10000000000000000000fury --keyring-backend test --home /tmp/localnet/config/gridironchain/gridironchain-testnet-1
+    # /tmp/localnet/bin/gridnoded add-genesis-account gridironchain-source 10000000000000000000fury --keyring-backend test --home /tmp/localnet/config/gridironchain/gridironchain-testnet-1
 
     # For each chain:
     # defaultGenesis = what was created in ${home}/config/genesis.json
@@ -48,7 +48,7 @@ def run_localnet_hook():
     #
     # writeFile(genesis, "${home}/config/genesis.json")
     #
-    # if gridchain: ${binPath}/${binary} set-gen-denom-whitelist ${home}/config/denoms.json --home ${home}
+    # if gridironchain: ${binPath}/${binary} set-gen-denom-whitelist ${home}/config/denoms.json --home ${home}
     #
     # ${binPath}/${binary} gentx ${validatorAccountName} ${amount}${denom} --chain-id ${chainId} --keyring-backend test --home ${home}
     # ${binPath}/${binary} collect-gentxs --home ${home}
@@ -85,8 +85,8 @@ def download_ibc_binaries(cmd, chains_to_download=None, output_path=None):
             cmd.mkdir(output_path)
     config = get_localnet_config(cmd)
     tmpdir = cmd.mktempdir()
-    # We prefer to compile gridchain. Sentinel uses sourceUrl, but there is no Makefile.
-    all_supported_chains = set(config.keys()).difference({"gridchain", "sentinel"})
+    # We prefer to compile gridironchain. Sentinel uses sourceUrl, but there is no Makefile.
+    all_supported_chains = set(config.keys()).difference({"gridironchain", "sentinel"})
     chains_to_download = chains_to_download or "all"
     if chains_to_download == "all":
         chains_to_download = all_supported_chains

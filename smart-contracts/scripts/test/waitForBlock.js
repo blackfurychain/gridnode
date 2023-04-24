@@ -1,9 +1,9 @@
 module.exports = async (cb) => {
-    const gridchainUtilities = require('./gridchainUtilities')
+    const gridironchainUtilities = require('./gridironchainUtilities')
     const contractUtilites = require('./contractUtilities');
 
-    const argv = gridchainUtilities.processArgs(this, {
-        ...gridchainUtilities.sharedYargOptions,
+    const argv = gridironchainUtilities.processArgs(this, {
+        ...gridironchainUtilities.sharedYargOptions,
         'block_number': {
             type: "number",
             demandOption: true
@@ -16,7 +16,7 @@ module.exports = async (cb) => {
         },
     });
 
-    const logging = gridchainUtilities.configureLogging(this);
+    const logging = gridironchainUtilities.configureLogging(this);
 
     const web3 = contractUtilites.buildWeb3(this, argv, logging);
 

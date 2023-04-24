@@ -17,7 +17,7 @@
       "pool_units": "1000000000000000000"
     }
   ],
-  "clp_module_address": "grid1pjm228rsgwqf23arkx7lm9ypkyma7mzr3y2n85",
+  "clp_module_address": "did:fury:g1pjm228rsgwqf23arkx7lm9ypkyma7mzr3y2n85",
   "height": 37,
   "pagination": {
     "next_key": null,

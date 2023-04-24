@@ -20,12 +20,12 @@ def test_ebrelayer_restart(
         base_transfer_request=basic_transfer_request,
         target_ceth_balance=10 ** 15
     )
-    balance = test_utilities.get_gridchain_addr_balance(request.gridchain_address, request.gridnoded_node, "ceth")
+    balance = test_utilities.get_gridironchain_addr_balance(request.gridironchain_address, request.gridnoded_node, "ceth")
     logging.info("restart ebrelayer normally, leaving the last block db in place")
     test_utilities.start_ebrelayer()
     test_utilities.advance_n_ethereum_blocks(test_utilities.n_wait_blocks * 2, request.smart_contracts_dir)
     time.sleep(5)
-    assert balance == test_utilities.get_gridchain_addr_balance(request.gridchain_address, request.gridnoded_node,
+    assert balance == test_utilities.get_gridironchain_addr_balance(request.gridironchain_address, request.gridnoded_node,
                                                                "ceth")
 
 
@@ -55,7 +55,7 @@ def test_ethereum_transactions_with_offline_relayer(
     requests = list(map(lambda addr: {
         "amount": amount,
         "symbol": test_utilities.NULL_ADDRESS,
-        "gridchain_address": addr
+        "gridironchain_address": addr
     }, new_addresses))
     json_requests = json.dumps(requests)
 
@@ -67,7 +67,7 @@ def test_ethereum_transactions_with_offline_relayer(
             f"--amount {amount}",
             f"--symbol eth",
             f"--json_path {request.solidity_json_path}",
-            f"--gridchain_address {new_addresses[0]}",
+            f"--gridironchain_address {new_addresses[0]}",
             f"--transactions \'{json_requests}\'",
             f"--ethereum_address {source_ethereum_address}",
             f"--bridgebank_address {bridgebank_address}"
@@ -82,11 +82,11 @@ def test_ethereum_transactions_with_offline_relayer(
         test_utilities.advance_n_ethereum_blocks(test_utilities.n_wait_blocks, request.smart_contracts_dir)
     for a in new_addresses:
         test_utilities.wait_for_grid_account(a, basic_transfer_request.gridnoded_node, 90)
-        test_utilities.wait_for_gridchain_addr_balance(a, "ceth", amount, basic_transfer_request.gridnoded_node, 90)
+        test_utilities.wait_for_gridironchain_addr_balance(a, "ceth", amount, basic_transfer_request.gridnoded_node, 90)
 
 
 @pytest.mark.usefixtures("ensure_relayer_restart")
-def test_gridchain_transactions_with_offline_relayer(
+def test_gridironchain_transactions_with_offline_relayer(
         basic_transfer_request: EthereumToGridironchainTransferRequest,
         fury_source_integrationtest_env_credentials: test_utilities.GridironchaincliCredentials,
         fury_source_integrationtest_env_transfer_request: EthereumToGridironchainTransferRequest,
@@ -116,17 +116,17 @@ def test_gridchain_transactions_with_offline_relayer(
     )
 
     request.amount = amount
-    request.gridchain_symbol = "ceth"
+    request.gridironchain_symbol = "ceth"
     request.ethereum_symbol = "eth"
 
     logging.info("send transactions while ebrelayer is offline")
 
     for a in new_eth_addrs:
         request.ethereum_address = a["address"]
-        gridchain_balance = test_utilities.get_gridchain_addr_balance(request.gridchain_address, request.gridnoded_node,
+        gridironchain_balance = test_utilities.get_gridironchain_addr_balance(request.gridironchain_address, request.gridnoded_node,
                                                                     "ceth")
-        logging.info(f"gridchain balance is {gridchain_balance}, request is {request}")
-        test_utilities.send_from_gridchain_to_ethereum(
+        logging.info(f"gridironchain balance is {gridironchain_balance}, request is {request}")
+        test_utilities.send_from_gridironchain_to_ethereum(
             transfer_request=request,
             credentials=credentials
         )
