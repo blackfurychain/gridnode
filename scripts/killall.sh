@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-killall gridnoded gridnoded ebrelayer
+killall grided grided ebrelayer

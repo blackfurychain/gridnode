@@ -11,7 +11,7 @@ export async function createAccount({ name }) {
     throw new Error("account name already exists in accounts.json");
 
   const { stdout: mnemonic } = await nothrow(
-    $`yes | gridnoded keys add ${name} --keyring-backend test --output json | jq -r .mnemonic`
+    $`yes | grided keys add ${name} --keyring-backend test --output json | jq -r .mnemonic`
   );
   accounts[name] = mnemonic.replace("\n", "");
   await fs.writeFile("./accounts.json", JSON.stringify(accounts, null, 2));

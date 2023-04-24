@@ -2,7 +2,7 @@
 
 set -x
 
-gridnoded tx clp reward-params \
+grided tx clp reward-params \
   --cancelPeriod 43200 \
   --lockPeriod 100800 \
   --from=$GRID_ACT \
@@ -14,7 +14,7 @@ gridnoded tx clp reward-params \
   --broadcast-mode=block \
   -y
 
-# gridnoded tx clp reward-params \
+# grided tx clp reward-params \
 #   --cancelPeriod 66825 \
 #   --lockPeriod 124425 \
 #   --from=$GRID_ACT \
@@ -26,7 +26,7 @@ gridnoded tx clp reward-params \
 #   --broadcast-mode=block \
 #   -y
 
-# gridnoded tx clp reward-params \
+# grided tx clp reward-params \
 #   --cancelPeriod 66825 \
 #   --lockPeriod 100800 \
 #   --from=$GRID_ACT \

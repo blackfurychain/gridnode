@@ -2,6 +2,6 @@
 
 set -x
 
-gridnoded q clp pool cusdt \
+grided q clp pool cusdt \
   --node ${GRIDNODE_NODE} \
   --chain-id $GRIDNODE_CHAIN_ID

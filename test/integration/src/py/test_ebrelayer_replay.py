@@ -75,7 +75,7 @@ def test_transfer_eth_to_ceth_using_replay_blocks(
     test_utilities.advance_n_ethereum_blocks(test_utilities.n_wait_blocks, smart_contracts_dir)
     time.sleep(5)
     balance_with_no_relayer = test_utilities.get_gridironchain_addr_balance(
-        request.gridironchain_address, request.gridnoded_node,
+        request.gridironchain_address, request.grided_node,
         request.gridironchain_symbol
     )
     assert (balance_with_no_relayer == 0)
@@ -92,13 +92,13 @@ def test_transfer_eth_to_ceth_using_replay_blocks(
     test_utilities.get_shell_output(cmd)
     time.sleep(5)
     logging.info(f"check the ending balance of {request.gridironchain_address} after replaying blocks")
-    ending_balance = test_utilities.get_gridironchain_addr_balance(request.gridironchain_address, request.gridnoded_node,
+    ending_balance = test_utilities.get_gridironchain_addr_balance(request.gridironchain_address, request.grided_node,
                                                               request.gridironchain_symbol)
     assert (ending_balance == request.amount)
 
     # now do it again
     test_utilities.get_shell_output(cmd)
     time.sleep(5)
-    ending_balance2 = test_utilities.get_gridironchain_addr_balance(request.gridironchain_address, request.gridnoded_node,
+    ending_balance2 = test_utilities.get_gridironchain_addr_balance(request.gridironchain_address, request.grided_node,
                                                                request.gridironchain_symbol)
     assert (ending_balance2 == request.amount)

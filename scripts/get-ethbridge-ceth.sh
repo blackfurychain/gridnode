@@ -2,4 +2,4 @@
 
 # the script get the ceth amount of ethbridge module account.
 # sdk.AccAddress(crypto.AddressHash([]byte("ethbridge")))
-gridnoded q account did:fury:g1l3dftf499u4gvdeuuzdl2pgv4f0xdtnuuwlzp8 | jq '. | {coins: .value.coins} ' | jq '.[] | map(select(.denom == "ceth"))' | jq '.[]'
+grided q account did:fury:g1l3dftf499u4gvdeuuzdl2pgv4f0xdtnuuwlzp8 | jq '. | {coins: .value.coins} ' | jq '.[] | map(select(.denom == "ceth"))' | jq '.[]'

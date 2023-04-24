@@ -2,7 +2,7 @@
 
 set -x
 
-gridnoded tx clp pmtp-rates \
+grided tx clp pmtp-rates \
   --endPolicy=true \
   --from=$GRID_ACT \
   --keyring-backend=test \

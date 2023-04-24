@@ -2,7 +2,7 @@
 
 set -x
 
-gridnoded tx clp swap \
+grided tx clp swap \
   --from $GRID_ACT \
   --keyring-backend test \
   --sentSymbol fury \

@@ -14,7 +14,7 @@ lock_gas_cost = 160000000000 * 393000
 highest_gas_cost = max(burn_gas_cost, lock_gas_cost)
 
 
-gridnoded_binary = "gridnoded"
+grided_binary = "grided"
 
 @dataclass
 class EthereumToGridironchainTransferRequest:
@@ -35,7 +35,7 @@ class EthereumToGridironchainTransferRequest:
     n_wait_blocks: int = n_wait_blocks
     bridgebank_address: str = ""
     bridgetoken_address: str = ""
-    gridnoded_node: str = "tcp://localhost:26657"
+    grided_node: str = "tcp://localhost:26657"
     solidity_json_path: str = ""
     # set to true if you want to fail if the balance changes before
     # the block waiting period has elapsed.  If you're runing
@@ -70,7 +70,7 @@ class GridironchaincliCredentials:
     keyring_passphrase: str = None
     keyring_backend: str = "test"
     from_key: str = None
-    gridnoded_homedir: str = None
+    grided_homedir: str = None
 
     def printable_entries(self):
         return {**(self.__dict__), "keyring_passphrase": "** hidden **"}
@@ -125,7 +125,7 @@ cmdfile = open("/tmp/testcmds.txt", "w")
 
 def get_shell_output(command_line):
     cmdfile.write(command_line)
-    if gridnoded_binary in command_line and not "q auth account" in command_line:
+    if grided_binary in command_line and not "q auth account" in command_line:
         time.sleep(2)
     logging.debug(f"execute shell command:\n{command_line}")
     sub = subprocess.run(command_line, shell=True, capture_output=True)
@@ -189,7 +189,7 @@ def start_ebrelayer():
 
 # converts a key to a grid address.
 def get_user_account(user, network_password):
-    command_line = "yes " + network_password + f" | {gridnoded_binary} keys show " + user + " -a"
+    command_line = "yes " + network_password + f" | {grided_binary} keys show " + user + " -a"
     return get_shell_output(command_line)
 
 
@@ -263,9 +263,9 @@ def mint_tokens(transfer_request: EthereumToGridironchainTransferRequest, operat
     return run_yarn_command(command_line)
 
 
-def get_gridironchain_addr_balance(gridaddress, gridnoded_node, denom):
-    node = f"--node {gridnoded_node}" if gridnoded_node else ""
-    command_line = f"{gridnoded_binary} query bank balances {node} {gridaddress} --output json --limit 100000000"
+def get_gridironchain_addr_balance(gridaddress, grided_node, denom):
+    node = f"--node {grided_node}" if grided_node else ""
+    command_line = f"{grided_binary} query bank balances {node} {gridaddress} --output json --limit 100000000"
     json_str = get_shell_output_json(command_line)
     coins = json_str["balances"]
     for coin in coins:
@@ -296,10 +296,10 @@ def wait_for_successful_command(command_line, max_seconds=80):
     )
 
 
-def get_transaction_result(tx_hash, gridnoded_node, chain_id):
-    node = f"--node {gridnoded_node}" if gridnoded_node else ""
+def get_transaction_result(tx_hash, grided_node, chain_id):
+    node = f"--node {grided_node}" if grided_node else ""
     chain_id_entry = f"--chain-id {chain_id}" if chain_id else ""
-    command_line = f"{gridnoded_binary} q tx {node} {tx_hash} {chain_id_entry} --output json"
+    command_line = f"{grided_binary} q tx {node} {tx_hash} {chain_id_entry} --output json"
     json_str = wait_for_successful_command(command_line, max_seconds=30)
     return json_str
 
@@ -360,7 +360,7 @@ def wait_for_gridironchain_addr_balance(
     )
 
 
-def detect_errors_in_gridnoded_output(result):
+def detect_errors_in_grided_output(result):
     result_lines = result.split("\n")
     for line in result_lines:
         line: str
@@ -376,12 +376,12 @@ def send_from_gridironchain_to_gridironchain_cmd(
     yes_entry = f"yes {credentials.keyring_passphrase} | " if credentials.keyring_passphrase else ""
     keyring_backend_entry = f"--keyring-backend {credentials.keyring_backend}" if credentials.keyring_backend else ""
     chain_id_entry = f"--chain-id {transfer_request.chain_id}" if transfer_request.chain_id else ""
-    node = f"--node {transfer_request.gridnoded_node}" if transfer_request.gridnoded_node else ""
+    node = f"--node {transfer_request.grided_node}" if transfer_request.grided_node else ""
     gridironchain_fees_entry = f"--fees {transfer_request.gridironchain_fees}" if transfer_request.gridironchain_fees else ""  # Deprecated, see https://github.com/Gridironchain/gridnode/pull/1802#discussion_r697403408
-    home_entry = f"--home {credentials.gridnoded_homedir}" if credentials.gridnoded_homedir else ""
+    home_entry = f"--home {credentials.grided_homedir}" if credentials.grided_homedir else ""
     cmd = " ".join([
         yes_entry,
-        f"{gridnoded_binary} tx bank send",
+        f"{grided_binary} tx bank send",
         transfer_request.gridironchain_address,
         transfer_request.gridironchain_destination_address,
         keyring_backend_entry,
@@ -402,9 +402,9 @@ def send_from_gridironchain_to_gridironchain(
 ):
     cmd = send_from_gridironchain_to_gridironchain_cmd(transfer_request, credentials)
     result = get_shell_output_json(cmd)
-    # detect_errors_in_gridnoded_output(result)
+    # detect_errors_in_grided_output(result)
     time.sleep(4)
-    # get_transaction_result(result["txhash"], transfer_request.gridnoded_node, transfer_request.chain_id)
+    # get_transaction_result(result["txhash"], transfer_request.grided_node, transfer_request.chain_id)
     return result
 
 
@@ -420,10 +420,10 @@ def send_from_gridironchain_to_ethereum_cmd(
     assert transfer_request.amount > 0
     yes_entry = f"yes {credentials.keyring_passphrase} | " if credentials.keyring_passphrase else ""
     keyring_backend_entry = f"--keyring-backend {credentials.keyring_backend}" if credentials.keyring_backend else ""
-    node = f"--node {transfer_request.gridnoded_node}" if transfer_request.gridnoded_node else ""
+    node = f"--node {transfer_request.grided_node}" if transfer_request.grided_node else ""
     gridironchain_fees_entry = f"--fees {transfer_request.gridironchain_fees}" if transfer_request.gridironchain_fees else ""  # Deprecated, see https://github.com/Gridironchain/gridnode/pull/1802#discussion_r697403408
     direction = "lock" if transfer_request.gridironchain_symbol == "fury" else "burn"
-    home_entry = f"--home {credentials.gridnoded_homedir}" if credentials.gridnoded_homedir else ""
+    home_entry = f"--home {credentials.grided_homedir}" if credentials.grided_homedir else ""
     from_entry = f"--from {credentials.from_key} " if credentials.from_key else ""
     if not transfer_request.ceth_amount:
         if direction == "lock":
@@ -431,7 +431,7 @@ def send_from_gridironchain_to_ethereum_cmd(
         else:
             ceth_charge = burn_gas_cost
     command_line = f"{yes_entry} " \
-                   f"{gridnoded_binary} tx ethbridge {direction} {node} " \
+                   f"{grided_binary} tx ethbridge {direction} {node} " \
                    f"{transfer_request.gridironchain_address} " \
                    f"{transfer_request.ethereum_address} " \
                    f"{int(transfer_request.amount):0} " \
@@ -451,7 +451,7 @@ def send_from_gridironchain_to_ethereum(transfer_request: EthereumToGridironchai
                                    credentials: GridironchaincliCredentials):
     command_line = send_from_gridironchain_to_ethereum_cmd(transfer_request, credentials)
     result = get_shell_output(command_line)
-    detect_errors_in_gridnoded_output(result)
+    detect_errors_in_grided_output(result)
     return result
 
 
@@ -702,7 +702,7 @@ def update_ceth_receiver_account(
         credentials: GridironchaincliCredentials
 ):
     cmd = build_gridironchain_command(
-        f"{gridnoded_binary} tx ethbridge update_ceth_receiver_account -y {admin_account} {receiver_account}",
+        f"{grided_binary} tx ethbridge update_ceth_receiver_account -y {admin_account} {receiver_account}",
         transfer_request=transfer_request,
         credentials=credentials
     )
@@ -718,7 +718,7 @@ def rescue_ceth(
         credentials: GridironchaincliCredentials
 ):
     cmd = build_gridironchain_command(
-        f"{gridnoded_binary} tx ethbridge rescue_ceth -y {admin_account} {receiver_account} {amount:d}",
+        f"{grided_binary} tx ethbridge rescue_ceth -y {admin_account} {receiver_account} {amount:d}",
         transfer_request=transfer_request,
         credentials=credentials
     )
@@ -733,8 +733,8 @@ def build_gridironchain_command(
     yes_entry = f"yes {credentials.keyring_passphrase} | " if credentials.keyring_passphrase else ""
     keyring_backend_entry = f"--keyring-backend {credentials.keyring_backend}" if credentials.keyring_backend else ""
     chain_id_entry = f"--chain-id {transfer_request.chain_id}" if transfer_request.chain_id else ""
-    node_entry = f"--node {transfer_request.gridnoded_node}" if transfer_request.gridnoded_node else ""
-    home_entry = f"--home {credentials.gridnoded_homedir}" if credentials.gridnoded_homedir else ""
+    node_entry = f"--node {transfer_request.grided_node}" if transfer_request.grided_node else ""
+    home_entry = f"--home {credentials.grided_homedir}" if credentials.grided_homedir else ""
     from_entry = f"--from {credentials.from_key} " if credentials.from_key else ""
     gridironchain_fees_entry = f"--fees {transfer_request.gridironchain_fees}" if transfer_request.gridironchain_fees else ""  # Deprecated, see https://github.com/Gridironchain/gridnode/pull/1802#discussion_r697403408
     return " ".join([

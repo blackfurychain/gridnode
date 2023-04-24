@@ -9,7 +9,7 @@ echo "create liquidity pool from catk:fury"
 
 # nativeAmount 10000000 catk
 # externalAmount 10000000 fury
-gridnoded tx clp create-pool \
+grided tx clp create-pool \
  --chain-id=gridironchain-local \
  --keyring-backend=test \
  --from akasha \
@@ -26,7 +26,7 @@ echo "create liquidity pool from cbtk:fury"
 # create liquidity pool from cbtk:fury
 # nativeAmount 10000000 cbtk
 # externalAmount 10000000 fury
-gridnoded tx clp create-pool \
+grided tx clp create-pool \
  --chain-id=gridironchain-local \
  --keyring-backend=test \
  --from akasha \
@@ -43,7 +43,7 @@ sleep 5
 echo "create liquidity pool from ceth:fury"
 # nativeAmount 8300 ceth
 # externalAmount 10000000 fury
-gridnoded tx clp create-pool \
+grided tx clp create-pool \
  --chain-id=gridironchain-local \
  --keyring-backend=test \
  --from akasha \
@@ -58,7 +58,7 @@ gridnoded tx clp create-pool \
 sleep 5
 
 echo "create liquidity pool from cusdc:fury"
-gridnoded tx clp create-pool \
+grided tx clp create-pool \
  --chain-id=gridironchain-local \
  --keyring-backend=test \
  --from akasha \
@@ -71,7 +71,7 @@ gridnoded tx clp create-pool \
 sleep 5
 
 echo "create liquidity pool from clink:fury"
-gridnoded tx clp create-pool \
+grided tx clp create-pool \
  --chain-id=gridironchain-local \
  --keyring-backend=test \
  --from akasha \
@@ -84,7 +84,7 @@ gridnoded tx clp create-pool \
 sleep 5
 
 echo "create liquidity pool from ctest:fury"
-gridnoded tx clp create-pool \
+grided tx clp create-pool \
  --chain-id=gridironchain-local \
  --keyring-backend=test \
  --from akasha \

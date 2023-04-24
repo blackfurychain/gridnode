@@ -2,7 +2,7 @@
 
 set -x
 
-gridnoded tx gov submit-proposal \
+grided tx gov submit-proposal \
     param-change proposal.json \
     --from $GRID_ACT \
     --keyring-backend test \

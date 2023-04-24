@@ -2,6 +2,6 @@
 
 set -x
 
-gridnoded q margin whitelist \
+grided q margin whitelist \
   --node ${GRIDNODE_NODE} \
   --chain-id $GRIDNODE_CHAIN_ID

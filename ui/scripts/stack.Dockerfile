@@ -38,7 +38,7 @@ RUN apk update && apk add curl jq bash
 
 # Copy the compiled binaires over.
 COPY --from=build-go /go/bin/ebrelayer /usr/bin/ebrelayer
-COPY --from=build-go /go/bin/gridnoded /usr/bin/gridnoded
+COPY --from=build-go /go/bin/grided /usr/bin/grided
 COPY --from=build-go /go/bin/gridgen /usr/bin/gridgen
 
 # Required for ebrelayer

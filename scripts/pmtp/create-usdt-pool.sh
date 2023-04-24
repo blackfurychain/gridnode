@@ -2,7 +2,7 @@
 
 set -x
 
-gridnoded tx clp create-pool \
+grided tx clp create-pool \
   --from $GRID_ACT \
   --keyring-backend test \
   --symbol cusdt \

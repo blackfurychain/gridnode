@@ -2,7 +2,7 @@
 
 set -x
 
-gridnoded tx margin update-params \
+grided tx margin update-params \
   --health-gain-factor=0.0000000001 \
   --interest-rate-decrease=0.000000001 \
   --interest-rate-increase=0.000000001 \

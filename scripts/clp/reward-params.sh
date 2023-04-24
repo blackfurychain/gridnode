@@ -2,7 +2,7 @@
 
 set -x
 
-gridnoded tx clp reward-params \
+grided tx clp reward-params \
   --lockPeriod 0 \
   --cancelPeriod 0 \
   --from $GRID_ACT \

@@ -2,7 +2,7 @@
 
 set -x
 
-gridnoded tx clp pmtp-rates \
+grided tx clp pmtp-rates \
   --blockRate=0.00 \
   --runningRate=0.00 \
   --from=$GRID_ACT \

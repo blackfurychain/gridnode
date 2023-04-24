@@ -10,10 +10,10 @@ log = gridtool_logger(__name__)
 def force_kill_processes(cmd):
     cmd.execst(["pkill", "node"], check_exit=False)
     cmd.execst(["pkill", "ebrelayer"], check_exit=False)
-    cmd.execst(["pkill", "gridnoded"], check_exit=False)
+    cmd.execst(["pkill", "grided"], check_exit=False)
 
 def killall(processes):
-    # TODO Order - ebrelayer, gridnoded, ganache
+    # TODO Order - ebrelayer, grided, ganache
     for p in processes:
         if p is not None:
             p.kill()
@@ -53,7 +53,7 @@ class Project:
             self.__rm(self.project_dir("test", "integration", "vagrant", "data"))
             self.__rm(self.project_dir("test", "integration", "src", ".pytest_cache"))
             self.__rm(self.project_dir("test", "integration", "src", "py", ".pytest_cache"))
-            self.__rm(self.cmd.get_user_home(".gridnoded"))  # Probably needed for "--keyring-backend test"
+            self.__rm(self.cmd.get_user_home(".grided"))  # Probably needed for "--keyring-backend test"
 
             self.__rm(self.project_dir("deploy", "networks"))  # from running integration tests
 
@@ -74,7 +74,7 @@ class Project:
 
             # rmdir ~/.cache/yarn
         if level >= 1:
-            for file in ["gridnoded", "ebrelayer", "gridgen"]:
+            for file in ["grided", "ebrelayer", "gridgen"]:
                 self.__rm(os.path.join(self.go_bin_dir, file))
             self.__rm(self.project_dir("smart-contracts", "node_modules"))
             self.__rm(self.project_dir("test", "localnet", "node_modules"))
@@ -134,13 +134,13 @@ class Project:
     def make_go_binaries(self):
         # make go binaries (TODO Makefile needs to be trimmed down, especially "find")
         # cd test/integration; BASEDIR=... make
-        # (checks all *.go files and, runs make in $BASEDIR, touches gridnoded, removes ~/.gridnoded/localnet
+        # (checks all *.go files and, runs make in $BASEDIR, touches grided, removes ~/.grided/localnet
         self.cmd.execst(["make"], cwd=project_dir("test", "integration"), env={"BASEDIR": project_dir()}, pipe=False)
 
     # From PeggyEnvironment
     # TODO Merge
     # Main Makefile requires GOBIN to be set to an absolute path. Compiled executables ebrelayer, gridgen and
-    # gridnoded will be written there. The directory will be created if it doesn't exist yet.
+    # grided will be written there. The directory will be created if it doesn't exist yet.
     def make_go_binaries_2(self, feature_toggles: Optional[Iterable[str]] = None):
         # Original: cd smart-contracts; make -C .. install
         extra_env = {feature: "1" for feature in feature_toggles}
@@ -189,7 +189,7 @@ class Project:
         self.install_smart_contracts_dependencies()
 
     def __rm_gridnode_binaries(self):
-        for filename in ["gridnoded", "ebrelayer", "gridgen"]:
+        for filename in ["grided", "ebrelayer", "gridgen"]:
             self.__rm(os.path.join(self.go_bin_dir, filename))
 
     # Removes hardhat-compiled smart contract files that are result of running
@@ -205,7 +205,7 @@ class Project:
         self.__rm(project_dir(".proto-gen"))
 
     def __rm_run_env_files(self):
-        self.__rm(self.cmd.get_user_home(".gridnoded"))
+        self.__rm(self.cmd.get_user_home(".grided"))
 
         # Created by npx hardhat run scripts/devenv.ts and/or gridtool run-env
         self.__rm(self.project_dir("smart-contracts", "relayerdb"))  # peggy1 only
@@ -402,7 +402,7 @@ class Project:
         self.__rm(os.path.join(self.smart_contracts_dir, "node_modules"))
         self.__rm_hardhat_compiled_files()
         self.__rm_gridnode_binaries()
-        self.__rm(os.path.join(self.cmd.get_user_home(), ".gridnoded"))
+        self.__rm(os.path.join(self.cmd.get_user_home(), ".grided"))
         self.__rm_peggy2_compiled_go_stubs()
         self.__rm_run_env_files()
         self.npm_install(self.smart_contracts_dir)
@@ -417,7 +417,7 @@ class Project:
         self.cmd.execst(args, pipe=False)
 
     def pkill(self):
-        for proc_name in ["node", "ebrelayer", "gridnoded", "geth"]:
+        for proc_name in ["node", "ebrelayer", "grided", "geth"]:
             self.cmd.execst(["pkill", "--signal", "SIGTERM", proc_name], check_exit=False)
 
     def clean_run_env_state(self):

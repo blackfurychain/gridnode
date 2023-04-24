@@ -1,7 +1,7 @@
 {
   "gridironchain": {
-    "binary": "gridnoded",
-    "binaryUrl": "https://github.com/Gridironchain/gridnode/releases/download/betanet-0.9.10/gridnoded-betanet-0.9.10-linux-amd64.zip",
+    "binary": "grided",
+    "binaryUrl": "https://github.com/Gridironchain/gridnode/releases/download/betanet-0.9.10/grided-betanet-0.9.10-linux-amd64.zip",
     "denom": "fury",
     "prefix": "grid",
     "fees": 100000,

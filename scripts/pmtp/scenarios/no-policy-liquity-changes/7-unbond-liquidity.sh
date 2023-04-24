@@ -2,7 +2,7 @@
 
 set -x
 
-gridnoded tx clp unbond-liquidity \
+grided tx clp unbond-liquidity \
   --from $GRID_ACT \
   --keyring-backend test \
   --symbol cusdt \

@@ -6,7 +6,7 @@
 
 TOKEN_REGISTRY_ADMIN_ADDRESS="did:fury:g1tpypxpppcf5lea47vcvgy09675nllmcucxydvu"
 
-gridnoded tx tokenregistry register ./$GRIDCHAIN_ID/$2.json \
+grided tx tokenregistry register ./$GRIDCHAIN_ID/$2.json \
   --node $GRID_NODE \
   --chain-id $GRIDCHAIN_ID \
   --from $TOKEN_REGISTRY_ADMIN_ADDRESS \

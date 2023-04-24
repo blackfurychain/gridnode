@@ -11,12 +11,12 @@ from gridtool import command, cosmos, project, environments, gridironchain
 # How to use:
 # Install Python 3.8-3.10
 # Run test/integration/framework/gridtool venv
-# Prepare gridnoded binaries
-# - Compile gridnoded binary for v0.14.0 and put them into test/integration/framework/build/versions/0.14.0/gridnoded
-# - Compile gridnoded binary for v0.15.0-rc.1 and put them into test/integration/framework/build/versions/0.15.0-rc.1/gridnoded
+# Prepare grided binaries
+# - Compile grided binary for v0.14.0 and put them into test/integration/framework/build/versions/0.14.0/grided
+# - Compile grided binary for v0.15.0-rc.1 and put them into test/integration/framework/build/versions/0.15.0-rc.1/grided
 # - For exact versions se OLD_VERSION and NEW_VERSION above
 # Run test/integration/framework/venv/bin/python3 test/integration/src/features/test_min_commission.py
-# To watch live logs: tail -F /tmp/gridtool.tmp/test_min_commission/gridnoded-0/gridnoded.log
+# To watch live logs: tail -F /tmp/gridtool.tmp/test_min_commission/grided-0/grided.log
 #
 # More information about min commission / max voting power:
 # Test scenarios (Kevin): https://github.com/Gridironchain/gridnode/blob/feature/min-commission/docs/tutorials/commission.md
@@ -38,14 +38,14 @@ OLD_VERSION = "0.14.0"
 NEW_VERSION = "0.15.0-rc.2"
 
 
-# Kill off any gridnoded processes running from before
+# Kill off any grided processes running from before
 def pkill(cmd):
     project.Project(cmd, project_dir()).pkill()
     time.sleep(2)
 
 
 def get_binary_for_version(label):
-    return project_dir("test", "integration", "framework", "build", "versions", label, "gridnoded")
+    return project_dir("test", "integration", "framework", "build", "versions", label, "grided")
 
 
 def assert_no_exception(exception):
@@ -65,7 +65,7 @@ def create_environment(cmd, version, commission_rate=0.06, commission_max_rate=0
 
     pkill(cmd)
 
-    env = environments.GridnodedEnvironment(cmd, gridnoded_home_root=home_root)
+    env = environments.GridnodedEnvironment(cmd, grided_home_root=home_root)
     env.staking_denom = STAKE
     env.add_validator(binary=binary, commission_rate=commission_rate, commission_max_rate=commission_max_rate,
         commission_max_change_rate=commission_max_change_rate, staking_amount=staking_amount)
@@ -76,12 +76,12 @@ def create_environment(cmd, version, commission_rate=0.06, commission_max_rate=0
 def delegate(env, from_index, to_index, amount):
     from_validator_node_info = env.node_info[from_index]
     to_validator_node_info = env.node_info[to_index]
-    gridnoded_to = env._gridnoded_for(to_validator_node_info)
-    gridnoded_from_to = env._gridnoded_for(from_validator_node_info, to_node_info=to_validator_node_info)
-    validator_addr = gridnoded_to.get_val_address(to_validator_node_info["admin_addr"])
+    grided_to = env._grided_for(to_validator_node_info)
+    grided_from_to = env._grided_for(from_validator_node_info, to_node_info=to_validator_node_info)
+    validator_addr = grided_to.get_val_address(to_validator_node_info["admin_addr"])
     from_addr = from_validator_node_info["admin_addr"]
     env.fund(from_addr, {env.staking_denom: amount})  # Make sure admin has enough balance for what he is delegating
-    res = gridnoded_from_to.staking_delegate(validator_addr, {env.staking_denom: amount}, from_addr, broadcast_mode="block")
+    res = grided_from_to.staking_delegate(validator_addr, {env.staking_denom: amount}, from_addr, broadcast_mode="block")
     gridironchain.check_raw_log(res)
 
 
@@ -112,14 +112,14 @@ def test_min_commission_modify_existing_validator_24h(cmd: command.Command):
     env.add_validator()
     env.add_validator()
 
-    gridnoded0 = env._gridnoded_for(env.node_info[0])
+    grided0 = env._grided_for(env.node_info[0])
     admin0_addr = env.node_info[0]["admin_addr"]
-    gridnoded1 = env._gridnoded_for(env.node_info[1])
+    grided1 = env._grided_for(env.node_info[1])
     admin1_addr = env.node_info[1]["admin_addr"]
-    gridnoded2 = env._gridnoded_for(env.node_info[2])
+    grided2 = env._grided_for(env.node_info[2])
     admin2_addr = env.node_info[2]["admin_addr"]
 
-    validators = gridnoded0.query_staking_validators()
+    validators = grided0.query_staking_validators()
     assert all(float(v["commission"]["commission_rates"]["rate"]) == 0.06 for v in validators)
     assert all(float(v["commission"]["commission_rates"]["max_rate"]) == 0.10 for v in validators)
     assert all(float(v["commission"]["commission_rates"]["max_change_rate"]) == 0.05 for v in validators)
@@ -131,7 +131,7 @@ def test_min_commission_modify_existing_validator_24h(cmd: command.Command):
 
     exception = None
     try:
-        res = gridnoded0.staking_edit_validator(0.05, from_acct=admin0_addr, broadcast_mode="block")
+        res = grided0.staking_edit_validator(0.05, from_acct=admin0_addr, broadcast_mode="block")
         gridironchain.check_raw_log(res)
     except Exception as e:
         exception = e
@@ -139,7 +139,7 @@ def test_min_commission_modify_existing_validator_24h(cmd: command.Command):
 
     exception = None
     try:
-        res = gridnoded1.staking_edit_validator(0.03, from_acct=admin1_addr, broadcast_mode="block")
+        res = grided1.staking_edit_validator(0.03, from_acct=admin1_addr, broadcast_mode="block")
         gridironchain.check_raw_log(res)
     except Exception as e:
         exception = e
@@ -147,7 +147,7 @@ def test_min_commission_modify_existing_validator_24h(cmd: command.Command):
 
     exception = None
     try:
-        res = gridnoded2.staking_edit_validator(0.07, from_acct=admin2_addr, broadcast_mode="block")
+        res = grided2.staking_edit_validator(0.07, from_acct=admin2_addr, broadcast_mode="block")
         gridironchain.check_raw_log(res)
     except Exception as e:
         exception = e
@@ -167,24 +167,24 @@ def test_min_commission_upgrade_handler(cmd: command.Command):
         if should_succeed:
             assert_no_exception(exception)
         else:
-            # TODO In case of invalid validator setup (commission_rate > commission_max_rate) gridnoded does not start
+            # TODO In case of invalid validator setup (commission_rate > commission_max_rate) grided does not start
             #      and we get a timeout. We don't check the exception here, but we assume that this is what happened
             #      since other scenarios are working which only differ in parameters.
             return
 
-        gridnoded = env._gridnoded_for(env.node_info[0])
-        upgrade_height = gridnoded.get_current_block() + 15  # 15 * 5 = 75s > 60s
+        grided = env._grided_for(env.node_info[0])
+        upgrade_height = grided.get_current_block() + 15  # 15 * 5 = 75s > 60s
 
-        commission_rates_before = exactly_one(gridnoded.query_staking_validators())["commission"]["commission_rates"]
+        commission_rates_before = exactly_one(grided.query_staking_validators())["commission"]["commission_rates"]
         assert float(commission_rates_before["rate"]) == pre_upgrade_commission_rate
         assert float(commission_rates_before["max_rate"]) == pre_upgrade_commission_max_rate
         assert float(commission_rates_before["max_change_rate"]) == 0.01
 
         env.upgrade(NEW_VERSION, get_binary_for_version(NEW_VERSION), upgrade_height)
 
-        gridnoded = env._gridnoded_for(env.node_info[0])
+        grided = env._grided_for(env.node_info[0])
 
-        commission_rates_after = exactly_one(gridnoded.query_staking_validators())["commission"]["commission_rates"]
+        commission_rates_after = exactly_one(grided.query_staking_validators())["commission"]["commission_rates"]
         assert float(commission_rates_after["rate"]) == expected_commission_rate
         assert float(commission_rates_after["max_rate"]) == expected_commission_max_rate
         assert float(commission_rates_after["max_change_rate"]) == 0.01
@@ -202,9 +202,9 @@ def test_max_voting_power(cmd: command.Command):
         env = create_environment(cmd, NEW_VERSION, staking_amount=1000 * 10**21)
         env.add_validator(staking_amount=62 * 10**21)
         env.start()
-        gridnoded = env._gridnoded_for(env.node_info[0])
+        grided = env._grided_for(env.node_info[0])
 
-        validator_powers_before = [int(x["tokens"]) for x in gridnoded.query_staking_validators()]
+        validator_powers_before = [int(x["tokens"]) for x in grided.query_staking_validators()]
 
         exception = None
         try:
@@ -213,12 +213,12 @@ def test_max_voting_power(cmd: command.Command):
         except Exception as e:
             exception = e
 
-        validator_powers_after = [int(x["tokens"]) for x in gridnoded.query_staking_validators()]
+        validator_powers_after = [int(x["tokens"]) for x in grided.query_staking_validators()]
 
         if should_succeed:
             assert_no_exception(exception)
             # Check actual vs. expected validator powers.
-            # Note: this assertion might fail if "gridnoded query staking validators" returns a list in different order.
+            # Note: this assertion might fail if "grided query staking validators" returns a list in different order.
             expected_validator_powers_after = validator_powers_before
             expected_validator_powers_after[to_validator_index] += amount
             assert validator_powers_after == expected_validator_powers_after

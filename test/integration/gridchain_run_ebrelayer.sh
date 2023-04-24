@@ -44,8 +44,8 @@ fi
 
 TCP_URL=tcp://0.0.0.0:26657
 
-yes | gridnoded keys delete $MONIKER --keyring-backend test || true
-echo $MNEMONIC | gridnoded keys add $MONIKER --keyring-backend test --recover
+yes | grided keys delete $MONIKER --keyring-backend test || true
+echo $MNEMONIC | grided keys add $MONIKER --keyring-backend test --recover
 
 set_persistant_env_var EBRELAYER_DB "${TEST_INTEGRATION_DIR}/gridironchainrelayerdb" $envexportfile
 
@@ -59,4 +59,4 @@ ETHEREUM_PRIVATE_KEY=$EBRELAYER_ETHEREUM_PRIVATE_KEY $runner init $TCP_URL "$ETH
   --from $MONIKER \
   --symbol-translator-file ${TEST_INTEGRATION_DIR}/config/symbol_translator.json \
   --relayerdb-path "$EBRELAYER_DB" \
-  # --home $CHAINDIR/.gridnoded \
+  # --home $CHAINDIR/.grided \

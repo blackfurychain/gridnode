@@ -2,7 +2,7 @@
 
 set -x
 
-gridnoded tx margin close \
+grided tx margin close \
   --from $GRID_ACT \
   --id 7 \
   --keyring-backend test \

@@ -2,7 +2,7 @@
 
 set -x
 
-gridnoded tx clp reward-period \
+grided tx clp reward-period \
   --path reward-period.json \
   --from $GRID_ACT \
   --keyring-backend test \

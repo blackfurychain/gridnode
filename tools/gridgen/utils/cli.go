@@ -83,11 +83,11 @@ func (c CLI) Reset(paths []string) error {
 }
 
 func (c CLI) DaemonPath() (*string, error) {
-	return c.shellExec("which", "gridnoded")
+	return c.shellExec("which", "grided")
 }
 
 func (c CLI) ResetState(nodeDir string) (*string, error) {
-	return c.shellExec("gridnoded", "unsafe-reset-all", "--home", nodeDir)
+	return c.shellExec("grided", "unsafe-reset-all", "--home", nodeDir)
 }
 
 func (c CLI) CreateDir(path string) error {
@@ -99,19 +99,19 @@ func (c CLI) MoveFile(src, dest string) (*string, error) {
 }
 
 func (c CLI) NodeID(nodeDir string) (*string, error) {
-	return c.shellExec("gridnoded", "tendermint", "show-node-id", "--home", nodeDir)
+	return c.shellExec("grided", "tendermint", "show-node-id", "--home", nodeDir)
 }
 
 func (c CLI) ValidatorAddress(nodeDir string) (*string, error) {
-	return c.shellExec("gridnoded", "tendermint", "show-validator", "--home", nodeDir)
+	return c.shellExec("grided", "tendermint", "show-validator", "--home", nodeDir)
 }
 
 func (c CLI) ValidatorConsensusAddress(nodeDir string) (*string, error) {
-	return c.shellExec("gridnoded", "tendermint", "show-address", "--home", nodeDir)
+	return c.shellExec("grided", "tendermint", "show-address", "--home", nodeDir)
 }
 
 func (c CLI) InitChain(chainID, moniker, nodeDir string) (*string, error) {
-	return c.shellExec("gridnoded", "init", moniker, "--chain-id", chainID, "--home", nodeDir)
+	return c.shellExec("grided", "init", moniker, "--chain-id", chainID, "--home", nodeDir)
 }
 
 func (c CLI) AddKey(name, mnemonic, keyPassword, cliDir string) (*string, error) {
@@ -121,24 +121,24 @@ func (c CLI) AddKey(name, mnemonic, keyPassword, cliDir string) (*string, error)
 	default:
 		var input [][]byte
 		input = c.formatInputs([]string{mnemonic, ""})
-		return c.shellExecInput("gridnoded", input, "keys", "add", name, "--home", cliDir, "-i", "--keyring-backend", c.keyringBackend)
+		return c.shellExecInput("grided", input, "keys", "add", name, "--home", cliDir, "-i", "--keyring-backend", c.keyringBackend)
 	}
 }
 
 func (c CLI) AddGenesisAccount(address, nodeDir string, coins []string) (*string, error) {
-	return c.shellExec("gridnoded", "add-genesis-account", address, strings.Join(coins[:], ","), "--home", nodeDir)
+	return c.shellExec("grided", "add-genesis-account", address, strings.Join(coins[:], ","), "--home", nodeDir)
 }
 
 func (c CLI) AddGenesisCLPAdmin(address, nodeDir string) (*string, error) {
-	return c.shellExec("gridnoded", "add-genesis-clp-admin", address, "--home", nodeDir, "--keyring-backend", c.keyringBackend)
+	return c.shellExec("grided", "add-genesis-clp-admin", address, "--home", nodeDir, "--keyring-backend", c.keyringBackend)
 }
 
 func (c CLI) SetGenesisOracleAdmin(address, nodeDir string) (*string, error) {
-	return c.shellExec("gridnoded", "set-genesis-oracle-admin", address, "--home", nodeDir, "--keyring-backend", c.keyringBackend)
+	return c.shellExec("grided", "set-genesis-oracle-admin", address, "--home", nodeDir, "--keyring-backend", c.keyringBackend)
 }
 
 func (c CLI) SetGenesisWhitelisterAdmin(address, nodeDir string) (*string, error) {
-	return c.shellExec("gridnoded", "set-genesis-whitelister-admin", address, "--home", nodeDir, "--keyring-backend", c.keyringBackend)
+	return c.shellExec("grided", "set-genesis-whitelister-admin", address, "--home", nodeDir, "--keyring-backend", c.keyringBackend)
 }
 
 func (c CLI) GenerateGenesisTxn(name, keyPassword, bondAmount, nodeDir, outputFile, nodeID, pubKey, ipV4Addr, chainID string) (*string, error) {
@@ -147,7 +147,7 @@ func (c CLI) GenerateGenesisTxn(name, keyPassword, bondAmount, nodeDir, outputFi
 		input = c.formatInputs([]string{keyPassword, keyPassword, keyPassword})
 	}
 
-	return c.shellExecInput("gridnoded", input,
+	return c.shellExecInput("grided", input,
 		"gentx", name, bondAmount,
 		"--details", name,
 		"--keyring-backend", c.keyringBackend,
@@ -161,11 +161,11 @@ func (c CLI) GenerateGenesisTxn(name, keyPassword, bondAmount, nodeDir, outputFi
 }
 
 func (c CLI) CollectGenesisTxns(gentxDir, nodeDir string) (*string, error) {
-	return c.shellExec("gridnoded", "collect-gentxs", "--gentx-dir", gentxDir, "--home", nodeDir)
+	return c.shellExec("grided", "collect-gentxs", "--gentx-dir", gentxDir, "--home", nodeDir)
 }
 
 func (c CLI) ExportGenesis() (*string, error) {
-	return c.shellExec("gridnoded", "export")
+	return c.shellExec("grided", "export")
 }
 
 func (c CLI) GenesisFilePath() string {
@@ -186,11 +186,11 @@ func (c CLI) TransferFunds(keyPassword, fromAddress, toAddress, coins string) (*
 		input = c.formatInputs([]string{keyPassword, keyPassword})
 	}
 
-	return c.shellExecInput("gridnoded", input, "tx", "send", fromAddress, toAddress, coins, "-y")
+	return c.shellExecInput("grided", input, "tx", "send", fromAddress, toAddress, coins, "-y")
 }
 
 func (c CLI) ValidatorPublicKeyAddress() (*string, error) {
-	return c.shellExec("gridnoded", "tendermint", "show-validator")
+	return c.shellExec("grided", "tendermint", "show-validator")
 }
 
 func (c CLI) CreateValidator(moniker, validatorPublicKey, keyPassword, bondAmount string) (*string, error) {
@@ -199,7 +199,7 @@ func (c CLI) CreateValidator(moniker, validatorPublicKey, keyPassword, bondAmoun
 		input = c.formatInputs([]string{keyPassword, keyPassword})
 	}
 
-	return c.shellExecInput("gridnoded", input,
+	return c.shellExecInput("grided", input,
 		"tx", "staking", "create-validator",
 		"--commission-max-change-rate", "0.1",
 		"--commission-max-rate", "0.1",

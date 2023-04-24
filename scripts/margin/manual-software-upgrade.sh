@@ -2,7 +2,7 @@
 
 set -x
 
-gridnoded tx gov submit-proposal software-upgrade "${NEW_VERSION}" \
+grided tx gov submit-proposal software-upgrade "${NEW_VERSION}" \
   --from ${GRID_ACT} \
   --deposit "${DEPOSIT}" \
   --upgrade-height "${TARGET_BLOCK}" \

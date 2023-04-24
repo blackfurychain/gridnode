@@ -6,5 +6,5 @@ basedir=$(dirname $0)
 hashes=$(cat $* | grep "^txhash: " | sed -e "s/txhash: //")
 for i in $hashes
 do
-  gridnoded q tx --home $CHAINDIR/.gridnoded $i -o json | jq -c .
+  grided q tx --home $CHAINDIR/.grided $i -o json | jq -c .
 done

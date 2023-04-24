@@ -2,7 +2,7 @@
 
 set -x
 
-gridnoded tx gov vote 2 yes \
+grided tx gov vote 2 yes \
   --from ${GRID_ACT} \
   --keyring-backend test \
   --chain-id="${GRIDNODE_CHAIN_ID}" \

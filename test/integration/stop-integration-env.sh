@@ -7,5 +7,5 @@ docker network rm genesis_gridironchain
 # Image built is untagged at 3.21 GB, this removes them to prevent devouring ones disk space
 docker rmi $(docker images | grep "^<none>" | awk "{print $3}")
 
-pkill gridnoded gridnoded ebrelayer node bash || true
-rm -rf ~/.gridnoded/localnet
+pkill grided grided ebrelayer node bash || true
+rm -rf ~/.grided/localnet

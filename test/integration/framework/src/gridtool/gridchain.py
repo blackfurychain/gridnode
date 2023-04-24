@@ -26,7 +26,7 @@ DEVNET = {"node": "https://rpc-devnet.gridironchain.finance", "chain_id": "gridi
 
 GasFees = Tuple[float, str]  # Special case of cosmos.Balance with only one denom and float amount  # TODO Rename to something more neutral such as Amount
 
-# Format of a single "entry" of output of "gridnoded q tokenregistry generate"; used for "gridnoded tx tokenregistry register"
+# Format of a single "entry" of output of "grided q tokenregistry generate"; used for "grided tx tokenregistry register"
 TokenRegistryParams = JsonDict
 RewardsParams = JsonDict
 LPPDParams = JsonDict
@@ -54,7 +54,7 @@ grid_tx_burn_fee_in_ceth = 1
 # "ethbridge burn". This amount does not seem to be actually used. For example, if you fund the account just with
 # grid_tx_burn_fee_in_fury, We observed that if you try to fund grid accounts with just the exact amount of fury
 # needed to pay fees (grid_tx_burn_fee_in_fury * number_of_transactions), the bridge would stop forwarding after
-# approx. 200 transactions, and you would see in gridnoded logs this message:
+# approx. 200 transactions, and you would see in grided logs this message:
 # {"level":"debug","module":"mempool","err":null,"peerID":"","res":{"check_tx":{"code":5,"data":null,"log":"0fury is smaller than 500000000000000000fury: insufficient funds: insufficient funds","info":"","gas_wanted":"1000000000000000000","gas_used":"19773","events":[],"codespace":"sdk"}},"tx":"...","time":"2022-03-26T10:09:26+01:00","message":"rejected bad transaction"}
 # TODO This should be dynamic (per-Gridnoded)
 grid_tx_burn_fee_buffer_in_fury = 5 * grid_tx_fee_in_fury
@@ -110,7 +110,7 @@ def mnemonic_to_address(cmd: command.Command, mnemonic: Iterable[str]):
     finally:
         cmd.rmdir(tmpdir)
 
-def gridnoded_parse_output_lines(stdout: str) -> Mapping:
+def grided_parse_output_lines(stdout: str) -> Mapping:
     # TODO Some values are like '""'
     pat = re.compile("^(.*?): (.*)$")
     result = {}
@@ -128,7 +128,7 @@ def format_peer_address(node_id: str, hostname: str, p2p_port: int) -> str:
 def format_node_url(hostname: str, p2p_port: int) -> str:
     return "tcp://{}:{}".format(hostname, p2p_port)
 
-# Use this to check the output of gridnoded commands if transaction was successful. This can only be used with
+# Use this to check the output of grided commands if transaction was successful. This can only be used with
 # "--broadcast-mode block" when the stack trace is returned in standard output (json/yaml) field `raw_log`.
 # @TODO Sometimes, raw_log is also json file, c.f. Gridnoded.send()
 def check_raw_log(res: JsonDict):
@@ -171,7 +171,7 @@ class Gridnoded:
         binary: Optional[str] = None
     ):
         self.cmd = cmd
-        self.binary = binary or "gridnoded"
+        self.binary = binary or "grided"
         self.home = home
         self.node = node
         self.chain_id = chain_id
@@ -187,17 +187,17 @@ class Gridnoded:
         # over existing entries resulting in gas that is proportional to the number of existing entries.
         self.high_gas = 200000 * 10000
 
-        # Firing transactions with "gridnoded tx bank send" in rapid succession does not work. This is currently a
+        # Firing transactions with "grided tx bank send" in rapid succession does not work. This is currently a
         # known limitation of Cosmos SDK, see https://github.com/cosmos/cosmos-sdk/issues/4186
         # Instead, we take advantage of batching multiple denoms to single account with single send command (amounts
-        # separated by by comma: "gridnoded tx bank send ... 100denoma,100denomb,100denomc") and wait for destination
+        # separated by by comma: "grided tx bank send ... 100denoma,100denomb,100denomc") and wait for destination
         # account to show changes for all denoms after each send. But also batches don't work reliably if they are too
         # big, so we limit the maximum batch size here.
         self.max_send_batch_size = 5
 
         self.broadcast_mode = None
-        # self.gridnoded_burn_gas_cost = 16 * 10**10 * 393000  # see x/ethbridge/types/msgs.go for gas
-        # self.gridnoded_lock_gas_cost = 16 * 10**10 * 393000
+        # self.grided_burn_gas_cost = 16 * 10**10 * 393000  # see x/ethbridge/types/msgs.go for gas
+        # self.grided_lock_gas_cost = 16 * 10**10 * 393000
         # TODO Rename, this is now shared among all callers of _paged_read()
         self.get_balance_default_retries = 0
 
@@ -214,7 +214,7 @@ class Gridnoded:
 
     def keys_list(self):
         args = ["keys", "list", "--output", "json"] + self._home_args() + self._keyring_backend_args()
-        res = self.gridnoded_exec(args)
+        res = self.grided_exec(args)
         return json.loads(stdout(res))
 
     def keys_show(self, name, bech=None):
@@ -222,12 +222,12 @@ class Gridnoded:
             (["--bech", bech] if bech else []) + \
             self._home_args() + \
             self._keyring_backend_args()
-        res = self.gridnoded_exec(args)
+        res = self.grided_exec(args)
         return yaml_load(stdout(res))
 
     def get_val_address(self, moniker) -> cosmos.BechAddress:
         args = ["keys", "show", "-a", "--bech", "val", moniker] + self._home_args() + self._keyring_backend_args()
-        res = self.gridnoded_exec(args)
+        res = self.grided_exec(args)
         expected = exactly_one(stdout_lines(res))
         result = exactly_one(self.keys_show(moniker, bech="val"))["address"]
         assert result == expected
@@ -236,11 +236,11 @@ class Gridnoded:
     def _keys_add(self, moniker: str, mnemonic: Optional[Iterable[str]] = None) -> Tuple[JsonDict, Iterable[str]]:
         if mnemonic is None:
             args = ["keys", "add", moniker] + self._home_args() + self._keyring_backend_args()
-            res = self.gridnoded_exec(args, stdin=["y"])
+            res = self.grided_exec(args, stdin=["y"])
             mnemonic = stderr(res).splitlines()[-1].split(" ")
         else:
             args = ["keys", "add", moniker, "--recover"] + self._home_args() + self._keyring_backend_args()
-            res = self.gridnoded_exec(args, stdin=[" ".join(mnemonic)])
+            res = self.grided_exec(args, stdin=[" ".join(mnemonic)])
         account = exactly_one(yaml_load(stdout(res)))
         return account, mnemonic
 
@@ -251,7 +251,7 @@ class Gridnoded:
 
     def generate_mnemonic(self) -> List[str]:
         args = ["keys", "mnemonic"] + self._home_args() + self._keyring_backend_args()
-        res = self.gridnoded_exec(args)
+        res = self.grided_exec(args)
         return exactly_one(stderr(res).splitlines()).split(" ")
 
     def create_addr(self, moniker: Optional[str] = None, mnemonic: Optional[Iterable[str]] = None) -> cosmos.Address:
@@ -261,7 +261,7 @@ class Gridnoded:
         moniker = self.__fill_in_moniker(moniker)
         args = ["keys", "add", moniker, "--multisig", ",".join(signers), "--multisig-threshold",
             str(multisig_threshold)] + self._home_args() + self._keyring_backend_args()
-        res = self.gridnoded_exec(args)
+        res = self.grided_exec(args)
         account = exactly_one(yaml_load(stdout(res)))
         return account
 
@@ -269,12 +269,12 @@ class Gridnoded:
         return moniker if moniker else "temp-{}".format(random_string(10))
 
     def keys_delete(self, name: str):
-        self.cmd.execst(["gridnoded", "keys", "delete", name] + self._home_args() + self._keyring_backend_args(),
+        self.cmd.execst(["grided", "keys", "delete", name] + self._home_args() + self._keyring_backend_args(),
             stdin=["y"], check_exit=False)
 
     def query_account(self, addr: cosmos.Address) -> JsonDict:
         args = ["query", "auth", "account", addr, "--output", "json"] + self._node_args() + self._chain_id_args()
-        res = self.gridnoded_exec(args)
+        res = self.grided_exec(args)
         return json.loads(stdout(res))
 
     def get_acct_seq(self, addr: cosmos.Address) -> Tuple[int, int]:
@@ -285,7 +285,7 @@ class Gridnoded:
 
     def add_genesis_account(self, gridnodeadmin_addr: cosmos.Address, tokens: cosmos.Balance):
         tokens_str = cosmos.balance_format(tokens)
-        self.gridnoded_exec(["add-genesis-account", gridnodeadmin_addr, tokens_str] + self._home_args() + self._keyring_backend_args())
+        self.grided_exec(["add-genesis-account", gridnodeadmin_addr, tokens_str] + self._home_args() + self._keyring_backend_args())
 
     # TODO Obsolete
     def add_genesis_account_directly_to_existing_genesis_json(self,
@@ -353,16 +353,16 @@ class Gridnoded:
         self.save_app_toml(app_toml)
 
     def get_effective_home(self) -> str:
-        return self.home if self.home is not None else self.cmd.get_user_home(".gridnoded")
+        return self.home if self.home is not None else self.cmd.get_user_home(".grided")
 
     def add_genesis_clp_admin(self, address: cosmos.Address):
         args = ["add-genesis-clp-admin", address] + self._home_args() + self._keyring_backend_args()
-        self.gridnoded_exec(args)
+        self.grided_exec(args)
 
     # Modifies genesis.json and adds the address to .oracle.address_whitelist array.
     def add_genesis_validators(self, address: cosmos.BechAddress):
         args = ["add-genesis-validators", address] + self._home_args() + self._keyring_backend_args()
-        res = self.gridnoded_exec(args)
+        res = self.grided_exec(args)
         return res
 
     # At the moment only on future/peggy2 branch, called from PeggyEnvironment
@@ -370,28 +370,28 @@ class Gridnoded:
         assert on_peggy2_branch
         args = ["add-genesis-validators", str(evm_network_descriptor), valoper, str(validator_power)] + \
             self._home_args()
-        self.gridnoded_exec(args)
+        self.grided_exec(args)
 
     def set_genesis_oracle_admin(self, address):
-        self.gridnoded_exec(["set-genesis-oracle-admin", address] + self._home_args() + self._keyring_backend_args())
+        self.grided_exec(["set-genesis-oracle-admin", address] + self._home_args() + self._keyring_backend_args())
 
     def set_genesis_token_registry_admin(self, address):
-        self.gridnoded_exec(["set-genesis-token-registry-admin", address] + self._home_args())
+        self.grided_exec(["set-genesis-token-registry-admin", address] + self._home_args())
 
     def set_genesis_whitelister_admin(self, address):
-        self.gridnoded_exec(["set-genesis-whitelister-admin", address] + self._home_args() + self._keyring_backend_args())
+        self.grided_exec(["set-genesis-whitelister-admin", address] + self._home_args() + self._keyring_backend_args())
 
     def set_gen_denom_whitelist(self, denom_whitelist_file):
-        self.gridnoded_exec(["set-gen-denom-whitelist", denom_whitelist_file] + self._home_args())
+        self.grided_exec(["set-gen-denom-whitelist", denom_whitelist_file] + self._home_args())
 
     def tendermint_show_node_id(self) -> str:
         args = ["tendermint", "show-node-id"] + self._home_args()
-        res = self.gridnoded_exec(args)
+        res = self.grided_exec(args)
         return exactly_one(stdout(res).splitlines())
 
     def tendermint_show_validator(self):
         args = ["tendermint", "show-validator"] + self._home_args()
-        res = self.gridnoded_exec(args)
+        res = self.grided_exec(args)
         return json.loads(stdout(res))
 
     # self.node ("--node") should point to existing validator (i.e. node 0) which must be up.
@@ -411,7 +411,7 @@ class Gridnoded:
             str(commission_max_change_rate), "--min-self-delegation", str(min_self_delegation), "--from", from_acct] + \
             self._home_args() + self._chain_id_args() + self._node_args() + self._keyring_backend_args() + \
             self._fees_args() + self._broadcast_mode_args(broadcast_mode) + self._yes_args()
-        res = self.gridnoded_exec(args)
+        res = self.grided_exec(args)
         return yaml_load(stdout(res))
 
     def staking_delegate(self, validator_addr, amount: cosmos.Balance, from_addr: cosmos.Balance,
@@ -421,7 +421,7 @@ class Gridnoded:
             self._home_args() + self._keyring_backend_args() + self._node_args() + self._chain_id_args() + \
             self._fees_args() + self._fees_args() + self._broadcast_mode_args(broadcast_mode=broadcast_mode) + \
             self._yes_args()
-        res = self.gridnoded_exec(args)
+        res = self.grided_exec(args)
         return yaml_load(stdout(res))
 
     def staking_edit_validator(self, commission_rate: float, from_acct: cosmos.Address,
@@ -430,7 +430,7 @@ class Gridnoded:
         args = ["tx", "staking", "edit-validator", "--from", from_acct, "--commission-rate", str(commission_rate)] + \
             self._chain_id_args() + self._home_args() + self._node_args() + self._keyring_backend_args() + \
             self._fees_args() + self._broadcast_mode_args(broadcast_mode) + self._yes_args()
-        res = self.gridnoded_exec(args)
+        res = self.grided_exec(args)
         return yaml_load(stdout(res))
 
     def query_staking_validators(self) -> JsonObj:
@@ -439,7 +439,7 @@ class Gridnoded:
         return res
 
     # See scripts/ibc/tokenregistration for more information and examples.
-    # JSON file can be generated with "gridnoded q tokenregistry generate"
+    # JSON file can be generated with "grided q tokenregistry generate"
     def create_tokenregistry_entry(self, symbol: str, gridironchain_symbol: str, decimals: int,
         permissions: Iterable[str] = None
     ) -> TokenRegistryParams:
@@ -484,7 +484,7 @@ class Gridnoded:
                 self._account_number_and_sequence_args(account_seq) + \
                 self._node_args() + self._high_gas_prices_args() + self._broadcast_mode_args(broadcast_mode=broadcast_mode) + \
                 self._yes_args()
-            res = self.gridnoded_exec(args)
+            res = self.grided_exec(args)
             res = json.loads(stdout(res))
             # Example of successful output: {"height":"196804","txhash":"C8252E77BCD441A005666A4F3D76C99BD35F9CB49AA1BE44CBE2FFCC6AD6ADF4","codespace":"","code":0,"data":"0A270A252F7369666E6F64652E746F6B656E72656769737472792E76312E4D73675265676973746572","raw_log":"[{\"events\":[{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"/gridnode.tokenregistry.v1.MsgRegister\"}]}]}]","logs":[{"msg_index":0,"log":"","events":[{"type":"message","attributes":[{"key":"action","value":"/gridnode.tokenregistry.v1.MsgRegister"}]}]}],"info":"","gas_wanted":"200000","gas_used":"115149","tx":null,"timestamp":""}
             if res["raw_log"].startswith("signature verification failed"):
@@ -509,7 +509,7 @@ class Gridnoded:
 
     def query_tokenregistry_entries(self):
         args = ["query", "tokenregistry", "entries"] + self._node_args() + self._chain_id_args()
-        res = self.gridnoded_exec(args)
+        res = self.grided_exec(args)
         return json.loads(stdout(res))["entries"]
 
     # Creates file config/gentx/gentx-*.json
@@ -524,18 +524,18 @@ class Gridnoded:
             (["--commission-max-rate", str(commission_max_rate)] if commission_max_rate is not None else []) + \
             (["--commission-max-change-rate", str(commission_max_change_rate)] if commission_max_change_rate is not None else []) + \
             self._home_args() + self._keyring_backend_args() + self._chain_id_args()
-        res = self.gridnoded_exec(args)
+        res = self.grided_exec(args)
         return exactly_one(stderr(res).splitlines())
 
     # Modifies genesis.json and adds .genutil.gen_txs (presumably from config/gentx/gentx-*.json)
     def collect_gentx(self) -> JsonDict:
         args = ["collect-gentxs"] + self._home_args()  # Must not use --keyring-backend
-        res = self.gridnoded_exec(args)
+        res = self.grided_exec(args)
         return json.loads(stderr(res))
 
     def validate_genesis(self):
         args = ["validate-genesis"] + self._home_args()  # Must not use --keyring-backend
-        res = self.gridnoded_exec(args)
+        res = self.grided_exec(args)
         res = exactly_one(stdout(res).splitlines())
         assert res.endswith(" is a valid genesis file")
 
@@ -558,7 +558,7 @@ class Gridnoded:
                 self._broadcast_mode_args("block") + \
                 self._yes_args()
 
-        res = self.gridnoded_exec(args)
+        res = self.grided_exec(args)
         return [json.loads(x) for x in stdout(res).splitlines()]
 
 
@@ -591,7 +591,7 @@ class Gridnoded:
         args = ["tx", "tokenregistry", "set-registry", registry_path, "--gas-prices", grid_format_amount(*gas_prices),
             "--gas-adjustment", str(gas_adjustment), "--from", from_account, "--chain-id", chain_id, "--output", "json"] + \
             self._home_args() + self._keyring_backend_args() + self._yes_args()
-        res = self.gridnoded_exec(args)
+        res = self.grided_exec(args)
         return [json.loads(x) for x in stdout(res).splitlines()]
 
     def peggy2_set_cross_chain_fee(self, admin_account_address, network_id, ethereum_cross_chain_fee_token,
@@ -603,24 +603,24 @@ class Gridnoded:
             str(cross_chain_burn_fee), "--from", admin_account_name, "--gas-prices", grid_format_amount(*gas_prices),
             "--gas-adjustment", str(gas_adjustment)] + self._home_args() + self._keyring_backend_args() + \
             self._chain_id_args() + self._yes_args()
-        return self.gridnoded_exec(args)
+        return self.grided_exec(args)
 
     def peggy2_update_consensus_needed(self, admin_account_address, hardhat_chain_id, consensus_needed):
         args = ["tx", "ethbridge", "update-consensus-needed", str(hardhat_chain_id),
             str(consensus_needed), "--from", admin_account_address] + self._home_args() + \
                self._keyring_backend_args() + self._gas_prices_args() + self._chain_id_args() + self._yes_args()
-        return self.gridnoded_exec(args)
+        return self.grided_exec(args)
 
     # TODO Rename tcp_url to rpc_laddr + remove dependency on self.node
-    def gridnoded_start(self, tcp_url: Optional[str] = None, minimum_gas_prices: Optional[GasFees] = None,
+    def grided_start(self, tcp_url: Optional[str] = None, minimum_gas_prices: Optional[GasFees] = None,
         log_format_json: bool = False, log_file: Optional[IO] = None, log_level: Optional[str] = None,
         trace: bool = False, p2p_laddr: Optional[str] = None, grpc_address: Optional[str] = None,
         grpc_web_address: Optional[str] = None, address: Optional[str] = None
     ):
-        gridnoded_exec_args = self.build_start_cmd(tcp_url=tcp_url, p2p_laddr=p2p_laddr, grpc_address=grpc_address,
+        grided_exec_args = self.build_start_cmd(tcp_url=tcp_url, p2p_laddr=p2p_laddr, grpc_address=grpc_address,
             grpc_web_address=grpc_web_address, address=address, minimum_gas_prices=minimum_gas_prices,
             log_format_json=log_format_json, log_level=log_level, trace=trace)
-        return self.cmd.spawn_asynchronous_process(gridnoded_exec_args, log_file=log_file)
+        return self.cmd.spawn_asynchronous_process(grided_exec_args, log_file=log_file)
 
     # TODO Rename tcp_url to rpc_laddr + remove dependency on self.node
     def build_start_cmd(self, tcp_url: Optional[str] = None, p2p_laddr: Optional[str] = None,
@@ -655,7 +655,7 @@ class Gridnoded:
             self._home_args() + self._keyring_backend_args() + self._chain_id_args() + self._node_args() + \
             self._fees_args() + self._account_number_and_sequence_args(account_seq) + \
             self._broadcast_mode_args(broadcast_mode) + self._yes_args()
-        res = self.gridnoded_exec(args)
+        res = self.grided_exec(args)
         retval = json.loads(stdout(res))
         # raw_log = retval["raw_log"]
         # for bad_thing in ["insufficient funds", "signature verification failed"]:
@@ -763,13 +763,13 @@ class Gridnoded:
     # TODO Deduplicate
     def status(self):
         args = ["status"] + self._node_args()
-        res = self.gridnoded_exec(args)
+        res = self.grided_exec(args)
         return json.loads(stderr(res))
 
     def query_block(self, block: Optional[int] = None) -> JsonDict:
         args = ["query", "block"] + \
             ([str(block)] if block is not None else []) + self._node_args()
-        res = self.gridnoded_exec(args)
+        res = self.grided_exec(args)
         return json.loads(stdout(res))
 
     def query_pools(self, height: Optional[int] = None) -> List[JsonDict]:
@@ -801,7 +801,7 @@ class Gridnoded:
             retries_left = retries_on_error
             while True:
                 try:
-                    res = self.gridnoded_exec(args, disable_log=disable_log)
+                    res = self.grided_exec(args, disable_log=disable_log)
                     break
                 except Exception as e:
                     if retries_left == 0:
@@ -846,7 +846,7 @@ class Gridnoded:
             self._node_args() + self._high_gas_prices_args() + self._home_args() + self._keyring_backend_args() + \
             self._account_number_and_sequence_args(account_seq) + \
             self._broadcast_mode_args(broadcast_mode=broadcast_mode) + self._yes_args()
-        res = self.gridnoded_exec(args)
+        res = self.grided_exec(args)
         return yaml_load(stdout(res))
 
     # Items: (denom, native_amount, external_amount)
@@ -870,7 +870,7 @@ class Gridnoded:
             self._keyring_backend_args() + self._chain_id_args() + self._node_args() + self._fees_args() + \
             self._account_number_and_sequence_args(account_seq) + \
             self._broadcast_mode_args(broadcast_mode=broadcast_mode) + self._yes_args()
-        res = self.gridnoded_exec(args)
+        res = self.grided_exec(args)
         return yaml_load(stdout(res))
 
     # asymmetry: -10000 = 100% of native asset, 0 = 50% of native asset and 50% of external asset, 10000 = 100% of external asset
@@ -882,7 +882,7 @@ class Gridnoded:
         args = ["tx", "clp", "remove-liquidity", "--from", from_addr, "--wBasis", int(w_basis), "--asymmetry",
             str(asymmetry)] + self._node_args() + self._chain_id_args() + self._keyring_backend_args() + \
             self._fees_args() + self._yes_args()
-        res = self.gridnoded_exec(args)
+        res = self.grided_exec(args)
         res = yaml_load(res)
         check_raw_log(res)
         return res
@@ -891,7 +891,7 @@ class Gridnoded:
         args = ["tx", "clp", "unbond-liquidity", "--from", from_addr, "--symbol", symbol, "--units", str(units)] + \
             self._home_args() + self._keyring_backend_args() + self._chain_id_args() + self._node_args() + \
             self._fees_args() + self._broadcast_mode_args() + self._yes_args()
-        res = self.gridnoded_exec(args)
+        res = self.grided_exec(args)
         res = yaml_load(stdout(res))
         check_raw_log(res)
         return res
@@ -903,7 +903,7 @@ class Gridnoded:
             "--receivedSymbol", received_symbol, "--minReceivingAmount", str(min_receiving_amount)] + \
             self._node_args() + self._chain_id_args() + self._home_args() + self._keyring_backend_args() + \
             self._fees_args() + self._broadcast_mode_args(broadcast_mode) + self._yes_args()
-        res = self.gridnoded_exec(args)
+        res = self.grided_exec(args)
         res = yaml_load(stdout(res))
         check_raw_log(res)
         return res
@@ -913,13 +913,13 @@ class Gridnoded:
             args = ["tx", "clp", "reward-period", "--from", from_addr, "--path", tmp_rewards_json] + \
                 self._home_args() + self._keyring_backend_args() + self._node_args() + self._chain_id_args() + \
                 self._fees_args() + self._broadcast_mode_args() + self._yes_args()
-            res = self.gridnoded_exec(args)
-            res = gridnoded_parse_output_lines(stdout(res))
+            res = self.grided_exec(args)
+            res = grided_parse_output_lines(stdout(res))
             return res
 
     def query_reward_params(self):
         args = ["query", "reward", "params"] + self._node_args()
-        res = self.gridnoded_exec(args)
+        res = self.grided_exec(args)
         return res
 
     def clp_set_lppd_params(self, from_addr: cosmos.Address, lppd_params: LPPDParams):
@@ -927,8 +927,8 @@ class Gridnoded:
             args = ["tx", "clp", "set-lppd-params", "--path", tmp_distribution_json, "--from", from_addr] + \
                 self._home_args() + self._keyring_backend_args() + self._node_args() + self._chain_id_args() + \
                 self._fees_args() + self._broadcast_mode_args() + self._yes_args()
-            res = self.gridnoded_exec(args)
-            res = gridnoded_parse_output_lines(stdout(res))
+            res = self.grided_exec(args)
+            res = grided_parse_output_lines(stdout(res))
             return res
 
     def tx_margin_update_pools(self, from_addr: cosmos.Address, open_pools: Iterable[str],
@@ -940,7 +940,7 @@ class Gridnoded:
             args = ["tx", "margin", "update-pools", open_pools_file, "--closed-pools", closed_pools_file,
                 "--from", from_addr] + self._home_args() + self._keyring_backend_args() + self._node_args() + \
                 self._chain_id_args() + self._fees_args() + self._broadcast_mode_args(broadcast_mode) + self._yes_args()
-            res = self.gridnoded_exec(args)
+            res = self.grided_exec(args)
             res = yaml_load(stdout(res))
             check_raw_log(res)
             return res
@@ -949,7 +949,7 @@ class Gridnoded:
         args = ["query", "margin", "params"] + \
             (["--height", str(height)] if height is not None else []) + \
             self._node_args() + self._chain_id_args()
-        res = self.gridnoded_exec(args)
+        res = self.grided_exec(args)
         res = yaml_load(stdout(res))
         return res
 
@@ -959,7 +959,7 @@ class Gridnoded:
         args = ["tx", "margin", "whitelist", address, "--from", from_addr] + self._home_args() + \
             self._keyring_backend_args() + self._node_args() + self._chain_id_args() + self._fees_args() + \
             self._broadcast_mode_args(broadcast_mode) + self._yes_args()
-        res = self.gridnoded_exec(args)
+        res = self.grided_exec(args)
         res = yaml_load(stdout(res))
         return res
 
@@ -970,7 +970,7 @@ class Gridnoded:
            "--collateral_amount", str(collateral_amount), "--leverage", str(leverage), "--position", position, \
             "--from", from_addr] + self._home_args() + self._keyring_backend_args() + self._node_args() + \
             self._chain_id_args() + self._fees_args() + self._broadcast_mode_args(broadcast_mode) + self._yes_args()
-        res = self.gridnoded_exec(args)
+        res = self.grided_exec(args)
         res = yaml_load(stdout(res))
         check_raw_log(res)
         return res
@@ -979,7 +979,7 @@ class Gridnoded:
         args = ["tx", "margin", "close", "--id", str(id), "--from", from_addr] + self._home_args() + \
             self._keyring_backend_args() + self._node_args() + self._chain_id_args() + self._fees_args() + \
             self._broadcast_mode_args(broadcast_mode) + self._yes_args()
-        res = self.gridnoded_exec(args)
+        res = self.grided_exec(args)
         res = yaml_load(stdout(res))
         check_raw_log(res)
         return res
@@ -1006,18 +1006,18 @@ class Gridnoded:
             args = ["tx", "sign", tmp_tx_file, "--from", from_grid_addr] + \
                 (["--sequence", str(sequence), "--offline", "--account-number", str(account_number)] if sequence else []) + \
                 self._home_args() + self._keyring_backend_args() + self._chain_id_args() + self._node_args()
-            res = self.gridnoded_exec(args)
+            res = self.grided_exec(args)
             signed_tx = json.loads(stderr(res))
             return signed_tx
 
     def encode_transaction(self, tx: JsonObj) -> bytes:
         with self._with_temp_json_file(tx) as tmp_file:
-            res = self.gridnoded_exec(["tx", "encode", tmp_file])
+            res = self.grided_exec(["tx", "encode", tmp_file])
             encoded_tx = base64.b64decode(stdout(res))
             return encoded_tx
 
     def version(self) -> str:
-        return exactly_one(stderr(self.gridnoded_exec(["version"])).splitlines())
+        return exactly_one(stderr(self.grided_exec(["version"])).splitlines())
 
     def gov_submit_software_upgrade(self, version: str, from_acct: cosmos.Address, deposit: cosmos.Balance,
         upgrade_height: int, upgrade_info: str, title: str, description: str, broadcast_mode: Optional[str] = None
@@ -1027,13 +1027,13 @@ class Gridnoded:
             "--title", title, "--description", description] + self._home_args() +  self._keyring_backend_args() + \
             self._node_args() + self._chain_id_args() + self._fees_args() + \
             self._broadcast_mode_args(broadcast_mode=broadcast_mode) + self._yes_args()
-        res = yaml_load(stdout(self.gridnoded_exec(args)))
+        res = yaml_load(stdout(self.grided_exec(args)))
         return res
 
     def query_gov_proposals(self) -> JsonObj:
         args = ["query", "gov", "proposals"] + self._node_args() + self._chain_id_args()
         # Check if there are no active proposals, in this case we don't get an empty result but an error
-        res = self.gridnoded_exec(args, check_exit=False)
+        res = self.grided_exec(args, check_exit=False)
         if res[0] == 1:
             error_lines = stderr(res).splitlines()
             if len(error_lines) > 0:
@@ -1042,7 +1042,7 @@ class Gridnoded:
         elif res[0] == 0:
             assert len(stderr(res)) == 0
             # TODO Pagination without initial block
-            res = yaml_load(stdout(self.gridnoded_exec(args)))
+            res = yaml_load(stdout(self.grided_exec(args)))
             assert res["pagination"]["next_key"] is None
             return res["proposals"]
 
@@ -1050,7 +1050,7 @@ class Gridnoded:
         args = ["tx", "gov", "vote", str(proposal_id), "yes" if vote else "no", "--from", from_acct] + \
             self._home_args() + self._keyring_backend_args() + self._node_args() + self._chain_id_args() + \
             self._fees_args() + self._broadcast_mode_args(broadcast_mode) + self._yes_args()
-        res = yaml_load(stdout(self.gridnoded_exec(args)))
+        res = yaml_load(stdout(self.grided_exec(args)))
         return res
 
     @contextlib.contextmanager
@@ -1059,7 +1059,7 @@ class Gridnoded:
             self.cmd.write_text_file(tmpfile, json.dumps(json_obj))
             yield tmpfile
 
-    def gridnoded_exec(self, args: List[str], stdin: Union[str, bytes, Sequence[str], None] = None,
+    def grided_exec(self, args: List[str], stdin: Union[str, bytes, Sequence[str], None] = None,
         cwd: Optional[str] = None, disable_log: bool = False, check_exit: bool = True
     ) -> command.ExecResult:
         args = [self.binary] + args
@@ -1128,7 +1128,7 @@ class Gridnoded:
             except URLError:
                 pass
             if time.time() - start_time > timeout:
-                raise GridnodedException("Timeout waiting for gridnoded to come up. Check if the process is running. "
+                raise GridnodedException("Timeout waiting for grided to come up. Check if the process is running. "
                     "If it didn't start, ther should be some information in the log file. If the process is slow to "
                     "start or if the validator needs more time to catch up, increase the timeout.")
             time.sleep(1)
@@ -1147,8 +1147,8 @@ class Gridnoded:
         return ["--gas-prices", self.gas_prices, "--gas-adjustment", str(self.gas_adjustment),
             "--gas", str(self.high_gas)]
 
-    # Deprecated: gridnoded accepts --gas-prices=0.5fury along with --gas-adjustment=1.5 instead of a fixed fee.
-    # However, this is needed for "gridnoded tx bank send" which does not work with "--gas"
+    # Deprecated: grided accepts --gas-prices=0.5fury along with --gas-adjustment=1.5 instead of a fixed fee.
+    # However, this is needed for "grided tx bank send" which does not work with "--gas"
     def _fees_args(self) -> List[str]:
         return ["--fees", grid_format_amount(self.fees, FURY)]
 
@@ -1182,7 +1182,7 @@ class GridnodeClient:
         self.grpc_port = grpc_port
 
     def query_account(self, grid_addr):
-        result = json.loads(stdout(self.gridnode.gridnoded_exec(["query", "account", grid_addr, "--output", "json"])))
+        result = json.loads(stdout(self.gridnode.grided_exec(["query", "account", grid_addr, "--output", "json"])))
         return result
 
     def send_from_gridironchain_to_ethereum(self, from_grid_addr: cosmos.Address, to_eth_addr: str, amount: int, denom: str,
@@ -1206,7 +1206,7 @@ class GridnodeClient:
                 self.gridnode._chain_id_args() + \
                 self.gridnode._node_args() + \
                 self.gridnode._yes_args()
-            res = self.gridnode.gridnoded_exec(args)
+            res = self.gridnode.grided_exec(args)
             result = json.loads(stdout(res))
             if not generate_only:
                 assert "failed to execute message" not in result["raw_log"]
@@ -1228,13 +1228,13 @@ class GridnodeClient:
                 ["--output","json"] + \
                 self.gridnode._yes_args()
 
-            res = self.gridnode.gridnoded_exec(args)
+            res = self.gridnode.grided_exec(args)
             result = json.loads(stdout(res))
             if not generate_only:
                 assert "failed to execute message" not in result["raw_log"]
             return result
 
-            # gridnoded tx ethbridge <direction> <node> <gridironchain_addr> <ethereum_addr> <amount> <symbol> <keyring backend> <ethereum-chain-id>
+            # grided tx ethbridge <direction> <node> <gridironchain_addr> <ethereum_addr> <amount> <symbol> <keyring backend> <ethereum-chain-id>
 
 
     def send_from_gridironchain_to_ethereum_grpc(self, from_grid_addr: cosmos.Address, to_eth_addr: str, amount: int,
@@ -1360,8 +1360,8 @@ def is_max_voting_power_limit_exceeded_exception(e: Exception):
 
 
 class RateLimiter:
-    def __init__(self, gridnoded, max_tpb):
-        self.gridnoded = gridnoded
+    def __init__(self, grided, max_tpb):
+        self.grided = grided
         self.max_tpb = max_tpb
         self.counter = 0
 
@@ -1370,7 +1370,7 @@ class RateLimiter:
             pass
         self.counter += 1
         if self.counter == self.max_tpb:
-            self.gridnoded.wait_for_last_transaction_to_be_mined()
+            self.grided.wait_for_last_transaction_to_be_mined()
             self.counter = 0
 
 

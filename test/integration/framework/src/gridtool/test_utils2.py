@@ -73,10 +73,10 @@ class PredefinedWallets:
 
     @staticmethod
     def create(cmd: command.Command, count: int, path: str):
-        gridnoded = gridironchain.Gridnoded(cmd, home=path)
+        grided = gridironchain.Gridnoded(cmd, home=path)
         entries = []
         for i in range(count):
-            account, mnemonic = gridnoded._keys_add("test-{}".format(i))
+            account, mnemonic = grided._keys_add("test-{}".format(i))
             addr = account["address"]
             entries.append(addr)
             entries.append(" ".join(mnemonic))

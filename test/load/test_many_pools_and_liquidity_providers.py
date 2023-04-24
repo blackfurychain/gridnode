@@ -58,7 +58,7 @@
 #
 # (3) Exceptions / printing of _debug...
 #
-# (4) Use parameter rpc.laddr for gridnoded start instead of self.node
+# (4) Use parameter rpc.laddr for grided start instead of self.node
 
 
 import argparse
@@ -76,7 +76,7 @@ log = gridtool_logger()
 
 
 class Test:
-    def __init__(self, cmd: command.Command, prj: project.Project, gridnoded_home_root: str):
+    def __init__(self, cmd: command.Command, prj: project.Project, grided_home_root: str):
         self.cmd = cmd
         self.prj = prj
         self.rnd = random.Random(5646067977921730044)  # Use a fixed random seed for repeatable results
@@ -108,7 +108,7 @@ class Test:
         # current block number (1s). The total time will be 4 * test_duration_blocks * block_time, i.e.
         # 4 * 6s = 24s for one unit of test_duration_blocks.
 
-        self.gridnoded_home_root = gridnoded_home_root
+        self.grided_home_root = grided_home_root
 
         self.env = None
         self.custom_wallet_mnemonics = [
@@ -116,8 +116,8 @@ class Test:
             "zebra sentence tape you spawn forget catalog veteran rocket steel ticket slender follow rubber spoil thing into liar twin document ring clock shell skirt",
         ]
 
-        self.gridnoded = None
-        self.gridnoded_client = None
+        self.grided = None
+        self.grided_client = None
 
     def setup(self):
         # Define one token per liquidity pool.
@@ -145,7 +145,7 @@ class Test:
             client_home = self.wallets_dir
         else:
             predefined_wallets = None
-            client_home = os.path.join(self.gridnoded_home_root, "gridnoded-client")
+            client_home = os.path.join(self.grided_home_root, "grided-client")
 
         # Set up test wallets with test tokens. We do this in genesis for performance reasons. For each wallet we choose
         # number_of_denoms_per_wallet` random denoms.
@@ -155,7 +155,7 @@ class Test:
         # For rewards, the funds are minted and in case we opted for a distribution of the rewards to the LP wallet the
         # minted furys are transferred there, you can see the minting process here: https://github.com/Gridironchain/gridnode/blob/master/x/clp/keeper/rewards.go#L54
         # For LPD, we only transfer the existing funds in CLP to the LP's wallet, you can see here: https://github.com/Gridironchain/gridnode/blob/8b2f9c45130c79e07555735185fbe1d00279fab0/x/clp/keeper/pool.go#L128
-        gridnoded_client = gridironchain.Gridnoded(self.cmd, home=client_home)
+        grided_client = gridironchain.Gridnoded(self.cmd, home=client_home)
         denom_total_supply = 10000 * self.number_of_wallets * self.amount_of_denom_per_wallet
         wallets = {}
         extra_accounts = {}
@@ -166,7 +166,7 @@ class Test:
                 addr = predefined_wallets.create_acct()
             else:
                 mnemonic = None if ((self.custom_wallet_mnemonics is None) or (i >= len(self.custom_wallet_mnemonics))) else self.custom_wallet_mnemonics[i].split(" ")
-                addr = gridnoded_client.create_addr(mnemonic=mnemonic)
+                addr = grided_client.create_addr(mnemonic=mnemonic)
             wallets[addr] = chosen_tokens
             extra_accounts[addr] = cosmos.balance_add(balances, {FURY: self.amount_of_fury_per_wallet})
 
@@ -174,7 +174,7 @@ class Test:
         # To create liquidity pools, faucet needs to have enough balances for all denoms. During
         # setup_liquidity_pools_simple() tokens will be transferred from faucet to clp_admin automatically.
         # (Currently, clp_admin == admin account of validator 0).
-        env = environments.GridnodedEnvironment(self.cmd, gridnoded_home_root=self.gridnoded_home_root)
+        env = environments.GridnodedEnvironment(self.cmd, grided_home_root=self.grided_home_root)
         validator_admin_initial_balance = {FURY: 10**25}
         for i in range(self.number_of_nodes):
             mnemonic = self.validator0_mnemonic if i == 0 else None
@@ -185,10 +185,10 @@ class Test:
         env.start()
 
         self.env = env
-        gridnoded = env._gridnoded_for(env.node_info[0])
-        gridnoded_client = gridironchain.Gridnoded(self.cmd, home=client_home, node=gridironchain.format_node_url(
+        grided = env._grided_for(env.node_info[0])
+        grided_client = gridironchain.Gridnoded(self.cmd, home=client_home, node=gridironchain.format_node_url(
             self.env.node_info[0]["host"], self.env.node_info[0]["ports"]["rpc"]), chain_id=env.chain_id)
-        gridnoded_client.get_balance_default_retries = 5
+        grided_client.get_balance_default_retries = 5
 
         # Set up liquidity pools. We create them symmetrically (`native_amount == external_amount`).
         native_amount = external_amount = self.amount_of_denom_per_wallet
@@ -201,26 +201,26 @@ class Test:
         # the first call gets through). To avoid `--broadcast-mode block` or waiting for new block, we need to use
         # account sequence numbers.
         for addr, denoms in wallets.items():
-            account_number, account_sequence = gridnoded.get_acct_seq(addr)
+            account_number, account_sequence = grided.get_acct_seq(addr)
             for denom in denoms:
-                res = gridnoded_client.tx_clp_add_liquidity(addr, denom, self.amount_of_liquidity_added_by_wallet,
+                res = grided_client.tx_clp_add_liquidity(addr, denom, self.amount_of_liquidity_added_by_wallet,
                     self.amount_of_liquidity_added_by_wallet, account_seq=(account_number, account_sequence))
                 gridironchain.check_raw_log(res)
                 account_sequence += 1
-        gridnoded_client.wait_for_last_transaction_to_be_mined()
-        self.check_actual_liquidity_providers(gridnoded_client, env.clp_admin, wallets)
+        grided_client.wait_for_last_transaction_to_be_mined()
+        self.check_actual_liquidity_providers(grided_client, env.clp_admin, wallets)
 
-        self.gridnoded = gridnoded
-        self.gridnoded_client = gridnoded_client
+        self.grided = grided
+        self.grided_client = grided_client
 
     def run(self):
-        gridnoded = self.gridnoded
-        gridnoded_client = self.gridnoded_client
+        grided = self.grided
+        grided_client = self.grided_client
         admin_addr = self.env.node_info[0]["admin_addr"]
 
         # Determine start and end blocks for rewards and LPPD
         # TODO start and end blocks are both inclusive, adjust
-        current_block = gridnoded_client.get_current_block()
+        current_block = grided_client.get_current_block()
         start_block = current_block + 5
         rewards_start_block = start_block + self.rewards_offset_blocks
         rewards_end_block = rewards_start_block + self.rewards_duration_blocks
@@ -235,17 +235,17 @@ class Test:
             reward_params = gridironchain.create_rewards_descriptor("RP_1", rewards_start_block, rewards_end_block,
                 [(token, 1) for token in self.tokens][:self.reward_period_pool_count], 100000 * self.token_unit,
                 self.reward_period_default_multiplier, self.reward_period_distribute, self.reward_period_mod)
-            gridnoded.clp_reward_period(admin_addr, reward_params)
-            gridnoded.wait_for_last_transaction_to_be_mined()
+            grided.clp_reward_period(admin_addr, reward_params)
+            grided.wait_for_last_transaction_to_be_mined()
             wait_boundaries.add(rewards_start_block)
             wait_boundaries.add(rewards_end_block)
-        # TODO gridnoded query reward params --node --chain-id (check if/when implemented)
+        # TODO grided query reward params --node --chain-id (check if/when implemented)
 
         # Set up LPD policies
         if self.lpd_duration_blocks > 0:
             lppd_params = gridironchain.create_lppd_params(lppd_start_block, lppd_end_block, 0.00045, self.lpd_period_mod)
-            gridnoded.clp_set_lppd_params(admin_addr, lppd_params)
-            gridnoded.wait_for_last_transaction_to_be_mined()
+            grided.clp_set_lppd_params(admin_addr, lppd_params)
+            grided.wait_for_last_transaction_to_be_mined()
             wait_boundaries.add(lppd_start_block)
             wait_boundaries.add(lppd_end_block)
 
@@ -279,8 +279,8 @@ class Test:
 
     # TODO Refactor - move to Gridnoded
     def wait_for_block(self, block_number: int) -> float:
-        gridnoded = self.gridnoded
-        current_block = gridnoded.get_current_block()
+        grided = self.grided
+        current_block = grided.get_current_block()
         prev_block = None
         assert current_block < block_number
         while current_block < block_number:
@@ -290,7 +290,7 @@ class Test:
                     # Check also https://github.com/cosmos/cosmos-sdk/issues/6105
                     try:
                         height = current_block - self.block_results_offset if self.block_results_offset is not None else None
-                        blk = gridnoded.get_block_results(height=height)
+                        blk = grided.get_block_results(height=height)
                         histogram = {}
                         for key in ["begin_block_events", "end_block_events"]:
                             items = blk[key]
@@ -305,7 +305,7 @@ class Test:
                     except Exception as e:
                         log.error("HTTP request for block_results failed: {}".format(repr(e)))
             time.sleep(1)
-            current_block = gridnoded.get_current_block()
+            current_block = grided.get_current_block()
         return time.time()
 
     def assert_set_equal(self, message: str, actual: set, expected: set):
@@ -317,10 +317,10 @@ class Test:
             log.error("Assertion failed: {}: actual_only={}".format(message, repr(actual_only)))
             log.error("Assertion failed: {}: expected_only={}".format(message, repr(expected_only)))
 
-    def check_actual_liquidity_providers(self, gridnoded, clp_admin, wallets):
+    def check_actual_liquidity_providers(self, grided, clp_admin, wallets):
         actual_lp_providers = {}
         for denom in self.tokens:
-            for lp in gridnoded.query_clp_liquidity_providers(denom):
+            for lp in grided.query_clp_liquidity_providers(denom):
                 addr = lp["liquidity_provider_address"]
                 symbol = lp["asset"]["symbol"]
                 if addr not in actual_lp_providers:
@@ -344,9 +344,9 @@ class Test:
 def run_test_case(args):
     cmd = command.Command()
     prj = project.Project(cmd, project_dir())
-    gridnoded_home_root = cmd.tmpdir("gridtool-test.tmp")
-    cmd.rmdir(gridnoded_home_root)
-    test = Test(cmd, prj, gridnoded_home_root=gridnoded_home_root)
+    grided_home_root = cmd.tmpdir("gridtool-test.tmp")
+    cmd.rmdir(grided_home_root)
+    test = Test(cmd, prj, grided_home_root=grided_home_root)
 
     scenario_vars = json.loads(cmd.read_text_file(args.scenario_file))
 
@@ -414,7 +414,7 @@ def run_test_case(args):
         try:
             log.error("Checking some balances to see if the thing is dead or alive...")
             addr = test.node_info[0]["admin_addr"]
-            balance = cosmos.balance_format(test.gridnoded[0].get_balance(addr))
+            balance = cosmos.balance_format(test.grided[0].get_balance(addr))
             log.debug("Balance of {}: {}".format(addr, balance))
         except Exception as e:
             log.error("Balance check failed", exc_info=True)

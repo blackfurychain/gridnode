@@ -2,7 +2,7 @@
 
 set -x
 
-# gridnoded tx clp create-pool \
+# grided tx clp create-pool \
 #   --from $GRID_ACT \
 #   --keyring-backend test \
 #   --symbol stake \
@@ -14,7 +14,7 @@ set -x
 #   --broadcast-mode block \
 #   -y
 
-gridnoded tx clp create-pool \
+grided tx clp create-pool \
   --from $GRID_ACT \
   --keyring-backend test \
   --symbol cusdc \
@@ -26,7 +26,7 @@ gridnoded tx clp create-pool \
   --broadcast-mode block \
   -y
 
-# gridnoded tx clp create-pool \
+# grided tx clp create-pool \
 #   --from $GRID_ACT \
 #   --keyring-backend test \
 #   --symbol ceth \
@@ -38,7 +38,7 @@ gridnoded tx clp create-pool \
 #   --broadcast-mode block \
 #   -y
 
-# gridnoded tx clp create-pool \
+# grided tx clp create-pool \
 #   --from $GRID_ACT \
 #   --keyring-backend test \
 #   --symbol cwbtc \
@@ -50,7 +50,7 @@ gridnoded tx clp create-pool \
 #   --broadcast-mode block \
 #   -y
 
-# gridnoded tx clp create-pool \
+# grided tx clp create-pool \
 #   --from $GRID_ACT \
 #   --keyring-backend test \
 #   --symbol ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2 \

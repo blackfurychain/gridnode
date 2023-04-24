@@ -2,8 +2,8 @@
 
 set -x
 
-killall gridnoded
+killall grided
 
 cd ../..
 make install
-gridnoded start --trace
+grided start --trace

@@ -1,9 +1,9 @@
 #!/bin/zsh
 
-echo "initializing gridnoded and doing initial IBC transfers"
+echo "initializing grided and doing initial IBC transfers"
 scripts/init-multichain.sh > /dev/null 2>&1
 scripts/do_ibc_transfers.sh > /dev/null 2>&1
-echo "killing gridnoded"
+echo "killing grided"
 ps auxww | grep gridnode-1 | egrep -v grep | awk '{ print $2 }' | xargs kill
 sleep 60
 echo "killing hermes"
@@ -23,7 +23,7 @@ echo "sleeping to let the localnet-1 expire"
 sleep 850
 
 echo "restarting localnet-1"
-gridnoded start --home ~/.gridnode-1 --p2p.laddr 0.0.0.0:27655 --grpc.address 0.0.0.0:9090 --grpc-web.address 0.0.0.0:9093 --address tcp://0.0.0.0:27659 --rpc.laddr tcp://127.0.0.1:27665 >> abci_1.log 2>&1 &
+grided start --home ~/.gridnode-1 --p2p.laddr 0.0.0.0:27655 --grpc.address 0.0.0.0:9090 --grpc-web.address 0.0.0.0:9093 --address tcp://0.0.0.0:27659 --rpc.laddr tcp://127.0.0.1:27665 >> abci_1.log 2>&1 &
 sleep 10
 
 echo "bouncing hermes"
@@ -49,24 +49,24 @@ scripts/create_clonable_hermes_channels.sh > /dev/null 2>&1
 
 echo "Current Grid balances"
 echo "localnet-1"
-gridnoded q bank balances $(gridnoded keys show grid -a --keyring-backend=test --home ~/.gridnode-1) --node tcp://127.0.0.1:27665
+grided q bank balances $(grided keys show grid -a --keyring-backend=test --home ~/.gridnode-1) --node tcp://127.0.0.1:27665
 echo ""
 echo "localnet-2"
-gridnoded q bank balances $(gridnoded keys show grid -a --keyring-backend=test --home ~/.gridnode-1) --node tcp://127.0.0.1:27666
+grided q bank balances $(grided keys show grid -a --keyring-backend=test --home ~/.gridnode-1) --node tcp://127.0.0.1:27666
 echo ""
 echo "localnet-3"
-gridnoded q bank balances $(gridnoded keys show grid -a --keyring-backend=test --home ~/.gridnode-1) --node tcp://127.0.0.1:27667
+grided q bank balances $(grided keys show grid -a --keyring-backend=test --home ~/.gridnode-1) --node tcp://127.0.0.1:27667
 echo ""
 
 echo "Current Akasha balances"
 echo "localnet-1"
-gridnoded q bank balances $(gridnoded keys show akasha -a --keyring-backend=test --home ~/.gridnode-1) --node tcp://127.0.0.1:27665
+grided q bank balances $(grided keys show akasha -a --keyring-backend=test --home ~/.gridnode-1) --node tcp://127.0.0.1:27665
 echo ""
 echo "localnet-2"
-gridnoded q bank balances $(gridnoded keys show akasha -a --keyring-backend=test --home ~/.gridnode-1) --node tcp://127.0.0.1:27666
+grided q bank balances $(grided keys show akasha -a --keyring-backend=test --home ~/.gridnode-1) --node tcp://127.0.0.1:27666
 echo ""
 echo "localnet-3"
-gridnoded q bank balances $(gridnoded keys show akasha -a --keyring-backend=test --home ~/.gridnode-1) --node tcp://127.0.0.1:27667
+grided q bank balances $(grided keys show akasha -a --keyring-backend=test --home ~/.gridnode-1) --node tcp://127.0.0.1:27667
 echo ""
 
 echo "voting on proposals"

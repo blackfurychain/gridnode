@@ -77,7 +77,7 @@ def test_bulk_transfers_from_gridironchain(
             burn_lock_functions.transfer_gridironchain_to_gridironchain(request, credentials_for_account_with_ceth)
             transfer = (request.gridironchain_destination_address, from_key, request.gridironchain_symbol, request.amount)
 
-            test_utilities.get_gridironchain_addr_balance(request.gridironchain_destination_address, request.gridnoded_node, t)
+            test_utilities.get_gridironchain_addr_balance(request.gridironchain_destination_address, request.grided_node, t)
 
             test_transfers.append(transfer)
 
@@ -88,7 +88,7 @@ def test_bulk_transfers_from_gridironchain(
         keyring_passphrase=None,
         keyring_backend="test",
         from_key=None,
-        gridnoded_homedir=None
+        grided_homedir=None
     )
 
     logging.info(f"all accounts are on gridironchain and have the correct balance")

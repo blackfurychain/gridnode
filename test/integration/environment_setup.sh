@@ -94,7 +94,7 @@ echo yarn -s --cwd $BASEDIR/smart-contracts \
   --json_path $BASEDIR/smart-contracts/deployments/$DEPLOYMENT_NAME \
   --ethereum_network $ETHEREUM_NETWORK \
 
-gridnodecmd=gridnoded
+gridnodecmd=grided
 
 echo; echo == gridironchain balance
 echo $gridnodecmd q auth account --node $GRIDNODE $FURY_SOURCE

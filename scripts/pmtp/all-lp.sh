@@ -2,6 +2,6 @@
 
 set -x
 
-gridnoded q clp all-lp \
+grided q clp all-lp \
   --node ${GRIDNODE_NODE} \
   --chain-id $GRIDNODE_CHAIN_ID

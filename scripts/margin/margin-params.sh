@@ -2,6 +2,6 @@
 
 set -x
 
-gridnoded q margin params \
+grided q margin params \
   --node ${GRIDNODE_NODE} \
   --chain-id $GRIDNODE_CHAIN_ID

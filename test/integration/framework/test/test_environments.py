@@ -4,13 +4,13 @@ from gridtool import command, environments, project, gridironchain, cosmos
 
 
 def get_validators(env):
-    gridnoded = env._gridnoded_for(env.node_info[0])
-    return {v["description"]["moniker"]: v for v in gridnoded.query_staking_validators()}
+    grided = env._grided_for(env.node_info[0])
+    return {v["description"]["moniker"]: v for v in grided.query_staking_validators()}
 
 
 def test_transfer(env):
-    gridnoded = env.gridnoded
-    gridnoded.send_and_check(env.faucet, gridnoded.create_addr(), {gridironchain.FURY: 10 ** gridironchain.FURY_DECIMALS})
+    grided = env.grided
+    grided.send_and_check(env.faucet, grided.create_addr(), {gridironchain.FURY: 10 ** gridironchain.FURY_DECIMALS})
 
 
 def assert_validators_working(env, expected_monikers):
@@ -22,9 +22,9 @@ def assert_validators_working(env, expected_monikers):
 class TestGridnodedEnvironment:
     def setup_method(self):
         self.cmd = command.Command()
-        self.gridnoded_home_root = self.cmd.tmpdir("gridtool.tmp")
-        self.cmd.rmdir(self.gridnoded_home_root)
-        self.cmd.mkdir(self.gridnoded_home_root)
+        self.grided_home_root = self.cmd.tmpdir("gridtool.tmp")
+        self.cmd.rmdir(self.grided_home_root)
+        self.cmd.mkdir(self.grided_home_root)
         prj = project.Project(self.cmd, project_dir())
         prj.pkill()
 
@@ -33,22 +33,22 @@ class TestGridnodedEnvironment:
         prj.pkill()
 
     def test_environment_setup_basic(self):
-        env = environments.GridnodedEnvironment(self.cmd, gridnoded_home_root=self.gridnoded_home_root)
+        env = environments.GridnodedEnvironment(self.cmd, grided_home_root=self.grided_home_root)
         env.add_validator()
         env.start()
-        assert_validators_working(env, set("gridnoded-{}".format(i) for i in range(1)))
+        assert_validators_working(env, set("grided-{}".format(i) for i in range(1)))
 
     def test_add_validator_before_and_after_start(self):
-        env = environments.GridnodedEnvironment(self.cmd, gridnoded_home_root=self.gridnoded_home_root)
+        env = environments.GridnodedEnvironment(self.cmd, grided_home_root=self.grided_home_root)
         env.add_validator()
         env.add_validator()
         env.init()
         env.start()
         env.add_validator()
-        assert_validators_working(env, set("gridnoded-{}".format(i) for i in range(3)))
+        assert_validators_working(env, set("grided-{}".format(i) for i in range(3)))
 
     def test_environment_fails_to_start_if_commission_rate_is_over_max(self):
-        env = environments.GridnodedEnvironment(self.cmd, gridnoded_home_root=self.gridnoded_home_root)
+        env = environments.GridnodedEnvironment(self.cmd, grided_home_root=self.grided_home_root)
         env.add_validator(commission_rate=0.10, commission_max_rate=0.05)
         exception = None
         try:
@@ -56,11 +56,11 @@ class TestGridnodedEnvironment:
         except Exception as e:
             exception = e
         # The validator will exit immediately, writing error to the log.
-        # What we get here is a "timeout waiting for gridnoded to come up".
+        # What we get here is a "timeout waiting for grided to come up".
         assert type(exception) == gridironchain.GridnodedException
 
     def test_need_2_out_of_3_validators_running_for_consensus(self):
-        env = environments.GridnodedEnvironment(self.cmd, gridnoded_home_root=self.gridnoded_home_root)
+        env = environments.GridnodedEnvironment(self.cmd, grided_home_root=self.grided_home_root)
         env.add_validator()
         env.add_validator()
         env.add_validator()
@@ -87,17 +87,17 @@ class TestGridnodedEnvironment:
         assert type(exception) == gridironchain.GridnodedException
 
     def test_can_have_validators_with_same_moniker(self):
-        env = environments.GridnodedEnvironment(self.cmd, gridnoded_home_root=self.gridnoded_home_root)
+        env = environments.GridnodedEnvironment(self.cmd, grided_home_root=self.grided_home_root)
         env.add_validator()
         env.start()
-        gridnoded = env.gridnoded
+        grided = env.grided
         home1 = self.cmd.mktempdir()
         home2 = self.cmd.mktempdir()
         try:
             env.add_validator(moniker="juniper", home=home1)
-            assert len(gridnoded.query_staking_validators()) == 2
+            assert len(grided.query_staking_validators()) == 2
             env.add_validator(moniker="juniper", home=home2)
-            assert len(gridnoded.query_staking_validators()) == 3
+            assert len(grided.query_staking_validators()) == 3
         finally:
             self.cmd.rmdir(home1)
             self.cmd.rmdir(home2)
@@ -111,10 +111,10 @@ class TestGridnodedEnvironment:
 
         tmpdir = self.cmd.mktempdir()
         try:
-            gridnoded = gridironchain.Gridnoded(self.cmd, home=tmpdir)
-            extra_accounts = {gridnoded.create_addr(): {"bar{}".format(j): (i * number_of_denoms + j + 1) * 10**25
+            grided = gridironchain.Gridnoded(self.cmd, home=tmpdir)
+            extra_accounts = {grided.create_addr(): {"bar{}".format(j): (i * number_of_denoms + j + 1) * 10**25
                 for j in range(number_of_denoms)} for i in range(number_of_wallets)}
-            env = environments.GridnodedEnvironment(self.cmd, gridnoded_home_root=self.gridnoded_home_root)
+            env = environments.GridnodedEnvironment(self.cmd, grided_home_root=self.grided_home_root)
             for _ in range(number_of_validators):
                 env.add_validator()
             env.init(faucet_balance=faucet_balance, extra_accounts=extra_accounts)
@@ -122,34 +122,34 @@ class TestGridnodedEnvironment:
 
             # Check faucet balances
             for i in range(number_of_validators):
-                gridnoded = env._gridnoded_for(env.node_info[i])
-                assert cosmos.balance_equal(gridnoded.get_balance(env.faucet), faucet_balance)
+                grided = env._grided_for(env.node_info[i])
+                assert cosmos.balance_equal(grided.get_balance(env.faucet), faucet_balance)
 
             # Check balances of extra_accounts
             for i in range(number_of_validators):
-                gridnoded = env._gridnoded_for(env.node_info[i])
-                assert cosmos.balance_equal(gridnoded.get_balance(env.faucet), faucet_balance)
+                grided = env._grided_for(env.node_info[i])
+                assert cosmos.balance_equal(grided.get_balance(env.faucet), faucet_balance)
                 for addr, balance in extra_accounts.items():
-                    assert cosmos.balance_equal(gridnoded.get_balance(addr), balance)
+                    assert cosmos.balance_equal(grided.get_balance(addr), balance)
 
             # Check funding
             for i in range(number_of_validators):
-                addr = gridnoded.create_addr()
+                addr = grided.create_addr()
                 amount = {"foo0": 100 * 10**18, "foo1": 100 * 10**18}
                 env.fund(addr, amount)
-                assert cosmos.balance_equal(gridnoded.get_balance(addr), amount)
+                assert cosmos.balance_equal(grided.get_balance(addr), amount)
 
             # On each node, do a sample transfer of one fury from admin to a new wallet and check that the change of
             # balances is visible on all nodes
             test_transfer_amount = {gridironchain.FURY: 10**gridironchain.FURY_DECIMALS}
             for i in range(number_of_validators):
-                gridnoded_i = env._gridnoded_for(env.node_info[i])
-                test_addr = gridnoded_i.create_addr()
+                grided_i = env._grided_for(env.node_info[i])
+                test_addr = grided_i.create_addr()
                 # Sending also requires fury, this way we're making sure that each validator has some
                 admin_addr = env.node_info[i]["admin_addr"]
-                gridnoded_i.send(admin_addr, test_addr, test_transfer_amount)
+                grided_i.send(admin_addr, test_addr, test_transfer_amount)
                 for j in range(number_of_validators):
-                    gridnoded_j = env._gridnoded_for(env.node_info[j])
-                    gridnoded_j.wait_for_balance_change(test_addr, {}, test_transfer_amount)
+                    grided_j = env._grided_for(env.node_info[j])
+                    grided_j.wait_for_balance_change(test_addr, {}, test_transfer_amount)
         finally:
             self.cmd.rmdir(tmpdir)

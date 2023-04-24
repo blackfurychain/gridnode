@@ -2,7 +2,7 @@
 
 set -x
 
-gridnoded tx clp set-symmetry-threshold \
+grided tx clp set-symmetry-threshold \
   --threshold=0.000000005 \
   --from=$GRID_ACT \
   --keyring-backend=test \

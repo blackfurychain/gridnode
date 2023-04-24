@@ -12,7 +12,7 @@ endif
 
 gofiles=$(shell find ${BASEDIR}/* -name \*.go) ${BASEDIR}/go.mod ${BASEDIR}/go.sum
 
-${GOBIN}/gridnoded: $(gofiles)
+${GOBIN}/grided: $(gofiles)
 	make -C ${BASEDIR} install
 	touch $@
-	rm -rf ~/.gridnoded/localnet
+	rm -rf ~/.grided/localnet

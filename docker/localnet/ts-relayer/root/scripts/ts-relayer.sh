@@ -39,10 +39,10 @@ EOF
 #
 import_mnemonic() {
   if [ "${GRIDNODE0_MNEMONIC}" == "${GRIDNODE1_MNEMONIC}" ]; then
-    printf "%s\n\n" "${GRIDNODE0_MNEMONIC}" | gridnoded keys add gridnode -i --recover --keyring-backend test
+    printf "%s\n\n" "${GRIDNODE0_MNEMONIC}" | grided keys add gridnode -i --recover --keyring-backend test
   else
-    printf "%s\n\n" "${GRIDNODE0_MNEMONIC}" | gridnoded keys add "${CHAINNET0}" -i --recover --keyring-backend test
-    printf "%s\n\n" "${GRIDNODE1_MNEMONIC}" | gridnoded keys add "${CHAINNET1}" -i --recover --keyring-backend test
+    printf "%s\n\n" "${GRIDNODE0_MNEMONIC}" | grided keys add "${CHAINNET0}" -i --recover --keyring-backend test
+    printf "%s\n\n" "${GRIDNODE1_MNEMONIC}" | grided keys add "${CHAINNET1}" -i --recover --keyring-backend test
   fi
 }
 
@@ -59,29 +59,29 @@ set_relayer_addrs() {
 #
 txfr_funds() {
   if [ "${GRIDNODE0_MNEMONIC}" == "${GRIDNODE1_MNEMONIC}" ]; then
-    FROM_ADDR=$(gridnoded keys show gridnode --keyring-backend test -a)
-    gridnoded tx bank send "${FROM_ADDR}" "${RELAYER_CHAINNET0_ADDR}" 100000000000000000000fury \
+    FROM_ADDR=$(grided keys show gridnode --keyring-backend test -a)
+    grided tx bank send "${FROM_ADDR}" "${RELAYER_CHAINNET0_ADDR}" 100000000000000000000fury \
     --from gridnode \
     --gas-prices 0.5fury \
     --keyring-backend test \
     --node tcp://"${RPC0}" \
     --chain-id "${CHAINNET0}" -y
 
-    gridnoded tx bank send "${FROM_ADDR}" "${RELAYER_CHAINNET1_ADDR}" 100000000000000000000fury \
+    grided tx bank send "${FROM_ADDR}" "${RELAYER_CHAINNET1_ADDR}" 100000000000000000000fury \
     --from gridnode \
     --gas-prices 0.5fury \
     --keyring-backend test \
     --node tcp://"${RPC1}" \
     --chain-id "${CHAINNET1}" -y
   else
-    gridnoded tx bank send $(gridnoded keys show "${CHAINNET0}" --keyring-backend test -a) "${RELAYER_CHAINNET0_ADDR}" 100000000000000000000fury \
+    grided tx bank send $(grided keys show "${CHAINNET0}" --keyring-backend test -a) "${RELAYER_CHAINNET0_ADDR}" 100000000000000000000fury \
     --from "${CHAINNET0}" \
     --gas-prices 0.5fury \
     --keyring-backend test \
     --node tcp://"${RPC0}" \
     --chain-id "${CHAINNET0}" -y
 
-    gridnoded tx bank send $(gridnoded keys show "${CHAINNET1}" --keyring-backend test -a) "${RELAYER_CHAINNET1_ADDR}" 100000000000000000000fury \
+    grided tx bank send $(grided keys show "${CHAINNET1}" --keyring-backend test -a) "${RELAYER_CHAINNET1_ADDR}" 100000000000000000000fury \
     --from "${CHAINNET1}" \
     --gas-prices 0.5fury \
     --keyring-backend test \

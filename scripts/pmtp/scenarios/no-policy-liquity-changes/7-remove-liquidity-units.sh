@@ -2,7 +2,7 @@
 
 set -x
 
-gridnoded tx clp remove-liquidity-units \
+grided tx clp remove-liquidity-units \
   --from $GRID_ACT \
   --keyring-backend test \
   --symbol cusdt \

@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	NodeHomeDir   = ".gridnoded"
+	NodeHomeDir   = ".grided"
 	ConfigDir     = "config"
 	GentxsDir     = "gentxs"
 	ValidatorsDir = "validators"

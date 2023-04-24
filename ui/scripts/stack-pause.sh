@@ -1,4 +1,4 @@
 #!/bin/bash
 
-killall gridnoded gridnoded ebrelayer ganache-cli
+killall grided grided ebrelayer ganache-cli
 sleep 10

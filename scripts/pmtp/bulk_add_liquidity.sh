@@ -2,19 +2,19 @@
 
 set -x
 
-ACCOUNT_NUMBER=$(gridnoded q auth account $ADMIN_ADDRESS \
+ACCOUNT_NUMBER=$(grided q auth account $ADMIN_ADDRESS \
     --node ${GRIDNODE_NODE} \
     --chain-id $GRIDNODE_CHAIN_ID \
     --output json \
     | jq -r ".account_number")
-SEQUENCE=$(gridnoded q auth account $ADMIN_ADDRESS \
+SEQUENCE=$(grided q auth account $ADMIN_ADDRESS \
   --node ${GRIDNODE_NODE} \
   --chain-id $GRIDNODE_CHAIN_ID \
   --output json \
   | jq -r ".sequence")
 for i in {0..12244}; do
   echo "tx ${i}"
-  gridnoded tx clp add_liquidity \
+  grided tx clp add_liquidity \
     --from=$GRID_ACT \
     --keyring-backend=test \
     --externalAmount=${EXTERNAL_AMOUNT} \

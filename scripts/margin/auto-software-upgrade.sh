@@ -2,11 +2,11 @@
 
 set -x
 
-gridnoded tx gov submit-proposal software-upgrade "${NEW_VERSION}" \
+grided tx gov submit-proposal software-upgrade "${NEW_VERSION}" \
   --from ${GRID_ACT} \
   --deposit "${DEPOSIT}" \
   --upgrade-height "${TARGET_BLOCK}" \
-  --upgrade-info "{\"binaries\":{\"linux/amd64\":\"https://github.com/Gridironchain/gridnode/releases/download/v${NEW_VERSION}/gridnoded-v${NEW_VERSION}-linux-amd64.zip?checksum=${CHECKSUM}\"}}" \
+  --upgrade-info "{\"binaries\":{\"linux/amd64\":\"https://github.com/Gridironchain/gridnode/releases/download/v${NEW_VERSION}/grided-v${NEW_VERSION}-linux-amd64.zip?checksum=${CHECKSUM}\"}}" \
   --title "v${NEW_VERSION}" \
   --description "v${NEW_VERSION}" \
   --chain-id "${GRIDNODE_CHAIN_ID}" \

@@ -150,8 +150,8 @@ Object {
       "chainId": "gridironchain-1",
       "node": "https://rpc.gridironchain.finance:443",
     },
-    "binary": "gridnoded",
-    "binaryUrl": "https://github.com/Gridironchain/gridnode/releases/download/betanet-0.9.10/gridnoded-betanet-0.9.10-linux-amd64.zip",
+    "binary": "grided",
+    "binaryUrl": "https://github.com/Gridironchain/gridnode/releases/download/betanet-0.9.10/grided-betanet-0.9.10-linux-amd64.zip",
     "chainId": "gridironchain-testnet-1",
     "denom": "fury",
     "devnet-1": Object {

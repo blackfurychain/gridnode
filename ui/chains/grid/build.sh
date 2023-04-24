@@ -1,9 +1,9 @@
 #!/bin/bash
 
-killall gridnoded
+killall grided
 
-rm $(which gridnoded) 2> /dev/null || echo gridnoded not install yet ...
+rm $(which grided) 2> /dev/null || echo grided not install yet ...
 
-rm -rf ~/.gridnoded
+rm -rf ~/.grided
 
 cd ../../../ && make install 

@@ -2,7 +2,7 @@
 
 set -x
 
-gridnoded tx clp cancel-unbond \
+grided tx clp cancel-unbond \
   --from $GRID_ACT \
   --keyring-backend test \
   --symbol cusdt \

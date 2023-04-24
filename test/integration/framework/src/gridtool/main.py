@@ -78,8 +78,8 @@ def main(argv):
             env.use_geth_instead_of_hardhat = args.geth
             if args.test_denom_count:
                 env.extra_balances_for_admin_account = {"test{}".format(i): 10**27 for i in range(args.test_denom_count)}
-            hardhat_proc, gridnoded_proc, relayer0_proc, witness_procs = env.run()
-            processes = [hardhat_proc, gridnoded_proc, relayer0_proc] + witness_procs
+            hardhat_proc, grided_proc, relayer0_proc, witness_procs = env.run()
+            processes = [hardhat_proc, grided_proc, relayer0_proc] + witness_procs
         elif class_to_use == IntegrationTestsEnvironment:
             project.clean()
             # deploy/networks already included in run()
@@ -91,7 +91,7 @@ def main(argv):
             processes = env.run()
             # TODO Cleanup:
             # - rm -rf test/integration/gridnoderelayerdb
-            # - rm -rf networks/validators/localnet/$moniker/.gridnoded
+            # - rm -rf networks/validators/localnet/$moniker/.grided
             # - If you ran the execute_integration_test_*.sh you need to kill ganache-cli for proper cleanup
             #   as it might have been killed and started outside of our control
         if not in_github_ci:
@@ -183,10 +183,10 @@ def main(argv):
         argparser.add_argument("--from-block", type=int)
         argparser.add_argument("--to-block", type=int)
         args = argparser.parse_args(argv[1:])
-        gridnoded = gridironchain.Gridnoded(cmd, node=args.node)
+        grided = gridironchain.Gridnoded(cmd, node=args.node)
         from_block = args.from_block if args.from_block is not None else 1
-        to_block = args.to_block if args.to_block is not None else gridnoded.get_current_block()
-        block_times = diagnostics.get_block_times(gridnoded, from_block, to_block)
+        to_block = args.to_block if args.to_block is not None else grided.get_current_block()
+        block_times = diagnostics.get_block_times(grided, from_block, to_block)
         block_times = [(block_times[i][0], (block_times[i][1] - block_times[i - 1][1]).total_seconds())
             for i in range(1, len(block_times))]
         lines = ["{},{:.3f}".format(t[0], t[1]) for t in block_times]

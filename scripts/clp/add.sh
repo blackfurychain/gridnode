@@ -2,7 +2,7 @@
 
 set -x
 
-gridnoded tx clp add-liquidity \
+grided tx clp add-liquidity \
   --externalAmount 488436982990 \
   --nativeAmount 96176925423929435353999282 \
   --symbol ceth \

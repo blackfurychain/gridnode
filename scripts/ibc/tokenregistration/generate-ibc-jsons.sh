@@ -8,7 +8,7 @@ echo "\n\ngenerating and storing all entries for network $GRIDCHAIN_ID"
 
 mkdir -p ./$GRIDCHAIN_ID
 
-gridnoded q tokenregistry generate -o json \
+grided q tokenregistry generate -o json \
 	--token_base_denom=$COSMOS_BASE_DENOM \
 	--token_ibc_counterparty_chain_id=$COSMOS_CHAIN_ID \
   --token_ibc_channel_id=$COSMOS_CHANNEL_ID \
@@ -26,7 +26,7 @@ echo "\n\ngenerated entry for COSMOS $COSMOS_CHAIN_ID"
 
 cat $GRIDCHAIN_ID/cosmos.json | jq
 
-gridnoded q tokenregistry generate -o json \
+grided q tokenregistry generate -o json \
 	--token_base_denom=uakt \
   --token_ibc_counterparty_chain_id=$AKASH_CHAIN_ID \
   --token_ibc_channel_id=$AKASH_CHANNEL_ID \
@@ -44,7 +44,7 @@ echo "\n\ngenerated entry for AKASH $AKASH_CHAIN_ID"
 
 cat $GRIDCHAIN_ID/akash.json | jq
 
-gridnoded q tokenregistry generate -o json \
+grided q tokenregistry generate -o json \
 	--token_base_denom=udvpn \
 	--token_ibc_counterparty_chain_id=$SENTINEL_CHAIN_ID \
   --token_ibc_channel_id=$SENTINEL_CHANNEL_ID \
@@ -63,7 +63,7 @@ echo "\n\ngenerated entry for SENTINEL $SENTINEL_CHAIN_ID"
 cat $GRIDCHAIN_ID/sentinel.json | jq
 
 
-gridnoded q tokenregistry generate -o json \
+grided q tokenregistry generate -o json \
 	--token_base_denom=$IRIS_BASE_DENOM \
 	--token_ibc_counterparty_chain_id=$IRIS_CHAIN_ID \
   --token_ibc_channel_id=$IRIS_CHANNEL_ID \
@@ -81,7 +81,7 @@ echo "\n\ngenerated entry for IRIS $IRIS_CHAIN_ID"
 
 cat $GRIDCHAIN_ID/iris.json | jq
 
-gridnoded q tokenregistry generate -o json \
+grided q tokenregistry generate -o json \
 	--token_base_denom=uxprt \
 	--token_ibc_counterparty_chain_id=$PERSISTENCE_CHAIN_ID \
   --token_ibc_channel_id=$PERSISTENCE_CHANNEL_ID \
@@ -99,7 +99,7 @@ echo "\n\ngenerated entry for PERSISTENCE $PERSISTENCE_CHAIN_ID"
 
 cat $GRIDCHAIN_ID/persistence.json | jq
 
-gridnoded q tokenregistry generate -o json \
+grided q tokenregistry generate -o json \
 	--token_base_denom=basecro \
 	--token_ibc_counterparty_chain_id=$CRYPTO_ORG_CHAIN_ID \
   --token_ibc_channel_id=$CRYPTO_ORG_CHANNEL_ID \
@@ -117,7 +117,7 @@ echo "\n\ngenerated entry for CRYPTO $CRYPTO_ORG_CHAIN_ID"
 
 cat $GRIDCHAIN_ID/crypto-org.json | jq
 
-gridnoded q tokenregistry generate -o json \
+grided q tokenregistry generate -o json \
 	--token_base_denom=uregen \
 	--token_ibc_counterparty_chain_id=$REGEN_CHAIN_ID \
   --token_ibc_channel_id=$REGEN_CHANNEL_ID \
@@ -135,7 +135,7 @@ echo "\n\ngenerated entry for REGEN $REGEN_CHAIN_ID"
 
 cat $GRIDCHAIN_ID/regen.json | jq
 
-gridnoded q tokenregistry generate -o json \
+grided q tokenregistry generate -o json \
 	--token_base_denom=uosmo \
 	--token_ibc_counterparty_chain_id=$OSMOSIS_CHAIN_ID \
   --token_ibc_channel_id=$OSMOSIS_CHANNEL_ID \
@@ -153,7 +153,7 @@ echo "\n\ngenerated entry for OSMOSIS $OSMOSIS_CHAIN_ID"
 
 cat $GRIDCHAIN_ID/osmosis.json | jq
 
-gridnoded q tokenregistry generate -o json \
+grided q tokenregistry generate -o json \
 	--token_base_denom=ujuno \
 	--token_ibc_counterparty_chain_id=$JUNO_CHAIN_ID \
   --token_ibc_channel_id=$JUNO_CHANNEL_ID \
@@ -171,7 +171,7 @@ echo "\n\ngenerated entry for JUNO $JUNO_CHAIN_ID"
 
 cat $GRIDCHAIN_ID/juno.json | jq
 
-gridnoded q tokenregistry generate -o json \
+grided q tokenregistry generate -o json \
 	--token_base_denom=uixo \
 	--token_ibc_counterparty_chain_id=$IXO_CHAIN_ID \
   --token_ibc_channel_id=$IXO_CHANNEL_ID \
@@ -189,7 +189,7 @@ echo "\n\ngenerated entry for IXO $IXO_CHAIN_ID"
 
 cat $GRIDCHAIN_ID/ixo.json | jq
 
-gridnoded q tokenregistry generate -o json \
+grided q tokenregistry generate -o json \
 	--token_base_denom=nanolike \
 	--token_ibc_counterparty_chain_id=$LIKECOIN_CHAIN_ID \
   --token_ibc_channel_id=$LIKECOIN_CHANNEL_ID \
@@ -207,7 +207,7 @@ echo "\n\ngenerated entry for LIKECOIN $LIKECOIN_CHAIN_ID"
 
 cat $GRIDCHAIN_ID/likecoin.json | jq
 
-gridnoded q tokenregistry generate -o json \
+grided q tokenregistry generate -o json \
 	--token_base_denom=ubtsg \
 	--token_ibc_counterparty_chain_id=$BITSONG_CHAIN_ID \
   --token_ibc_channel_id=$BITSONG_CHANNEL_ID \
@@ -225,7 +225,7 @@ echo "\n\ngenerated entry for BITSONG $BITSONG_CHAIN_ID"
 
 cat $GRIDCHAIN_ID/bitsong.json | jq
 
-gridnoded q tokenregistry generate -o json \
+grided q tokenregistry generate -o json \
 	--token_base_denom=uband \
 	--token_ibc_counterparty_chain_id=$BAND_CHAIN_ID \
   --token_ibc_channel_id=$BAND_CHANNEL_ID \
@@ -243,7 +243,7 @@ echo "\n\ngenerated entry for BAND $BAND_CHAIN_ID"
 
 cat $GRIDCHAIN_ID/band.json | jq
 
-gridnoded q tokenregistry generate -o json \
+grided q tokenregistry generate -o json \
 	--token_base_denom=ungm \
 	--token_ibc_counterparty_chain_id=$EMONEY_CHAIN_ID \
   --token_ibc_channel_id=$EMONEY_CHANNEL_ID \
@@ -261,7 +261,7 @@ echo "\n\ngenerated entry for EMONEY $EMONEY_CHAIN_ID"
 
 cat $GRIDCHAIN_ID/emoney.json | jq
 
-gridnoded q tokenregistry generate -o json \
+grided q tokenregistry generate -o json \
 	--token_base_denom=eeur \
 	--token_ibc_counterparty_chain_id=$EMONEY_CHAIN_ID \
   --token_ibc_channel_id=$EMONEY_CHANNEL_ID \
@@ -279,7 +279,7 @@ echo "\n\ngenerated entry for EMONEY $EMONEY_CHAIN_ID"
 
 cat $GRIDCHAIN_ID/emoney-eeur.json | jq
 
-gridnoded q tokenregistry generate -o json \
+grided q tokenregistry generate -o json \
 	--token_base_denom=uluna \
 	--token_ibc_counterparty_chain_id=$TERRA_CHAIN_ID \
   --token_ibc_channel_id=$TERRA_CHANNEL_ID \
@@ -297,7 +297,7 @@ echo "\n\ngenerated entry for TERRA $TERRA_CHAIN_ID"
 
 cat $GRIDCHAIN_ID/terra.json | jq
 
-gridnoded q tokenregistry generate -o json \
+grided q tokenregistry generate -o json \
 	--token_base_denom=uusd \
 	--token_ibc_counterparty_chain_id=$TERRA_CHAIN_ID \
   --token_ibc_channel_id=$TERRA_CHANNEL_ID \
@@ -315,7 +315,7 @@ echo "\n\ngenerated entry for TERRA $TERRA_CHAIN_ID"
 
 cat $GRIDCHAIN_ID/terra-uusd.json | jq
 
-gridnoded q tokenregistry generate -o json \
+grided q tokenregistry generate -o json \
 	--token_base_denom=uscrt \
 	--token_ibc_counterparty_chain_id=$SECRET_CHAIN_ID \
   --token_ibc_channel_id=$SECRET_CHANNEL_ID \
@@ -333,7 +333,7 @@ echo "\n\ngenerated entry for SECRET $SECRET_CHAIN_ID"
 
 cat $GRIDCHAIN_ID/scrt.json | jq
 
-gridnoded q tokenregistry generate -o json \
+grided q tokenregistry generate -o json \
 	--token_base_denom=cdmx \
 	--token_ibc_counterparty_chain_id=$COMDEX_CHAIN_ID \
   --token_ibc_channel_id=$COMDEX_CHANNEL_ID \
@@ -351,7 +351,7 @@ echo "\n\ngenerated entry for $COMDEX_CHAIN_ID"
 
 cat $GRIDCHAIN_ID/cmdx.json | jq
 
-gridnoded q tokenregistry generate -o json \
+grided q tokenregistry generate -o json \
 	--token_base_denom=uhuahua \
 	--token_ibc_counterparty_chain_id=$HUAHUA_CHAIN_ID \
   --token_ibc_channel_id=$HUAHUA_CHANNEL_ID \
@@ -369,7 +369,7 @@ echo "\n\ngenerated entry for $HUAHUA_CHAIN_ID"
 
 cat $GRIDCHAIN_ID/huahua.json | jq
 
-gridnoded q tokenregistry generate -o json \
+grided q tokenregistry generate -o json \
 	--token_base_denom=ustars \
 	--token_ibc_counterparty_chain_id=$STARGAZE_CHAIN_ID \
   --token_ibc_channel_id=$STARGAZE_CHANNEL_ID \
@@ -387,7 +387,7 @@ echo "\n\ngenerated entry for $STARGAZE_CHAIN_ID"
 
 cat $GRIDCHAIN_ID/ustars.json | jq
 
-gridnoded q tokenregistry generate -o json \
+grided q tokenregistry generate -o json \
 	--token_base_denom=ubcna \
 	--token_ibc_counterparty_chain_id=$BITCANNA_CHAIN_ID \
   --token_ibc_channel_id=$BITCANNA_CHANNEL_ID \
@@ -405,7 +405,7 @@ echo "\n\ngenerated entry for $BITCANNA_CHAIN_ID"
 
 cat $GRIDCHAIN_ID/ubcna.json | jq
 
-gridnoded q tokenregistry generate -o json \
+grided q tokenregistry generate -o json \
 	--token_base_denom=uiov \
 	--token_ibc_counterparty_chain_id=$STARNAME_CHAIN_ID \
   --token_ibc_channel_id=$STARNAME_CHANNEL_ID \
@@ -423,7 +423,7 @@ echo "\n\ngenerated entry for $STARNAME_CHAIN_ID"
 
 cat $GRIDCHAIN_ID/uiov.json | jq
 
-gridnoded q tokenregistry generate -o json \
+grided q tokenregistry generate -o json \
 	--token_base_denom=aevmos \
 	--token_ibc_counterparty_chain_id=$EVMOS_CHAIN_ID \
   --token_ibc_channel_id=$EVMOS_CHANNEL_ID \

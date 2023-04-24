@@ -2,7 +2,7 @@
 
 set -x
 
-gridnoded tx clp pmtp-params \
+grided tx clp pmtp-params \
   --rGov=0.02 \
   --from=$GRID_ACT \
   --keyring-backend=test \

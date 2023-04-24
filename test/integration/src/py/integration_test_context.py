@@ -30,7 +30,7 @@ class IntegrationTestContext:
         )
 
     @property
-    def gridnoded_node(self):
+    def grided_node(self):
         return self.get_optional_var("GRIDNODE", None)
 
     @property
@@ -54,7 +54,7 @@ class IntegrationTestContext:
     @property
     def is_ropsten_testnet(self):
         """if gridnode_clinode is set, we're talking to ropsten/sandpit"""
-        return bool(self.gridnoded_node)
+        return bool(self.grided_node)
 
     @property
     def ethereum_network_id(self):
@@ -82,19 +82,19 @@ class IntegrationTestContext:
         """true if we're using ganache"""
         return not self.ethereum_network
 
-    # Deprecated: gridnoded accepts --gas-prices=0.5fury along with --gas-adjustment=1.5 instead of a fixed fee.
+    # Deprecated: grided accepts --gas-prices=0.5fury along with --gas-adjustment=1.5 instead of a fixed fee.
     # Using those parameters is the best way to have the fees set robustly after the .42 upgrade.
     # See https://github.com/Gridironchain/gridnode/pull/1802#discussion_r697403408
     @property
     def gridironchain_fees_int(self):
         return 100000000000000000
 
-    # Deprecated: gridnoded accepts --gas-prices=0.5fury along with --gas-adjustment=1.5 instead of a fixed fee.
+    # Deprecated: grided accepts --gas-prices=0.5fury along with --gas-adjustment=1.5 instead of a fixed fee.
     # Using those parameters is the best way to have the fees set robustly after the .42 upgrade.
     # See https://github.com/Gridironchain/gridnode/pull/1802#discussion_r697403408
     @property
     def gridironchain_fees(self):
-        """returns a string suitable for passing to gridnoded"""
+        """returns a string suitable for passing to grided"""
         return f"{self.gridironchain_fees_int}fury"
 
     @property
@@ -147,12 +147,12 @@ class IntegrationTestContext:
             return result
 
     @property
-    def gridnoded_homedir(self):
+    def grided_homedir(self):
         if self.is_ropsten_testnet:
             base = self.get_required_var("HOME")
         else:
             base = self.get_required_var("CHAINDIR")
-        result = f"""{base}/.gridnoded"""
+        result = f"""{base}/.grided"""
         return result
 
     @property
@@ -208,7 +208,7 @@ class IntegrationTestContext:
             bridgebank_address=self.bridgebank_address,
             bridgetoken_address=self.bridgetoken_address,
             ethereum_network=self.ethereum_network,
-            gridnoded_node=self.gridnoded_node,
+            grided_node=self.grided_node,
             manual_block_advance=self.is_ganache,
             chain_id=self.chain_id,
             gridironchain_fees=self.gridironchain_fees,

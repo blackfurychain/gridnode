@@ -2,7 +2,7 @@
 
 set -x
 
-ACCOUNT_NUMBER=$(gridnoded q auth account $ADMIN_ADDRESS \
+ACCOUNT_NUMBER=$(grided q auth account $ADMIN_ADDRESS \
     --node ${GRIDNODE_NODE} \
     --chain-id $GRIDNODE_CHAIN_ID \
     --output json \
@@ -10,12 +10,12 @@ ACCOUNT_NUMBER=$(gridnoded q auth account $ADMIN_ADDRESS \
 
 for i in {0..1}; do
   echo "tx ${i}"
-  SEQUENCE=$(gridnoded q auth account $ADMIN_ADDRESS \
+  SEQUENCE=$(grided q auth account $ADMIN_ADDRESS \
     --node ${GRIDNODE_NODE} \
     --chain-id $GRIDNODE_CHAIN_ID \
     --output json \
     | jq -r ".sequence")
-  gridnoded tx clp swap \
+  grided tx clp swap \
     --from=$GRID_ACT \
     --keyring-backend=test \
     --sentSymbol=ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2 \

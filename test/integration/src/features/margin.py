@@ -20,9 +20,9 @@ def swap_pricing_formula(x, X, y, Y):
 class TestMargin:
     def setup_method(self):
         self.cmd = command.Command()
-        self.gridnoded_home_root = self.cmd.tmpdir("gridtool.tmp")
-        self.cmd.rmdir(self.gridnoded_home_root)
-        self.cmd.mkdir(self.gridnoded_home_root)
+        self.grided_home_root = self.cmd.tmpdir("gridtool.tmp")
+        self.cmd.rmdir(self.grided_home_root)
+        self.cmd.mkdir(self.grided_home_root)
         self.default_pool_setup = [
             # denom,  decimals,  pool_native_amount, pool_external_amount, faucet_amount
             ["cusdc",        6,              10**25,               10**25,        10**30 ],
@@ -42,7 +42,7 @@ class TestMargin:
         }, {
             denom: external_amount + faucet_amount for denom, _, _, external_amount, faucet_amount in pool_setup
         })
-        env = environments.GridnodedEnvironment(self.cmd, gridnoded_home_root=self.gridnoded_home_root)
+        env = environments.GridnodedEnvironment(self.cmd, grided_home_root=self.grided_home_root)
         env.add_validator()
         env.init(faucet_balance=faucet_balance)
         env.start()
@@ -52,29 +52,29 @@ class TestMargin:
 
         # Enable margin on all pools
         mtp_enabled_pools = set(denom for denom, _, _, _, _ in pool_setup)
-        margin_params_before = env.gridnoded.query_margin_params()
-        env.gridnoded.tx_margin_update_pools(env.clp_admin, mtp_enabled_pools, [], broadcast_mode="block")
-        margin_params_after = env.gridnoded.query_margin_params()
+        margin_params_before = env.grided.query_margin_params()
+        env.grided.tx_margin_update_pools(env.clp_admin, mtp_enabled_pools, [], broadcast_mode="block")
+        margin_params_after = env.grided.query_margin_params()
         assert len(margin_params_before["params"]["pools"]) == 0
         assert set(margin_params_after["params"]["pools"]) == mtp_enabled_pools
 
-        yield env, env.gridnoded, pool_definitions
+        yield env, env.grided, pool_definitions
         env.close()
 
     def test_swap_fury_to_external(self):
-        with self.with_test_env(self.default_pool_setup) as (env, gridnoded, pools_definitions):
+        with self.with_test_env(self.default_pool_setup) as (env, grided, pools_definitions):
             src_denom = "fury"
             dst_denom = "ceth"
             swap_amount = 10**18
             assert dst_denom in pools_definitions
 
-            account = gridnoded.create_addr()
+            account = grided.create_addr()
             env.fund(account, {FURY: 10**25 + swap_amount})
-            balance_before = gridnoded.get_balance(account)
-            pool_before = gridnoded.query_pools_sorted()[dst_denom]
-            gridnoded.tx_clp_swap(account, src_denom, swap_amount, dst_denom, 0, broadcast_mode="block")
-            balance_after = gridnoded.get_balance(account)
-            pool_after = gridnoded.query_pools_sorted()[dst_denom]
+            balance_before = grided.get_balance(account)
+            pool_before = grided.query_pools_sorted()[dst_denom]
+            grided.tx_clp_swap(account, src_denom, swap_amount, dst_denom, 0, broadcast_mode="block")
+            balance_after = grided.get_balance(account)
+            pool_after = grided.query_pools_sorted()[dst_denom]
 
             src_balance_delta = balance_after.get(src_denom, 0) - balance_before.get(src_denom, 0)
             dst_balance_delta = balance_after.get(dst_denom, 0) - balance_before.get(dst_denom, 0)
@@ -110,12 +110,12 @@ class TestMargin:
             assert True  # no-op line just for setting a breakpoint
 
     def test_swap_external_to_fury(self):
-        with self.with_test_env(self.default_pool_setup) as (env, gridnoded, pools_definitions):
+        with self.with_test_env(self.default_pool_setup) as (env, grided, pools_definitions):
             raise NotImplemented()  # TODO
 
     def test_swap_external_to_external(self):
-        with self.with_test_env(self.default_pool_setup) as (env, gridnoded, pools_definitions):
-            account = gridnoded.create_addr()
+        with self.with_test_env(self.default_pool_setup) as (env, grided, pools_definitions):
+            account = grided.create_addr()
             balances = []
             pools = []
 
@@ -126,15 +126,15 @@ class TestMargin:
             assert src_denom in pools_definitions
             assert dst_denom in pools_definitions
 
-            balances.append(gridnoded.get_balance(account))
-            pools.append(gridnoded.query_pools_sorted())
+            balances.append(grided.get_balance(account))
+            pools.append(grided.query_pools_sorted())
             env.fund(account, {FURY: 10**20, src_denom: swap_amount})
 
-            balance_before = gridnoded.get_balance(account)
-            pools_before = gridnoded.query_pools_sorted()
-            gridnoded.tx_clp_swap(account, src_denom, swap_amount, dst_denom, 0, broadcast_mode="block")
-            balance_after = gridnoded.get_balance(account)
-            pools_after = gridnoded.query_pools_sorted()
+            balance_before = grided.get_balance(account)
+            pools_before = grided.query_pools_sorted()
+            grided.tx_clp_swap(account, src_denom, swap_amount, dst_denom, 0, broadcast_mode="block")
+            balance_after = grided.get_balance(account)
+            pools_after = grided.query_pools_sorted()
 
             fury_delta = balance_after.get(FURY, 0) - balance_before.get(FURY, 0)
             from_delta = balance_after.get(src_denom, 0) - balance_before.get(src_denom, 0)
@@ -179,25 +179,25 @@ class TestMargin:
         collateral_amount = 10**20
         leverage = 2
 
-        with self.with_test_env(self.default_pool_setup) as (env, gridnoded, pools_definitions):
-            account = gridnoded.create_addr()
+        with self.with_test_env(self.default_pool_setup) as (env, grided, pools_definitions):
+            account = grided.create_addr()
             env.fund(account, {
                 FURY: 10**25,
                 collateral_asset: 10**25,
             })
-            margin_params = gridnoded.query_margin_params()
+            margin_params = grided.query_margin_params()
 
-            # gridnoded.tx_margin_whitelist(env.clp_admin, account, broadcast_mode="block")
+            # grided.tx_margin_whitelist(env.clp_admin, account, broadcast_mode="block")
 
-            pool_before_open = gridnoded.query_pools_sorted()[collateral_asset]
-            balance_before_open = gridnoded.get_balance(account)
-            mtp_positions_before_open = gridnoded.query_margin_positions_for_address(account)
-            res = gridnoded.margin_open_simple(account, borrow_asset, collateral_asset=collateral_asset,
+            pool_before_open = grided.query_pools_sorted()[collateral_asset]
+            balance_before_open = grided.get_balance(account)
+            mtp_positions_before_open = grided.query_margin_positions_for_address(account)
+            res = grided.margin_open_simple(account, borrow_asset, collateral_asset=collateral_asset,
                 collateral_amount=collateral_amount, leverage=leverage, position="long")
             mtp_id = int(res["id"])
-            pool_after_open = gridnoded.query_pools_sorted()[collateral_asset]
-            balance_after_open = gridnoded.get_balance(account)
-            mtp_positions_after_open = gridnoded.query_margin_positions_for_address(account)
+            pool_after_open = grided.query_pools_sorted()[collateral_asset]
+            balance_after_open = grided.get_balance(account)
+            mtp_positions_after_open = grided.query_margin_positions_for_address(account)
 
             assert len(mtp_positions_before_open) == 0
             assert len(mtp_positions_after_open) == 1
@@ -208,17 +208,17 @@ class TestMargin:
             # TODO Why does the open position disappear after 4 blocks?
             # Whitelisting does not help
             for i in range(10):
-                cnt = len(gridnoded.query_margin_positions_for_address(account))
+                cnt = len(grided.query_margin_positions_for_address(account))
                 if cnt == 0:
                     break
-                gridnoded.wait_for_last_transaction_to_be_mined()
+                grided.wait_for_last_transaction_to_be_mined()
 
             # TODO
 
-            pool_before_close = gridnoded.query_pools_sorted()[collateral_asset]
-            balance_before_close = gridnoded.get_balance(account)
-            res2 = gridnoded.tx_margin_close(account, mtp_id, broadcast_mode="block")
-            pool_after_close = gridnoded.query_pools_sorted()[collateral_asset]
-            balance_after_close = gridnoded.get_balance(account)
+            pool_before_close = grided.query_pools_sorted()[collateral_asset]
+            balance_before_close = grided.get_balance(account)
+            res2 = grided.tx_margin_close(account, mtp_id, broadcast_mode="block")
+            pool_after_close = grided.query_pools_sorted()[collateral_asset]
+            balance_after_close = grided.get_balance(account)
 
             assert True

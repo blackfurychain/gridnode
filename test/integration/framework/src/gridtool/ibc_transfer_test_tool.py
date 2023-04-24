@@ -15,7 +15,7 @@ chains = {
     "iris": {"binary": "iris", "relayer": "hermes"},
     "sentinel": {"binary": "sentinelhub", "relayer": "ibc"},
     "persistence": {"binary": "persistenceCore", "relayer": "hermes"},
-    "gridironchain": {"binary": "gridnoded", "relayer": "ibc"},
+    "gridironchain": {"binary": "grided", "relayer": "ibc"},
 }
 
 # TODO Define format and usage
@@ -48,7 +48,7 @@ def get_binary_for_chain(chain_name):
 def get_config(config_name):
     return None  # TODO
 
-# Generates a gridnoded key and stores it into test keyring. Returns the mnemonic that can be used to
+# Generates a grided key and stores it into test keyring. Returns the mnemonic that can be used to
 # recreate it.
 def add_new_key_to_keyring(chain, key_name):
     binary = get_binary_for_chain(chain)

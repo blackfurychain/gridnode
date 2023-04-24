@@ -2,7 +2,7 @@
 
 set -x
 
-gridnoded tx clp remove-liquidity-units \
+grided tx clp remove-liquidity-units \
   --withdrawUnits 1 \
   --symbol ceth \
   --from $GRID_ACT \

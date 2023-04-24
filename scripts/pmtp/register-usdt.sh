@@ -2,7 +2,7 @@
 
 set -x
 
-gridnoded tx tokenregistry register denoms/fury.json \
+grided tx tokenregistry register denoms/fury.json \
   --node ${GRIDNODE_NODE} \
   --chain-id "${GRIDNODE_CHAIN_ID}" \
   --from "${ADMIN_ADDRESS}" \
@@ -12,7 +12,7 @@ gridnoded tx tokenregistry register denoms/fury.json \
   -y \
   --broadcast-mode block
 
-gridnoded tx tokenregistry register denoms/cusdt.json \
+grided tx tokenregistry register denoms/cusdt.json \
   --node ${GRIDNODE_NODE} \
   --chain-id "${GRIDNODE_CHAIN_ID}" \
   --from "${ADMIN_ADDRESS}" \

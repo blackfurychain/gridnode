@@ -35,11 +35,11 @@ def run_localnet_hook():
 
     # rm -rf /tmp/localnet/config/gridironchain/gridironchain-testnet-1
     # mkdir -p /tmp/localnet/config/gridironchain/gridironchain-testnet-1
-    # /tmp/localnet/bin/gridnoded init gridironchain-testnet-1 --chain-id gridironchain-testnet-1 --home /tmp/localnet/config/gridironchain/gridironchain-testnet-1
-    # /tmp/localnet/bin/gridnoded keys add gridironchain-validator --keyring-backend test --home /tmp/localnet/config/gridironchain/gridironchain-testnet-1
-    # /tmp/localnet/bin/gridnoded keys add gridironchain-source --keyring-backend test --home /tmp/localnet/config/gridironchain/gridironchain-testnet-1
-    # /tmp/localnet/bin/gridnoded add-genesis-account gridironchain-validator 10000000000000000000fury --keyring-backend test --home /tmp/localnet/config/gridironchain/gridironchain-testnet-1
-    # /tmp/localnet/bin/gridnoded add-genesis-account gridironchain-source 10000000000000000000fury --keyring-backend test --home /tmp/localnet/config/gridironchain/gridironchain-testnet-1
+    # /tmp/localnet/bin/grided init gridironchain-testnet-1 --chain-id gridironchain-testnet-1 --home /tmp/localnet/config/gridironchain/gridironchain-testnet-1
+    # /tmp/localnet/bin/grided keys add gridironchain-validator --keyring-backend test --home /tmp/localnet/config/gridironchain/gridironchain-testnet-1
+    # /tmp/localnet/bin/grided keys add gridironchain-source --keyring-backend test --home /tmp/localnet/config/gridironchain/gridironchain-testnet-1
+    # /tmp/localnet/bin/grided add-genesis-account gridironchain-validator 10000000000000000000fury --keyring-backend test --home /tmp/localnet/config/gridironchain/gridironchain-testnet-1
+    # /tmp/localnet/bin/grided add-genesis-account gridironchain-source 10000000000000000000fury --keyring-backend test --home /tmp/localnet/config/gridironchain/gridironchain-testnet-1
 
     # For each chain:
     # defaultGenesis = what was created in ${home}/config/genesis.json
@@ -53,7 +53,7 @@ def run_localnet_hook():
     # ${binPath}/${binary} gentx ${validatorAccountName} ${amount}${denom} --chain-id ${chainId} --keyring-backend test --home ${home}
     # ${binPath}/${binary} collect-gentxs --home ${home}
 
-    localnet.start_all_chains()  # Runs gridnoded and gaiad
+    localnet.start_all_chains()  # Runs grided and gaiad
 
 
 

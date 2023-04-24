@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Remove liquidity 
-gridnoded tx clp remove-liquidity \
+grided tx clp remove-liquidity \
 --from grid --keyring-backend test \
 --fees 100000000000000000fury \
 --symbol ceth \

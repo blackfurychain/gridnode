@@ -29,4 +29,4 @@ ADD cmd/ebrelayer/contract/generated  /grid/cmd/ebrelayer/contract/generated
 
 # Copy the compiled binaires over.
 COPY --from=build /go/bin/ebrelayer /usr/bin/ebrelayer
-COPY --from=build /go/bin/gridnoded /usr/bin/gridnoded
+COPY --from=build /go/bin/grided /usr/bin/grided

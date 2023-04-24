@@ -2,4 +2,4 @@
 
 echo "Starting test chain"
 
-gridnoded start --minimum-gas-prices 0.5fury
+grided start --minimum-gas-prices 0.5fury

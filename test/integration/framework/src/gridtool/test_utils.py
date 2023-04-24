@@ -14,7 +14,7 @@ from gridtool import eth, truffle, hardhat, run_env, gridironchain, cosmos, comm
 from gridtool.gridironchain import FURY, CETH
 from gridtool.common import *
 
-# These are utilities to interact with running environment (running agains local ganache-cli/hardhat/gridnoded).
+# These are utilities to interact with running environment (running agains local ganache-cli/hardhat/grided).
 # This is to replace test_utilities.py, conftest.py, burn_lock_functions.py and integration_test_context.py.
 # Also to replace smart-contracts/scripts/...
 
@@ -73,7 +73,7 @@ def get_env_ctx_peggy2():
         gridironchain_config = env_vars["gridironchain"]
         gridnode_url = gridironchain_config["rpc_url"]
         gridnode_chain_id = gridironchain_config["chain_id"]
-        gridnoded_home = gridironchain_config.get("home")
+        grided_home = gridironchain_config.get("home")
 
         # Supported scenarios regarding fury_source:
         # (1) no fury_source, no mnemonic => set fury_source to None and assume it will not be used
@@ -90,9 +90,9 @@ def get_env_ctx_peggy2():
             if fury_source_mnemonic:
                 fury_source_mnemonic = fury_source_mnemonic.split(" ")
                 fury_source = gridironchain.mnemonic_to_address(cmd, fury_source_mnemonic)
-                gridnoded = gridironchain.Gridnoded(cmd, home=gridnoded_home)
-                if not [x for x in gridnoded.keys_list() if x["address"] == fury_source]:
-                    gridnoded.keys_add(None, fury_source_mnemonic)
+                grided = gridironchain.Gridnoded(cmd, home=grided_home)
+                if not [x for x in grided.keys_list() if x["address"] == fury_source]:
+                    grided.keys_add(None, fury_source_mnemonic)
 
         eth_config = env_vars["ethereum"]
         smart_contract_addresses = {k: eth.validate_address_and_private_key(v, None)[0] for k, v in eth_config["smart_contract_addresses"].items()}
@@ -147,7 +147,7 @@ def get_env_ctx_peggy2():
         gridnode_url = dot_env_vars["TCP_URL"]
         gridnode_chain_id = "localnet"  # TODO Mandatory, but not present either in environment_vars or dot_env_vars
         assert dot_env_vars["CHAINDIR"] == dot_env_vars["HOME"]
-        gridnoded_home = os.path.join(dot_env_vars["CHAINDIR"], ".gridnoded")
+        grided_home = os.path.join(dot_env_vars["CHAINDIR"], ".grided")
         ethereum_network_descriptor = int(dot_env_vars["ETH_CHAIN_ID"])
 
         eth_node_is_local = True
@@ -160,7 +160,7 @@ def get_env_ctx_peggy2():
     abi_files_root = cmd.project.project_dir("smart-contracts/artifacts/contracts")
     abi_provider = hardhat.HardhatAbiProvider(cmd, abi_files_root, smart_contract_addresses)
     ctx_eth = eth.EthereumTxWrapper(w3_conn, eth_node_is_local)
-    ctx = EnvCtx(cmd, w3_conn, ctx_eth, abi_provider, owner_address, gridnoded_home, gridnode_url, gridnode_chain_id,
+    ctx = EnvCtx(cmd, w3_conn, ctx_eth, abi_provider, owner_address, grided_home, gridnode_url, gridnode_chain_id,
         fury_source, ceth_symbol, generic_erc20_contract, eth_faucet)
     if owner_private_key:
         ctx.eth.set_private_key(owner_address, owner_private_key)
@@ -176,7 +176,7 @@ def get_env_ctx_peggy2():
     # assert ctx.eth.fixed_gas_args["gasPrice"] == 1 * eth.GWEI + 7
 
     # Monkeypatching for peggy2 extras
-    # TODO These are set in run_env.py:Peggy2Environment.init_gridironchain(), specifically "gridnoded tx ethbridge set-cross-chain-fee"
+    # TODO These are set in run_env.py:Peggy2Environment.init_gridironchain(), specifically "grided tx ethbridge set-cross-chain-fee"
     # Consider passing them via environment
     ctx.eth.cross_chain_fee_base = 1
     ctx.eth.cross_chain_lock_fee = 1
@@ -261,7 +261,7 @@ def get_env_ctx_peggy1(cmd=None, env_file=None, env_vars=None):
         artifacts_dir = cmd.project.project_dir("smart-contracts/build/contracts")
 
     gridnode_url = env_vars.get("GRIDNODE")  # Defaults to "tcp://localhost:26657"
-    gridnoded_home = None  # Implies default ~/.gridnoded
+    grided_home = None  # Implies default ~/.grided
     deployed_smart_contract_address_overrides = _get_overrides_for_smart_contract_addresses(env_vars)
 
     w3_conn = eth.web3_connect(w3_url)
@@ -276,7 +276,7 @@ def get_env_ctx_peggy1(cmd=None, env_file=None, env_vars=None):
 
     ctx_eth = eth.EthereumTxWrapper(w3_conn, eth_node_is_local)
     abi_provider = truffle.GanacheAbiProvider(cmd, artifacts_dir, ethereum_network_id, deployed_smart_contract_address_overrides)
-    ctx = EnvCtx(cmd, w3_conn, ctx_eth, abi_provider, operator_address, gridnoded_home, gridnode_url, gridnode_chain_id,
+    ctx = EnvCtx(cmd, w3_conn, ctx_eth, abi_provider, operator_address, grided_home, gridnode_url, gridnode_chain_id,
         fury_source, CETH, generic_erc20_contract_name, operator_address)
     if operator_private_key:
         ctx.eth.set_private_key(operator_address, operator_private_key)
@@ -329,7 +329,7 @@ def grid_addr_to_evm_arg(grid_address):
 
 class EnvCtx:
     def __init__(self, cmd: command.Command, w3_conn: web3.Web3, ctx_eth: eth.EthereumTxWrapper, abi_provider,
-        operator: eth.Address, gridnoded_home: str, gridnode_url: Optional[str], gridnode_chain_id: str,
+        operator: eth.Address, grided_home: str, gridnode_url: Optional[str], gridnode_chain_id: str,
         fury_source: cosmos.Address, ceth_symbol: str, generic_erc20_contract: str, eth_faucet: eth.Address
     ):
         self.cmd = cmd
@@ -337,7 +337,7 @@ class EnvCtx:
         self.eth: eth.EthereumTxWrapper = ctx_eth
         self.abi_provider: hardhat.HardhatAbiProvider = abi_provider
         self.operator = operator
-        self.gridnode = gridironchain.Gridnoded(self.cmd, home=gridnoded_home, node=gridnode_url, chain_id=gridnode_chain_id)
+        self.gridnode = gridironchain.Gridnoded(self.cmd, home=grided_home, node=gridnode_url, chain_id=gridnode_chain_id)
         # Refactoring in progress: moving stuff into separate client that encapsulates things like url, home and chain_id
         self.gridnode_client = gridironchain.GridnodeClient(self, self.gridnode, grpc_port=9090)
         self.fury_source = fury_source
@@ -617,7 +617,7 @@ class EnvCtx:
         self.approve_erc20_token(token_sc, from_eth_addr, amount)
         self.bridge_bank_lock_eth(from_eth_addr, dest_sichain_addr, amount)
 
-    # TODO Decouple; we want to use this with just "gridnoded" running, move to Gridnoded class?
+    # TODO Decouple; we want to use this with just "grided" running, move to Gridnoded class?
     def create_gridironchain_addr(self, moniker: str = None,
         fund_amounts: Union[cosmos.Balance, cosmos.LegacyBalance, None] = None
     ) -> cosmos.Address:
@@ -673,7 +673,7 @@ class EnvCtx:
         else:
             return "c" + eth_token_symbol.lower()
 
-    # Deprecated: gridnoded accepts --gas-prices=0.5fury along with --gas-adjustment=1.5 instead of a fixed fee.
+    # Deprecated: grided accepts --gas-prices=0.5fury along with --gas-adjustment=1.5 instead of a fixed fee.
     # Using those parameters is the best way to have the fees set robustly after the .42 upgrade.
     # See https://github.com/Gridironchain/gridnode/pull/1802#discussion_r697403408
     # The corresponding denom should be "fury".

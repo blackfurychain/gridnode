@@ -95,12 +95,12 @@ def solidity_json_path(smart_contracts_dir):
 
 
 @pytest.fixture
-def gridnoded_homedir(is_ropsten_testnet):
+def grided_homedir(is_ropsten_testnet):
     if is_ropsten_testnet:
         base = test_utilities.get_required_env_var("HOME")
     else:
         base = test_utilities.get_required_env_var("CHAINDIR")
-    result = f"""{base}/.gridnoded"""
+    result = f"""{base}/.grided"""
     return result
 
 
@@ -131,7 +131,7 @@ def fury_source_key(is_ropsten_testnet, fury_source):
 
 
 @pytest.fixture
-def gridnoded_node():
+def grided_node():
     return test_utilities.get_optional_env_var("GRIDNODE", None)
 
 
@@ -168,9 +168,9 @@ def ropsten_wait_time():
 
 
 @pytest.fixture
-def is_ropsten_testnet(gridnoded_node):
+def is_ropsten_testnet(grided_node):
     """if gridnode_clinode is set, we're talking to ropsten/sandpit"""
-    return gridnoded_node
+    return grided_node
 
 
 @pytest.fixture
@@ -179,16 +179,16 @@ def is_ganache(ethereum_network):
     return not ethereum_network
 
 
-# Deprecated: gridnoded accepts --gas-prices=0.5fury along with --gas-adjustment=1.5 instead of a fixed fee.
+# Deprecated: grided accepts --gas-prices=0.5fury along with --gas-adjustment=1.5 instead of a fixed fee.
 # Using those parameters is the best way to have the fees set robustly after the .42 upgrade.
 # See https://github.com/Gridironchain/gridnode/pull/1802#discussion_r697403408
 @pytest.fixture
 def gridironchain_fees(gridironchain_fees_int):
-    """returns a string suitable for passing to gridnoded"""
+    """returns a string suitable for passing to grided"""
     return f"{gridironchain_fees_int}fury"
 
 
-# Deprecated: gridnoded accepts --gas-prices=0.5fury along with --gas-adjustment=1.5 instead of a fixed fee.
+# Deprecated: grided accepts --gas-prices=0.5fury along with --gas-adjustment=1.5 instead of a fixed fee.
 # Using those parameters is the best way to have the fees set robustly after the .42 upgrade.
 # See https://github.com/Gridironchain/gridnode/pull/1802#discussion_r697403408
 @pytest.fixture
@@ -268,7 +268,7 @@ def basic_transfer_request(
         bridgebank_address,
         bridgetoken_address,
         ethereum_network,
-        gridnoded_node,
+        grided_node,
         chain_id,
         gridironchain_fees,
         solidity_json_path,
@@ -283,7 +283,7 @@ def basic_transfer_request(
         bridgebank_address=bridgebank_address,
         bridgetoken_address=bridgetoken_address,
         ethereum_network=ethereum_network,
-        gridnoded_node=gridnoded_node,
+        grided_node=grided_node,
         manual_block_advance=is_ganache,
         chain_id=chain_id,
         gridironchain_fees=gridironchain_fees,
@@ -293,7 +293,7 @@ def basic_transfer_request(
 
 @pytest.fixture(scope="function")
 def fury_source_integrationtest_env_credentials(
-        gridnoded_homedir,
+        grided_homedir,
         validator_password,
         fury_source_key,
         is_ganache,

@@ -12,7 +12,7 @@ import test_utilities
 from pytest_utilities import generate_test_account
 from integration_env_credentials import gridironchain_cli_credentials_for_test
 from test_utilities import get_required_env_var, GridironchaincliCredentials, get_optional_env_var, ganache_owner_account, \
-    get_shell_output_json, get_shell_output, detect_errors_in_gridnoded_output, get_transaction_result, amount_in_wei
+    get_shell_output_json, get_shell_output, detect_errors_in_grided_output, get_transaction_result, amount_in_wei
 
 
 # CODE TO GENERATE RANDOM STRING FOR DISPENSATION NAME AS DISPENSATION NAME IS A UNIQUE KEY
@@ -34,7 +34,7 @@ def send_sample_fury(from_address, to_address, amount, keyring_backend, chain_id
     gridironchain_fees_entry = f"--fees 100000000000000000fury"
     keyring_backend_entry = f"--keyring-backend {keyring_backend}"
     cmd = " ".join([
-        "gridnoded tx bank send",
+        "grided tx bank send",
         f"{from_address}",
         f"{to_address}",
         f"{amount}",
@@ -51,7 +51,7 @@ def send_sample_fury(from_address, to_address, amount, keyring_backend, chain_id
 # CODE TO QUERY BLOCK FOR NEW DISPENSATION TXN
 def query_block_claim(txn_hash):
     cmd = " ".join([
-        "gridnoded query tx",
+        "grided query tx",
         f"{txn_hash}",
         "--chain-id localnet",
         "-o json"
@@ -64,7 +64,7 @@ def query_block_claim(txn_hash):
 def balance_check(address, currency):
     logging.debug(f"check_balance")
     cmd = " ".join([
-        "gridnoded query bank balances",
+        "grided query bank balances",
         f"{address}",
         f"--denom {currency}",
         f"-o json"
@@ -86,7 +86,7 @@ def create_online_singlekey_txn(
     keyring_backend_entry = f"--keyring-backend test"
     output = 'output.json'
     cmd = " ".join([
-        "gridnoded tx dispensation create",
+        "grided tx dispensation create",
         f"{claimType}",
         output,
         gridironchain_gas_entry,
@@ -114,7 +114,7 @@ def create_online_singlekey_async_txn(
     keyring_backend_entry = f"--keyring-backend test"
     output = 'output.json'
     cmd = " ".join([
-        "gridnoded tx dispensation create",
+        "grided tx dispensation create",
         f"{claimType}",
         output,
         gridironchain_fees_entry,
@@ -142,7 +142,7 @@ def create_offline_singlekey_txn(
     gridironchain_gas_entry = f"--gas auto --gas-adjustment=1.5"
     output = 'output.json'
     cmd = " ".join([
-        "gridnoded tx dispensation create",
+        "grided tx dispensation create",
         f"{claimType}",
         output,
         f"--from {signing_address}",
@@ -161,7 +161,7 @@ def create_offline_singlekey_txn(
 def sign_txn(signingaddress, file):
     keyring_backend_entry = f"--keyring-backend test"
     cmd = " ".join([
-        "gridnoded tx sign",
+        "grided tx sign",
         f"--from {signingaddress}",
         f"{file}",
         keyring_backend_entry,
@@ -175,7 +175,7 @@ def sign_txn(signingaddress, file):
 #CODE TO BROADCAST SINGLE SIGNED TXN ON BLOCK
 def broadcast_txn(file_path):
     cmd = " ".join([
-        "gridnoded tx broadcast",
+        "grided tx broadcast",
         f"{file_path}",
         f"--yes -o json"
     ])
@@ -187,7 +187,7 @@ def broadcast_txn(file_path):
 #CODE TO BROADCAST SINGLE SIGNED TXN ON BLOCK WITH AN ASYNC FLAG
 def broadcast_async_txn(file_path):
     cmd = " ".join([
-        "gridnoded tx broadcast",
+        "grided tx broadcast",
         f"{file_path}",
         f"--broadcast-mode async",
         f"--yes -o json"
@@ -209,7 +209,7 @@ def create_online_singlekey_txn_with_runner(
     keyring_backend_entry = f"--keyring-backend test"
     output = 'output.json'
     cmd = " ".join([
-        "gridnoded tx dispensation create",
+        "grided tx dispensation create",
         f"{claimType}",
         output,
         runner_address,
@@ -239,7 +239,7 @@ def create_offline_singlekey_txn_with_runner(
     keyring_backend_entry = f"--keyring-backend test"
     output = 'output.json'
     cmd = " ".join([
-        "gridnoded tx dispensation create",
+        "grided tx dispensation create",
         f"{claimType}",
         output,
         runner_address,
@@ -269,7 +269,7 @@ def run_dispensation(
     gridironchain_fees_entry = f"--fees 200000fury"
     keyring_backend_entry = f"--keyring-backend test"
     cmd = " ".join([
-        "gridnoded tx dispensation run",
+        "grided tx dispensation run",
         distribution_name,
         f"{claimType}",
         distribution_count,
@@ -289,7 +289,7 @@ def run_dispensation(
 #CODE TO QUERY A NEW CLAIM 
 def query_created_claim(claimType):
     cmd = " ".join([
-        "gridnoded q dispensation claims-by-type",
+        "grided q dispensation claims-by-type",
         f"{claimType}",
         "--chain-id localnet",
         f"-o json"
@@ -310,7 +310,7 @@ def create_claim(
     gridironchain_gas_entry = f"--gas auto --gas-adjustment=1.5"
     gridironchain_fees_entry = f"--fees 100000000000000000fury"
     cmd = " ".join([
-        "gridnoded tx dispensation claim",
+        "grided tx dispensation claim",
         f"{claimType}",
         f"--from {gridironchain_address}",
         gridironchain_fees_entry,

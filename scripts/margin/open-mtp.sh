@@ -2,7 +2,7 @@
 
 set -x
 
-gridnoded tx margin open \
+grided tx margin open \
   --from $GRID_ACT \
   --keyring-backend test \
   --borrow_asset cusdc \

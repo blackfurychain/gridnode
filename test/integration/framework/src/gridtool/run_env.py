@@ -143,24 +143,24 @@ class Integrator(Ganache, Command):
 
         # This was deleted in commit f00242302dd226bc9c3060fb78b3de771e3ff429 from gridironchain_start_daemon.sh because
         # it was not working. But we assume that we want to keep it.
-        gridnode.gridnoded_exec(["add-genesis-validators", valoper] + gridnode._home_args())
+        gridnode.grided_exec(["add-genesis-validators", valoper] + gridnode._home_args())
 
-        # Add gridnodeadmin to ~/.gridnoded
+        # Add gridnodeadmin to ~/.grided
         gridnode0 = Gridnoded(self)
         adminuser_addr = gridnode0.keys_add("gridnodeadmin")["address"]
         tokens = {FURY: 10 ** 28}
         # Original from peggy:
-        # self.cmd.execst(["gridnoded", "add-genesis-account", gridnoded_admin_address, "100000000000000000000fury", "--home", gridnoded_home])
+        # self.cmd.execst(["grided", "add-genesis-account", grided_admin_address, "100000000000000000000fury", "--home", grided_home])
         gridnode.add_genesis_account(adminuser_addr, tokens)
         gridnode.set_genesis_oracle_admin(adminuser_addr)
         gridnode.set_gen_denom_whitelist(denom_whitelist_file)
 
         return adminuser_addr
 
-    def gridnoded_peggy2_init_validator(self, gridnode, validator_moniker, validator_mnemonic, evm_network_descriptor, validator_power):
+    def grided_peggy2_init_validator(self, gridnode, validator_moniker, validator_mnemonic, evm_network_descriptor, validator_power):
         # Add validator key to test keyring
-        # This effectively copies key for validator_moniker from what gridgen creates in /tmp/gridnodedNetwork/validators
-        # to ~/.gridnoded (note absence of explicit gridnoded_home, therefore it's ~/.gridnoded)
+        # This effectively copies key for validator_moniker from what gridgen creates in /tmp/gridedNetwork/validators
+        # to ~/.grided (note absence of explicit grided_home, therefore it's ~/.grided)
         gridnode0 = Gridnoded(self)
         # TODO don't add keys to the default ~/ keyring
         gridnode0.keys_add(validator_moniker, validator_mnemonic)
@@ -204,7 +204,7 @@ class Integrator(Ganache, Command):
         # Peggy2
         # How this works: by default, the command below will try to do a POST to http://localhost:26657.
         # So the port has to be up first, but this query will fail anyway if it is not.
-        args = ["gridnoded", "query", "account", address] + \
+        args = ["grided", "query", "account", address] + \
             (["--node", tcp_url] if tcp_url else [])
         last_exception = None
         start_time = time.time()
@@ -234,7 +234,7 @@ class UIStackEnvironment:
         self.network_id = 5777
         self.keyring_backend = "test"
         self.ganache_db_path = self.cmd.get_user_home(".ganachedb")
-        self.gridnoded_path = self.cmd.get_user_home(".gridnoded")
+        self.grided_path = self.cmd.get_user_home(".grided")
         self.gridnode = Gridnoded(cmd)
 
         # From ui/chains/credentials.sh
@@ -265,9 +265,9 @@ class UIStackEnvironment:
 
         # yarn stack --save-snapshot -> ui/scripts/stack.sh -> ui/scripts/stack-save-snapshot.sh => ui/scripts/stack-launch.sh
         # ui/scripts/stack-launch.sh -> ui/scripts/_grid-build.sh -> ui/chains/grid/build.sh
-        # killall gridnoded
-        # rm $(which gridnoded)
-        self.cmd.rmdir(self.gridnoded_path)
+        # killall grided
+        # rm $(which grided)
+        self.cmd.rmdir(self.grided_path)
         self.project.make_go_binaries_2()
 
         # ui/scripts/stack-launch.sh -> ui/scripts/_eth.sh -> ui/chains/etc/launch.sh
@@ -279,14 +279,14 @@ class UIStackEnvironment:
 
         gridnode = Gridnoded(self.cmd)
         # ui/scripts/stack-launch.sh -> ui/scripts/_grid.sh -> ui/chains/grid/launch.sh
-        gridnode.gridnoded_init("test", self.chain_id)
-        self.cmd.copy_file(project_dir("ui/chains/grid/app.toml"), os.path.join(self.gridnoded_path, "config/app.toml"))
+        gridnode.grided_init("test", self.chain_id)
+        self.cmd.copy_file(project_dir("ui/chains/grid/app.toml"), os.path.join(self.grided_path, "config/app.toml"))
         log.info(f"Generating deterministic account - {self.shadowfiend_name}...")
-        shadowfiend_account = self.cmd.gridnoded_keys_add(self.shadowfiend_name, self.shadowfiend_mnemonic)
+        shadowfiend_account = self.cmd.grided_keys_add(self.shadowfiend_name, self.shadowfiend_mnemonic)
         log.info(f"Generating deterministic account - {self.akasha_name}...")
         akasha_account = self.gridnode.keys_add(self.akasha_name, self.akasha_mnemonic)
         log.info(f"Generating deterministic account - {self.juniper_name}...")
-        juniper_account = self.cmd.gridnoded_keys_add(self.juniper_name, self.juniper_mnemonic)
+        juniper_account = self.cmd.grided_keys_add(self.juniper_name, self.juniper_mnemonic)
         shadowfiend_address = shadowfiend_account["address"]
         akasha_address = akasha_account["address"]
         juniper_address = juniper_account["address"]
@@ -302,21 +302,21 @@ class UIStackEnvironment:
         gridnode.add_genesis_account(juniper_address, tokens_juniper)
 
         shadowfiend_address_bech_val = gridnode.keys_show(self.shadowfiend_name, bech="val")[0]["address"]
-        self.cmd.gridnoded_add_genesis_validators(shadowfiend_address_bech_val)
+        self.cmd.grided_add_genesis_validators(shadowfiend_address_bech_val)
 
         amount = grid_format_amount(10**24, "stake")
-        self.cmd.execst(["gridnoded", "gentx", self.shadowfiend_name, amount, f"--chain-id={self.chain_id}",
+        self.cmd.execst(["grided", "gentx", self.shadowfiend_name, amount, f"--chain-id={self.chain_id}",
             f"--keyring-backend={self.keyring_backend}"])
 
         log.info("Collecting genesis txs...")
-        self.cmd.execst(["gridnoded", "collect-gentxs"])
+        self.cmd.execst(["grided", "collect-gentxs"])
         log.info("Validating genesis file...")
-        self.cmd.execst(["gridnoded", "validate-genesis"])
+        self.cmd.execst(["grided", "validate-genesis"])
 
         log.info("Starting test chain...")
-        gridnoded_proc = self.cmd.gridnoded_start(minimum_gas_prices=(0.5, FURY))  # TODO gridnoded_home=???
+        grided_proc = self.cmd.grided_start(minimum_gas_prices=(0.5, FURY))  # TODO grided_home=???
 
-        # gridnoded must be up before continuing
+        # grided must be up before continuing
         self.cmd.grid_wait_up("localhost", 1317)
 
         # ui/scripts/_migrate.sh -> ui/chains/peggy/migrate.sh
@@ -397,15 +397,15 @@ class UIStackEnvironment:
             bridge_registry_address, self.shadowfiend_name, self.shadowfiend_mnemonic, self.chain_id,
             ethereum_private_key=ethereum_private_key, gas=5*10**12, gas_prices=[0.5, FURY])
 
-        # At this point we have 3 running processes - ganache_proc, gridnoded_proc and ebrelayer_proc
+        # At this point we have 3 running processes - ganache_proc, grided_proc and ebrelayer_proc
         # await grid-node-up and migrate-complete
 
         time.sleep(30)
         # ui/scripts/_snapshot.sh
 
         # ui/scripts/stack-pause.sh:
-        # killall gridnoded gridnoded ebrelayer ganache-cli
-        gridnoded_proc.kill()
+        # killall grided grided ebrelayer ganache-cli
+        grided_proc.kill()
         ebrelayer_proc.kill()
         ganache_proc.kill()
         time.sleep(10)
@@ -419,7 +419,7 @@ class UIStackEnvironment:
         self.cmd.tar_create(project_dir("smart-contracts/build"), os.path.join(snapshots_dir, "peggy_build.tar.gz"))
 
         # ui/chains/grid/snapshot.sh:
-        self.cmd.tar_create(self.gridnoded_path, os.path.join(snapshots_dir, "grid.tar.gz"))
+        self.cmd.tar_create(self.grided_path, os.path.join(snapshots_dir, "grid.tar.gz"))
 
         # ui/chains/etc/snapshot.sh:
         self.cmd.tar_create(self.ganache_db_path, os.path.join(snapshots_dir, "eth.tar.gz"))
@@ -514,7 +514,7 @@ class IntegrationTestsEnvironment:
         log_dir = self.cmd.tmpdir("gridnode")
         self.cmd.mkdir(log_dir)
         ganache_log_file = open(os.path.join(log_dir, "ganache.log"), "w")  # TODO close
-        gridnoded_log_file = open(os.path.join(log_dir, "gridnoded.log"), "w")  # TODO close
+        grided_log_file = open(os.path.join(log_dir, "grided.log"), "w")  # TODO close
         ebrelayer_log_file = open(os.path.join(log_dir, "ebrelayer.log"), "w")  # TODO close
 
         # test/integration/ganache-start.sh:
@@ -592,27 +592,27 @@ class IntegrationTestsEnvironment:
         validator1_password = netdef["password"]
         validator1_mnemonic = netdef["mnemonic"].split(" ")
         chaindir = os.path.join(networks_dir, f"validators/{self.chainnet}/{validator1_moniker}")
-        gridnoded_home = os.path.join(chaindir, ".gridnoded")
+        grided_home = os.path.join(chaindir, ".grided")
         denom_whitelist_file = os.path.join(self.test_integration_dir, "whitelisted-denoms.json")
-        # GRIDNODED_LOG=$datadir/logs/gridnoded.log
+        # GRIDNODED_LOG=$datadir/logs/grided.log
 
-        gridnode = Gridnoded(self.cmd, home=gridnoded_home)
+        gridnode = Gridnoded(self.cmd, home=grided_home)
 
         adminuser_addr = self.cmd.gridironchain_init_integration(gridnode, validator1_moniker, validator1_mnemonic,
             denom_whitelist_file)
 
-        # Start gridnoded
-        gridnoded_proc = gridnode.gridnoded_start(tcp_url=self.tcp_url, minimum_gas_prices=(0.5, FURY),
-            log_file=gridnoded_log_file, trace=True)
+        # Start grided
+        grided_proc = gridnode.grided_start(tcp_url=self.tcp_url, minimum_gas_prices=(0.5, FURY),
+            log_file=grided_log_file, trace=True)
 
-        # TODO: wait for gridnoded to come up before continuing
+        # TODO: wait for grided to come up before continuing
         # in gridironchain_start_daemon.sh: "sleep 10"
         # in gridironchain_run_ebrelayer.sh (also run_ebrelayer here) we already wait for connection to port 26657 and grid account validator1_addr
 
         # Removed
         # # TODO Process exits immediately with returncode 1
         # # TODO Why does it not stop start-integration-env.sh?
-        # # rest_server_proc = self.cmd.popen(["gridnoded", "rest-server", "--laddr", "tcp://0.0.0.0:1317"])  # TODO cwd
+        # # rest_server_proc = self.cmd.popen(["grided", "rest-server", "--laddr", "tcp://0.0.0.0:1317"])  # TODO cwd
 
         # test/integration/gridironchain_start_ebrelayer.sh -> test/integration/gridironchain_run_ebrelayer.sh
         # This script is also called from tests
@@ -658,13 +658,13 @@ class IntegrationTestsEnvironment:
         from gridtool import localnet
         localnet.run_localnet_hook()
 
-        return ganache_proc, gridnoded_proc, ebrelayer_proc
+        return ganache_proc, grided_proc, ebrelayer_proc
 
-    def remove_and_add_gridnoded_keys(self, moniker, mnemonic):
+    def remove_and_add_grided_keys(self, moniker, mnemonic):
         # Error: The specified item could not be found in the keyring
         # This is not neccessary during start-integration-env.sh (as the key does not exist yet), but is neccessary
         # during tests that restart ebrelayer
-        # res = self.cmd.execst(["gridnoded", "keys", "delete", moniker, "--keyring-backend", "test"], stdin=["y"])
+        # res = self.cmd.execst(["grided", "keys", "delete", moniker, "--keyring-backend", "test"], stdin=["y"])
         gridnode = Gridnoded(self.cmd)
         gridnode.keys_delete(moniker)
         gridnode.keys_add(moniker, mnemonic)
@@ -688,7 +688,7 @@ class IntegrationTestsEnvironment:
         # self.cmd.wait_for_grid_account(netdef_json, validator1_address)
         self.cmd.wait_for_grid_account_up(validator1_address)
         time.sleep(10)
-        self.remove_and_add_gridnoded_keys(validator_moniker, validator_mnemonic)  # Creates ~/.gridnoded/keyring-tests/xxxx.address
+        self.remove_and_add_grided_keys(validator_moniker, validator_mnemonic)  # Creates ~/.grided/keyring-tests/xxxx.address
         ebrelayer_proc = Ebrelayer(self.cmd).init(self.tcp_url, self.ethereum_websocket_address, bridge_registry_sc_addr,
             validator_moniker, validator_mnemonic, self.chainnet, ethereum_private_key=ebrelayer_ethereum_private_key,
             node=self.tcp_url, keyring_backend="test", sign_with=validator_moniker,
@@ -710,7 +710,7 @@ class IntegrationTestsEnvironment:
         self.cmd.tar_create(self.state_vars["EBRELAYER_DB"], os.path.join(named_snapshot_dir, "gridironchainrelayerdb.tar.gz"))
         self.cmd.tar_create(project_dir("deploy/networks"), os.path.join(named_snapshot_dir, "networks.tar.gz"))
         self.cmd.tar_create(project_dir("smart-contracts/build"), os.path.join(named_snapshot_dir, "smart-contracts.tar.gz"))
-        self.cmd.tar_create(self.cmd.get_user_home(".gridnoded"), os.path.join(named_snapshot_dir, "gridnoded.tar.gz"))
+        self.cmd.tar_create(self.cmd.get_user_home(".grided"), os.path.join(named_snapshot_dir, "grided.tar.gz"))
         self.cmd.write_text_file(os.path.join(named_snapshot_dir, "vagrantenv.json"), json.dumps(self.state_vars, indent=4))
 
     def restore_snapshot(self, snapshot_name):
@@ -731,7 +731,7 @@ class IntegrationTestsEnvironment:
         extract("networks.tar.gz", deploy_networks_dir)
         smart_contracts_build_dir = project_dir("smart-contracts/build")
         extract("smart-contracts.tar.gz", smart_contracts_build_dir)
-        extract("gridnoded.tar.gz", self.cmd.get_user_home(".gridnoded"))  # Needed for "--keyring-backend test"
+        extract("grided.tar.gz", self.cmd.get_user_home(".grided"))  # Needed for "--keyring-backend test"
 
         state_vars["GANACHE_DB_DIR"] = ganache_db_dir
         state_vars["EBRELAYER_DB"] = relayer_db_path
@@ -754,9 +754,9 @@ class IntegrationTestsEnvironment:
         validator_moniker = self.state_vars["MONIKER"]
         networks_dir = project_dir("deploy/networks")
         chaindir = os.path.join(networks_dir, f"validators/{self.chainnet}/{validator_moniker}")
-        gridnoded_home = os.path.join(chaindir, ".gridnoded")
-        gridnoded_proc = self.cmd.gridnoded_start(tcp_url=self.tcp_url, minimum_gas_prices=(0.5, FURY),
-            gridnoded_home=gridnoded_home, trace=True)
+        grided_home = os.path.join(chaindir, ".grided")
+        grided_proc = self.cmd.grided_start(tcp_url=self.tcp_url, minimum_gas_prices=(0.5, FURY),
+            grided_home=grided_home, trace=True)
 
         bridge_token_sc_addr, bridge_registry_sc_addr, bridge_bank_sc_addr = \
             self.cmd.get_bridge_smart_contract_addresses(self.network_id)
@@ -775,11 +775,11 @@ class IntegrationTestsEnvironment:
         ebrelayer_proc = self.run_ebrelayer(netdef_json, validator1_address, validator_moniker, validator_mnemonic,
             ebrelayer_ethereum_private_key, bridge_registry_sc_addr, relayer_db_path)
 
-        return ganache_proc, gridnoded_proc, ebrelayer_proc
+        return ganache_proc, grided_proc, ebrelayer_proc
 
 
 # Peggy2 environment
-# Originally derived from devenv which ran hardhat, gridnoded, ebrelayer like this: cd smart-contracts; GOBIN=~/go/bin npx hardhat run scripts/devenv.ts
+# Originally derived from devenv which ran hardhat, grided, ebrelayer like this: cd smart-contracts; GOBIN=~/go/bin npx hardhat run scripts/devenv.ts
 class Peggy2Environment(IntegrationTestsEnvironment):
     def __init__(self, cmd: Command, witness_count: int = 1, witness_power: int = 100, consensus_threshold: int = 49,
         ethereum_ws_port: int = 8545, ethereum_chain_id: int = 9999, grid_chain_id = "localnet", use_geth: bool = False
@@ -863,10 +863,10 @@ class Peggy2Environment(IntegrationTestsEnvironment):
         log_dir = self.cmd.tmpdir("gridnode")
         self.cmd.mkdir(log_dir)
         hardhat_log_file = open(os.path.join(log_dir, "hardhat.log"), "w")  # TODO close + use a different name
-        gridnoded_log_file = open(os.path.join(log_dir, "gridnoded.log"), "w")  # TODO close
+        grided_log_file = open(os.path.join(log_dir, "grided.log"), "w")  # TODO close
         relayer_log_file = open(os.path.join(log_dir, "relayer.log"), "w")  # TODO close
 
-        self.cmd.rmdir(self.cmd.get_user_home(".gridnoded"))  # Purge test keyring backend
+        self.cmd.rmdir(self.cmd.get_user_home(".grided"))  # Purge test keyring backend
 
         hardhat = Hardhat(self.cmd)
 
@@ -1007,12 +1007,12 @@ class Peggy2Environment(IntegrationTestsEnvironment):
         tendermint_port = 26657
         denom_whitelist_file = project_dir("test", "integration", "whitelisted-denoms.json")
         registry_json = project_dir("smart-contracts", "src", "devenv", "registry.json")
-        gridnoded_network_dir = self.cmd.tmpdir("gridnodedNetwork")  # Gets written to .vscode/launch.json
-        self.cmd.rmdir(gridnoded_network_dir)
-        self.cmd.mkdir(gridnoded_network_dir)
-        network_config_file, gridnoded_exec_args, gridnoded_proc, tcp_url, admin_account_address, gridnode_validators, \
+        grided_network_dir = self.cmd.tmpdir("gridedNetwork")  # Gets written to .vscode/launch.json
+        self.cmd.rmdir(grided_network_dir)
+        self.cmd.mkdir(grided_network_dir)
+        network_config_file, grided_exec_args, grided_proc, tcp_url, admin_account_address, gridnode_validators, \
             gridnode_relayers, gridnode_witnesses, gridnode_validator0_home, chain_dir = \
-                self.init_gridironchain(gridnoded_network_dir, gridnoded_log_file, self.validator_mint_amounts,
+                self.init_gridironchain(grided_network_dir, grided_log_file, self.validator_mint_amounts,
                     validator_power, seed_ip_address, tendermint_port, denom_whitelist_file,
                     self.admin_account_mint_amounts, registry_json, admin_account_name, self.ceth_symbol)
 
@@ -1064,12 +1064,12 @@ class Peggy2Environment(IntegrationTestsEnvironment):
         self.write_env_files(self.project.project_dir(), self.project.go_bin_dir, peggy_sc_addrs, hardhat_accounts,
             admin_account_name, admin_account_address, gridnode_validator0_home, gridnode_validators, gridnode_relayers,
             gridnode_witnesses, tcp_url, hardhat_bind_hostname, hardhat_port, self.ethereum_chain_id, chain_dir,
-            gridnoded_exec_args, relayer0_exec_args, witness_exec_args
+            grided_exec_args, relayer0_exec_args, witness_exec_args
         )
 
-        return hardhat_proc, gridnoded_proc, relayer0_proc, witness_procs
+        return hardhat_proc, grided_proc, relayer0_proc, witness_procs
 
-    def init_gridironchain(self, gridnoded_network_dir: str, gridnoded_log_file: TextIO,
+    def init_gridironchain(self, grided_network_dir: str, grided_log_file: TextIO,
         validator_mint_amounts: cosmos.Balance, validator_power: int, seed_ip_address: str, tendermint_port: int,
         denom_whitelist_file: str, admin_account_mint_amounts: cosmos.Balance, registry_json: str,
         admin_account_name: str, ceth_symbol: str
@@ -1080,7 +1080,7 @@ class Peggy2Environment(IntegrationTestsEnvironment):
 
         network_config_file_path = self.cmd.mktempfile()
         try:
-            self.cmd.gridgen_create_network(self.chain_id, validator_count, gridnoded_network_dir, network_config_file_path,
+            self.cmd.gridgen_create_network(self.chain_id, validator_count, grided_network_dir, network_config_file_path,
                 seed_ip_address, mint_amount=validator_mint_amounts)
             network_config_file = self.cmd.read_text_file(network_config_file_path)
         finally:
@@ -1104,7 +1104,7 @@ class Peggy2Environment(IntegrationTestsEnvironment):
         #     is_seed: bool
         assert len(validators) == validator_count
 
-        chain_dir_base = os.path.join(gridnoded_network_dir, "validators", self.chain_id)
+        chain_dir_base = os.path.join(grided_network_dir, "validators", self.chain_id)
 
         for validator in validators:
             validator_moniker = validator["moniker"]
@@ -1112,13 +1112,13 @@ class Peggy2Environment(IntegrationTestsEnvironment):
             # TODO Not used
             # validator_password = validator["password"]
             evm_network_descriptor = 1  # TODO Why not hardhat_chain_id?
-            gridnoded_home = os.path.join(chain_dir_base, validator_moniker, ".gridnoded")
-            gridnode = Gridnoded(self.cmd, home=gridnoded_home)
-            self.cmd.gridnoded_peggy2_init_validator(gridnode, validator_moniker, validator_mnemonic, evm_network_descriptor, validator_power)
+            grided_home = os.path.join(chain_dir_base, validator_moniker, ".grided")
+            gridnode = Gridnoded(self.cmd, home=grided_home)
+            self.cmd.grided_peggy2_init_validator(gridnode, validator_moniker, validator_mnemonic, evm_network_descriptor, validator_power)
 
         # TODO Needs to be fixed when we support more than 1 validator
         validator0 = exactly_one(validators)
-        validator0_home = os.path.join(chain_dir_base, validator0["moniker"], ".gridnoded")
+        validator0_home = os.path.join(chain_dir_base, validator0["moniker"], ".grided")
         validator0_address = validator0["address"]
         chain_dir = os.path.join(chain_dir_base, validator0["moniker"])
 
@@ -1130,11 +1130,11 @@ class Peggy2Environment(IntegrationTestsEnvironment):
         if self.extra_balances_for_admin_account:
             gridnode.add_genesis_account_directly_to_existing_genesis_json({admin_account_address: self.extra_balances_for_admin_account})
 
-        # TODO Check if gridnoded_peggy2_add_relayer_witness_account can be executed offline (without gridnoded running)
-        # TODO Check if gridnoded_peggy2_set_cross_chain_fee can be executed offline (without gridnoded running)
+        # TODO Check if grided_peggy2_add_relayer_witness_account can be executed offline (without grided running)
+        # TODO Check if grided_peggy2_set_cross_chain_fee can be executed offline (without grided running)
 
         # Create an account for each relayer
-        # Note: "--home" is shared with gridnoded's "--home"
+        # Note: "--home" is shared with grided's "--home"
         relayers = [{
             "name": name,
             "address": gridnode.peggy2_add_relayer_witness_account(name, admin_account_mint_amounts,
@@ -1143,7 +1143,7 @@ class Peggy2Environment(IntegrationTestsEnvironment):
         } for name in [f"relayer-{i}" for i in range(relayer_count)]]
 
         # Create an account for each witness
-        # Note: "--home" is shared with gridnoded's "--home"
+        # Note: "--home" is shared with grided's "--home"
         witnesses = [{
             "name": name,
             "address": gridnode.peggy2_add_relayer_witness_account(name, admin_account_mint_amounts,
@@ -1154,14 +1154,14 @@ class Peggy2Environment(IntegrationTestsEnvironment):
 
         tcp_url = "tcp://{}:{}".format(ANY_ADDR, tendermint_port)
         gas_prices = (0.5, FURY)
-        # @TODO Detect if gridnoded is already running, for now it fails silently and we wait forever in wait_for_grid_account_up
-        gridnoded_exec_args = gridnode.build_start_cmd(tcp_url=tcp_url, minimum_gas_prices=gas_prices,
+        # @TODO Detect if grided is already running, for now it fails silently and we wait forever in wait_for_grid_account_up
+        grided_exec_args = gridnode.build_start_cmd(tcp_url=tcp_url, minimum_gas_prices=gas_prices,
             log_format_json=True, log_level="debug")
-        gridnoded_proc = self.cmd.spawn_asynchronous_process(gridnoded_exec_args, log_file=gridnoded_log_file)
+        grided_proc = self.cmd.spawn_asynchronous_process(grided_exec_args, log_file=grided_log_file)
 
         time_before = time.time()
         self.cmd.wait_for_grid_account_up(validator0_address, tcp_url)
-        log.debug("Time for gridnoded to come up: {:.2f}s".format(time.time() - time_before))
+        log.debug("Time for grided to come up: {:.2f}s".format(time.time() - time_before))
 
         # TODO This command exits with status 0, but looks like there are some errros.
         # The same happens also in devenv.
@@ -1191,7 +1191,7 @@ class Peggy2Environment(IntegrationTestsEnvironment):
         gridnode.wait_for_last_transaction_to_be_mined()
         gridnode.peggy2_update_consensus_needed(admin_account_address, self.ethereum_chain_id, self.consensus_threshold)
 
-        return network_config_file, gridnoded_exec_args, gridnoded_proc, tcp_url, admin_account_address, validators, \
+        return network_config_file, grided_exec_args, grided_proc, tcp_url, admin_account_address, validators, \
             relayers, witnesses, validator0_home, chain_dir
 
     def start_witnesses_and_relayers(self, web3_websocket_address: str, hardhat_chain_id: int, tcp_url: str,
@@ -1264,7 +1264,7 @@ class Peggy2Environment(IntegrationTestsEnvironment):
 
     def write_env_files(self, project_dir, go_bin_dir, evm_smart_contract_addrs, eth_accounts, admin_account_name,
         admin_account_address, gridnode_validator0_home, gridnode_validators, gridnode_relayers, gridnode_witnesses,
-        tcp_url, hardhat_bind_hostname, hardhat_port, hardhat_chain_id, chain_dir, gridnoded_exec_args,
+        tcp_url, hardhat_bind_hostname, hardhat_port, hardhat_chain_id, chain_dir, grided_exec_args,
         relayer0_exec_args, witness0_exec_args
     ):
         w3_url = eth.web3_host_port_url(hardhat_bind_hostname, hardhat_port)
@@ -1478,9 +1478,9 @@ class Peggy2Environment(IntegrationTestsEnvironment):
                     "type": "go",
                     "request": "launch",
                     "mode": "debug",
-                    "program": "cmd/gridnoded",
-                    # Generally we want to use gridnoded_exec_args, except for:
-                    # - here we don't have the initial "gridnoded"
+                    "program": "cmd/grided",
+                    # Generally we want to use grided_exec_args, except for:
+                    # - here we don't have the initial "grided"
                     # TODO Do not use .env file here
                     "envFile": "${workspaceFolder}/smart-contracts/.env",
                     "args": [
@@ -1539,7 +1539,7 @@ class Peggy2Environment(IntegrationTestsEnvironment):
                 "</component>",
             ]
 
-        intellij_gridnoded_configs = []
+        intellij_grided_configs = []
         intellij_ebrelayer_configs = []
         intellij_witness_configs = []
         for config in launch_json["configurations"]:
@@ -1558,16 +1558,16 @@ class Peggy2Environment(IntegrationTestsEnvironment):
                     "$PROJECT_DIR$/cmd/ebrelayer/main.go",
                     {"ETHEREUM_PRIVATE_KEY": dot_env["ETHEREUM_PRIVATE_KEY"]}))
             elif config["name"].startswith("Debug Gridnoded"):
-                intellij_gridnoded_configs.append(render_intellij_run_xml(
-                    "gridnoded devenv",
+                intellij_grided_configs.append(render_intellij_run_xml(
+                    "grided devenv",
                     " ".join(config["args"]),
-                    "github.com/Gridironchain/gridnode/cmd/gridnoded",
-                    "$PROJECT_DIR$/cmd/gridnoded/main.go",
+                    "github.com/Gridironchain/gridnode/cmd/grided",
+                    "$PROJECT_DIR$/cmd/grided/main.go",
                     {}))
 
         intellij_ebrelayer_config = exactly_one(intellij_ebrelayer_configs)
         intellij_witness_config = intellij_witness_configs[0]
-        intellij_gridnoded_config = exactly_one(intellij_gridnoded_configs)
+        intellij_grided_config = exactly_one(intellij_grided_configs)
 
         run_dir = self.project.project_dir(".run")
         self.cmd.mkdir(run_dir)
@@ -1580,9 +1580,9 @@ class Peggy2Environment(IntegrationTestsEnvironment):
         self.cmd.write_text_file(os.path.join(vscode_dir, "launch.json"), json.dumps(launch_json, indent=2))
         self.cmd.write_text_file(os.path.join(run_dir, "ebrelayer.run.xml"), joinlines(intellij_ebrelayer_config))
         self.cmd.write_text_file(os.path.join(run_dir, "witness.run.xml"), joinlines(intellij_witness_config))
-        self.cmd.write_text_file(os.path.join(run_dir, "gridnoded.run.xml"), joinlines(intellij_gridnoded_config))
+        self.cmd.write_text_file(os.path.join(run_dir, "grided.run.xml"), joinlines(intellij_grided_config))
 
-        return environment_json, dot_env, launch_json, intellij_ebrelayer_config, intellij_witness_config, intellij_gridnoded_config
+        return environment_json, dot_env, launch_json, intellij_ebrelayer_config, intellij_witness_config, intellij_grided_config
 
 
 class IBCEnvironment(IntegrationTestsEnvironment):
@@ -1595,7 +1595,7 @@ class IBCEnvironment(IntegrationTestsEnvironment):
         ipaddr0 = "192.168.65.2"
         ipaddr1 = "192.168.65.3"
         subnet = "192.168.65.1/24"
-        # Mnemonics can be generated with "gridgen key generate" or "gridnoded keys mnemonic", but that gives us 24 words
+        # Mnemonics can be generated with "gridgen key generate" or "grided keys mnemonic", but that gives us 24 words
         # and here are only 12.
         # A mnemonic contains both public and private key. Public key is the address, there can only be one such entry
         # in the keyring.

@@ -11,7 +11,7 @@ page = 1
 clients = []
 
 while True:
-  output = subprocess.check_output(['gridnoded', 'q', 'ibc', 'client', 'states', '--output', 'json', '--node', sys.argv[1], '--page', str(page)])
+  output = subprocess.check_output(['grided', 'q', 'ibc', 'client', 'states', '--output', 'json', '--node', sys.argv[1], '--page', str(page)])
   data = json.loads(output.decode('utf-8'))
 
   clients.extend(data['client_states'])
@@ -22,12 +22,12 @@ while True:
   page += 1
 
 # get the block time
-output = subprocess.check_output(["gridnoded", "q", "ibc", "connection", "connections", "--output", "json", "--node", sys.argv[1]])
+output = subprocess.check_output(["grided", "q", "ibc", "connection", "connections", "--output", "json", "--node", sys.argv[1]])
 
 connection = json.loads(output.decode('utf-8'))
 
 current_block_number = connection['height']['revision_height']
-output = subprocess.check_output(["gridnoded", "q", "block", current_block_number, "--node", sys.argv[1]])
+output = subprocess.check_output(["grided", "q", "block", current_block_number, "--node", sys.argv[1]])
 current_block = json.loads(output.decode('utf-8'))
 current_block_time = parse(current_block['block']['header']['time'])
 
@@ -49,7 +49,7 @@ for client_data in clients:
   print("revison height: " + revision_height)
   print('trusting period: ' + trusting_period)
 
-  output = subprocess.check_output(['gridnoded', 'q', 'ibc', 'client', 'consensus-state', client_id,  f'{revision_number}-{revision_height}', '--node', sys.argv[1], '--output', 'json'])
+  output = subprocess.check_output(['grided', 'q', 'ibc', 'client', 'consensus-state', client_id,  f'{revision_number}-{revision_height}', '--node', sys.argv[1], '--output', 'json'])
   block = json.loads(output.decode('utf-8'))
   block_time = parse(block['consensus_state']['timestamp'])
 

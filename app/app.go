@@ -122,7 +122,7 @@ import (
 const appName = "gridnode"
 
 var (
-	DefaultNodeHome = os.ExpandEnv("$HOME/.gridnoded")
+	DefaultNodeHome = os.ExpandEnv("$HOME/.grided")
 
 	ModuleBasics = module.NewBasicManager(genutil.AppModuleBasic{},
 		auth.AppModuleBasic{},

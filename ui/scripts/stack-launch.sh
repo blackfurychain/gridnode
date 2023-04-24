@@ -5,7 +5,7 @@
 # All setup scripts will be run and once it is ready our app will be compiled and built
 # You probably only need to use this script to set a new snapshot archive
 
-killall gridnoded ebrelayer ganache-cli
+killall grided ebrelayer ganache-cli
 sleep 5
 
 ./scripts/_grid-build.sh

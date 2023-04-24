@@ -2,7 +2,7 @@
 
 set -x
 
-gridnoded tx margin update-pools ./pools.json \
+grided tx margin update-pools ./pools.json \
   --closed-pools ./closed-pools.json \
   --from=$GRID_ACT \
   --keyring-backend=test \

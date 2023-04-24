@@ -9,7 +9,7 @@ def gridironchain_cli_credentials_for_test(key: str) -> GridironchaincliCredenti
         keyring_passphrase="",
         keyring_backend="test",
         from_key=key,
-        gridnoded_homedir=f"""{get_required_env_var("HOME")}/.gridnoded"""
+        grided_homedir=f"""{get_required_env_var("HOME")}/.grided"""
     )
 
 

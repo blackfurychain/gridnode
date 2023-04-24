@@ -25,5 +25,5 @@ EXPOSE 1317
 EXPOSE 26656
 EXPOSE 26657
 
-COPY --from=build /go/bin/gridnoded /usr/bin/gridnoded
+COPY --from=build /go/bin/grided /usr/bin/grided
 COPY --from=build /go/bin/gridgen /usr/bin/gridgen

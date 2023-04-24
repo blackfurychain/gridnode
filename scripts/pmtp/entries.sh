@@ -2,6 +2,6 @@
 
 set -x
 
-gridnoded q tokenregistry entries \
+grided q tokenregistry entries \
     --node ${GRIDNODE_NODE} \
     --chain-id $GRIDNODE_CHAIN_ID | jq

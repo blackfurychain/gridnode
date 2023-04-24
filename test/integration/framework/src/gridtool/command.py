@@ -48,7 +48,7 @@ class Command:
         stderr = log_file or None
         return popen(args, stdout=stdout, stderr=stderr, **kwargs)
 
-    # Starts a process asynchronously (for gridnoded, hardhat, ebrelayer etc.)
+    # Starts a process asynchronously (for grided, hardhat, ebrelayer etc.)
     # The arguments should correspond to what buildcmd() returns.
     def spawn_asynchronous_process(self, exec_args: ExecArgs, log_file=None) -> subprocess.Popen:
         return self.popen(**exec_args, log_file=log_file)

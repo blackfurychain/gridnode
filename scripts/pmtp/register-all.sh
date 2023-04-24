@@ -2,7 +2,7 @@
 
 set -x
 
-gridnoded tx tokenregistry register denoms/fury.json \
+grided tx tokenregistry register denoms/fury.json \
   --node ${GRIDNODE_NODE} \
   --chain-id "${GRIDNODE_CHAIN_ID}" \
   --from "${ADMIN_ADDRESS}" \
@@ -12,7 +12,7 @@ gridnoded tx tokenregistry register denoms/fury.json \
   -y \
   --broadcast-mode block
 
-gridnoded tx tokenregistry register denoms/ceth.json \
+grided tx tokenregistry register denoms/ceth.json \
   --node ${GRIDNODE_NODE} \
   --chain-id "${GRIDNODE_CHAIN_ID}" \
   --from "${ADMIN_ADDRESS}" \
@@ -22,7 +22,7 @@ gridnoded tx tokenregistry register denoms/ceth.json \
   -y \
   --broadcast-mode block
 
-gridnoded tx tokenregistry register denoms/cusdc.json \
+grided tx tokenregistry register denoms/cusdc.json \
   --node ${GRIDNODE_NODE} \
   --chain-id "${GRIDNODE_CHAIN_ID}" \
   --from "${ADMIN_ADDRESS}" \
@@ -32,7 +32,7 @@ gridnoded tx tokenregistry register denoms/cusdc.json \
   -y \
   --broadcast-mode block
 
-gridnoded tx tokenregistry register denoms/cusdt.json \
+grided tx tokenregistry register denoms/cusdt.json \
   --node ${GRIDNODE_NODE} \
   --chain-id "${GRIDNODE_CHAIN_ID}" \
   --from "${ADMIN_ADDRESS}" \
@@ -42,7 +42,7 @@ gridnoded tx tokenregistry register denoms/cusdt.json \
   -y \
   --broadcast-mode block
 
-gridnoded tx tokenregistry register denoms/uatom.json \
+grided tx tokenregistry register denoms/uatom.json \
   --node ${GRIDNODE_NODE} \
   --chain-id "${GRIDNODE_CHAIN_ID}" \
   --from "${ADMIN_ADDRESS}" \
@@ -52,7 +52,7 @@ gridnoded tx tokenregistry register denoms/uatom.json \
   -y \
   --broadcast-mode block
 
-gridnoded tx tokenregistry register denoms/ujuno.json \
+grided tx tokenregistry register denoms/ujuno.json \
   --node ${GRIDNODE_NODE} \
   --chain-id "${GRIDNODE_CHAIN_ID}" \
   --from "${ADMIN_ADDRESS}" \
@@ -62,7 +62,7 @@ gridnoded tx tokenregistry register denoms/ujuno.json \
   -y \
   --broadcast-mode block
 
-gridnoded tx tokenregistry register denoms/uluna.json \
+grided tx tokenregistry register denoms/uluna.json \
   --node ${GRIDNODE_NODE} \
   --chain-id "${GRIDNODE_CHAIN_ID}" \
   --from "${ADMIN_ADDRESS}" \

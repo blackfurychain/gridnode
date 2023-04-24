@@ -1,5 +1,5 @@
 CHAINNET?=betanet
-BINARY?=gridnoded
+BINARY?=grided
 GOPATH?=$(shell go env GOPATH)
 GOBIN?=$(GOPATH)/bin
 NOW=$(shell date +'%Y-%m-%d_%T')
@@ -14,14 +14,14 @@ GOFLAGS:=""
 GOTAGS:=ledger
 
 ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=gridchain \
-		  -X github.com/cosmos/cosmos-sdk/version.ServerName=gridnoded \
-		  -X github.com/cosmos/cosmos-sdk/version.ClientName=gridnoded \
+		  -X github.com/cosmos/cosmos-sdk/version.ServerName=grided \
+		  -X github.com/cosmos/cosmos-sdk/version.ClientName=grided \
 		  -X github.com/cosmos/cosmos-sdk/version.Version=$(VERSION) \
 		  -X github.com/cosmos/cosmos-sdk/version.Commit=$(COMMIT)
 
 BUILD_FLAGS := -ldflags '$(ldflags)' -tags '$(GOTAGS)'
 
-BINARIES=./cmd/gridnoded ./cmd/gridgen ./cmd/ebrelayer ./cmd/gridtest
+BINARIES=./cmd/grided ./cmd/gridgen ./cmd/ebrelayer ./cmd/gridtest
 
 all: lint install
 
@@ -33,7 +33,7 @@ init:
 	./scripts/init.sh
 
 start:
-	gridnoded start
+	grided start
 
 lint-pre:
 	@test -z $(gofmt -l .)
@@ -49,7 +49,7 @@ install: go.sum
 	GOFLAGS=$(GOFLAGS) go install $(BUILD_FLAGS) $(BINARIES)
 
 build-gridd: go.sum
-	GOFLAGS=$(GOFLAGS) go build  $(BUILD_FLAGS) ./cmd/gridnoded
+	GOFLAGS=$(GOFLAGS) go build  $(BUILD_FLAGS) ./cmd/grided
 
 clean:
 	@rm -rf $(GOBIN)/grid*
@@ -64,7 +64,7 @@ feature-tests:
 	@GOFLAGS=$(GOFLAGS) go test -v ./test/bdd --godog.format=pretty --godog.random -race -coverprofile=.coverage.txt
 
 run:
-	GOFLAGS=$(GOFLAGS) go run ./cmd/gridnoded start
+	GOFLAGS=$(GOFLAGS) go run ./cmd/grided start
 
 build-image:
 	docker build -t gridchain/$(BINARY):$(IMAGE_TAG) -f ./cmd/$(BINARY)/Dockerfile .

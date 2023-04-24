@@ -2,7 +2,7 @@
 
 set -x
 
-gridnoded tx bank send \
+grided tx bank send \
     $GRID_ACT \
     did:fury:g144w8cpva2xkly74xrms8djg69y3mljzplx3fjt \
     9299999999750930000fury \

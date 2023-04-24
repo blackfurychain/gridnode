@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-gridnoded tx clp liquidity-protection-params --isActive=true \
+grided tx clp liquidity-protection-params --isActive=true \
 	--maxFuryLiquidityThreshold=43815115800 \
   --maxFuryLiquidityThresholdAsset=cusdc \
   --epochLength=14400 \

@@ -6,7 +6,7 @@ set -e
 . $(dirname $0)/vagrantenv.sh
 . ${TEST_INTEGRATION_DIR}/shell_utilities.sh
 
-pkill gridnoded || true
+pkill grided || true
 pkill ebrelayer || true
 
 sleep 1
@@ -33,14 +33,14 @@ set_persistant_env_var VALIDATOR1_PASSWORD $(cat $NETDEF_JSON | jq -r '.[0].pass
 set_persistant_env_var VALIDATOR1_ADDR $(cat $NETDEF_JSON | jq -r '.[0].address') $envexportfile
 set_persistant_env_var MNEMONIC "$(cat $NETDEF_JSON | jq -r '.[0].mnemonic')" $envexportfile
 set_persistant_env_var CHAINDIR $NETWORKDIR/validators/$CHAINNET/$MONIKER $envexportfile
-set_persistant_env_var GRIDNODED_LOG $datadir/logs/gridnoded.log $envexportfile
+set_persistant_env_var GRIDNODED_LOG $datadir/logs/grided.log $envexportfile
 
 . $envexportfile
 
 # now we have to add the validator key to the test keyring so the tests can send fury from validator1
-echo "$MNEMONIC" | gridnoded keys add $MONIKER --keyring-backend test --recover 
-valoper=$(gridnoded keys show -a --bech val $MONIKER --home $CHAINDIR/.gridnoded --keyring-backend test)
-gridnoded add-genesis-validators $valoper --home $CHAINDIR/.gridnoded
+echo "$MNEMONIC" | grided keys add $MONIKER --keyring-backend test --recover 
+valoper=$(grided keys show -a --bech val $MONIKER --home $CHAINDIR/.grided --keyring-backend test)
+grided add-genesis-validators $valoper --home $CHAINDIR/.grided
 
 mkdir -p $datadir/logs
 nohup $TEST_INTEGRATION_DIR/gridironchain_start_daemon.sh < /dev/null > $GRIDNODED_LOG 2>&1 &

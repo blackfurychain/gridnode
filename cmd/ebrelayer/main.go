@@ -31,7 +31,7 @@ import (
 )
 
 func buildRootCmd() *cobra.Command {
-	// see cmd/gridnoded/cmd/root.go:37 ; we need to do the
+	// see cmd/grided/cmd/root.go:37 ; we need to do the
 	// same thing in ebrelayer
 	encodingConfig := gridapp.MakeTestEncodingConfig()
 	initClientCtx := client.Context{}.

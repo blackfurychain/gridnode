@@ -2,7 +2,7 @@
 
 set -x
 
-gridnoded tx clp add-liquidity \
+grided tx clp add-liquidity \
   --from $GRID_ACT \
   --keyring-backend test \
   --symbol ceth \

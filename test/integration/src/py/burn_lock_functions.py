@@ -14,7 +14,7 @@ from test_utilities import get_gridironchain_addr_balance, advance_n_ethereum_bl
     get_eth_balance, send_from_gridironchain_to_ethereum, wait_for_eth_balance, \
     wait_for_ethereum_block_number, send_from_gridironchain_to_gridironchain, wait_for_grid_account, \
     get_shell_output_json, EthereumToGridironchainTransferRequest, GridironchaincliCredentials, RequestAndCredentials, \
-    gridnoded_binary
+    grided_binary
 
 default_timeout_for_ganache = 160
 
@@ -48,7 +48,7 @@ def transfer_ethereum_to_gridironchain(transfer_request: EthereumToGridironchain
     try:
         gridironchain_starting_balance = get_gridironchain_addr_balance(
             transfer_request.gridironchain_address,
-            transfer_request.gridnoded_node,
+            transfer_request.grided_node,
             transfer_request.gridironchain_symbol
         )
     except:
@@ -83,7 +83,7 @@ def transfer_ethereum_to_gridironchain(transfer_request: EthereumToGridironchain
     try:
         gridironchain_balance_before_required_elapsed_blocks = get_gridironchain_addr_balance(
             transfer_request.gridironchain_address,
-            transfer_request.gridnoded_node,
+            transfer_request.grided_node,
             transfer_request.gridironchain_symbol
         )
     except:
@@ -113,14 +113,14 @@ def transfer_ethereum_to_gridironchain(transfer_request: EthereumToGridironchain
     logging.debug(f"wait for account {transfer_request.gridironchain_address}")
     wait_for_grid_account(
         grid_addr=transfer_request.gridironchain_address,
-        gridironchaincli_node=transfer_request.gridnoded_node,
+        gridironchaincli_node=transfer_request.grided_node,
         max_seconds=max_seconds
     )
 
     wait_for_gridironchain_addr_balance(
         gridironchain_address=transfer_request.gridironchain_address,
         symbol=transfer_request.gridironchain_symbol,
-        gridironchaincli_node=transfer_request.gridnoded_node,
+        gridironchaincli_node=transfer_request.grided_node,
         target_balance=target_balance,
         max_seconds=max_seconds,
         debug_prefix=f"transfer_ethereum_to_gridironchain waiting for balance {transfer_request}"
@@ -148,7 +148,7 @@ def transfer_gridironchain_to_ethereum(
 
     gridironchain_starting_balance = get_gridironchain_addr_balance(
         transfer_request.gridironchain_address,
-        transfer_request.gridnoded_node,
+        transfer_request.grided_node,
         transfer_request.gridironchain_symbol
     )
 
@@ -173,7 +173,7 @@ def transfer_gridironchain_to_ethereum(
 
     gridironchain_ending_balance = get_gridironchain_addr_balance(
         transfer_request.gridironchain_address,
-        transfer_request.gridnoded_node,
+        transfer_request.grided_node,
         transfer_request.gridironchain_symbol
     )
 
@@ -197,7 +197,7 @@ def transfer_gridironchain_to_gridironchain(
     try:
         gridironchain_starting_balance = get_gridironchain_addr_balance(
             transfer_request.gridironchain_destination_address,
-            transfer_request.gridnoded_node,
+            transfer_request.grided_node,
             transfer_request.gridironchain_symbol
         )
     except Exception as e:
@@ -217,14 +217,14 @@ def transfer_gridironchain_to_gridironchain(
     target_balance = transfer_request.amount + gridironchain_starting_balance
     wait_for_grid_account(
         grid_addr=transfer_request.gridironchain_destination_address,
-        gridironchaincli_node=transfer_request.gridnoded_node,
+        gridironchaincli_node=transfer_request.grided_node,
         max_seconds=max_seconds
     )
     wait_for_gridironchain_addr_balance(
         gridironchain_address=transfer_request.gridironchain_destination_address,
         symbol=transfer_request.gridironchain_symbol,
         target_balance=target_balance,
-        gridironchaincli_node=transfer_request.gridnoded_node,
+        gridironchaincli_node=transfer_request.grided_node,
         max_seconds=max_seconds,
         debug_prefix=f"transfer_gridironchain_to_gridironchain {transfer_request}"
     )
@@ -335,7 +335,7 @@ def transfer_argument_parser() -> argparse.ArgumentParser:
         required=True
     )
     parser.add_argument(
-        '--gridnoded_node',
+        '--grided_node',
         type=str,
         nargs=1,
         default="tcp://localhost:26657",
@@ -364,10 +364,10 @@ def add_credentials_arguments(parser: argparse.ArgumentParser) -> argparse.Argum
         type=str,
         nargs=1,
         default=[""],
-        help="--from argument for gridnoded"
+        help="--from argument for grided"
     )
     parser.add_argument(
-        '--gridnoded_homedir',
+        '--grided_homedir',
         type=str,
         nargs=1,
         required=True,
@@ -408,7 +408,7 @@ def process_args(cmdline: List[str]) -> RequestAndCredentials:
         keyring_passphrase=os.environ.get(args.keyring_passphrase_env_var[0]),
         from_key=args.from_key[0],
         keyring_backend=args.keyring_backend[0],
-        gridnoded_homedir=args.gridnoded_homedir[0],
+        grided_homedir=args.grided_homedir[0],
     )
 
     return RequestAndCredentials(transfer_request, credentials, args)
@@ -423,5 +423,5 @@ def create_new_gridaddr(
     yes_subcmd = f"yes {keyring_passphrase} |" if keyring_passphrase else ""
     keyring_backend_subcmd = f"--keyring-backend {credentials.keyring_backend}" if credentials.keyring_backend else ""
     # Note that keys-add prints to stderr
-    cmd = f"{yes_subcmd} {gridnoded_binary} keys add {keyname} --home {credentials.gridnoded_homedir} {keyring_backend_subcmd} --output json 2>&1"
+    cmd = f"{yes_subcmd} {grided_binary} keys add {keyname} --home {credentials.grided_homedir} {keyring_backend_subcmd} --output json 2>&1"
     return get_shell_output_json(cmd)

@@ -2,7 +2,7 @@
 
 set -x
 
-gridnoded tx clp set-lppd-params \
+grided tx clp set-lppd-params \
   --path lppd-params.json \
   --from $GRID_ACT \
   --keyring-backend test \

@@ -25,6 +25,6 @@ ENV PACKAGES curl jq bind-tools expect nodejs npm
 
 RUN apk add --update --no-cache $PACKAGES
 
-COPY --from=build /go/bin/gridnoded /usr/bin/gridnoded
+COPY --from=build /go/bin/grided /usr/bin/grided
 
 RUN npm i -g @confio/relayer@main

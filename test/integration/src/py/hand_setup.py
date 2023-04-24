@@ -45,10 +45,10 @@ def build_request() -> (EthereumToGridironchainTransferRequest, Gridironchaincli
 
 # if there's an existing user1 key, just remove it.  Otherwise, adding a duplicate key will just hang
 try:
-    test_utilities.get_shell_output(f"gridnoded keys delete user1 --home /home/vagrant/.gridnoded --keyring-backend test -o json")
+    test_utilities.get_shell_output(f"grided keys delete user1 --home /home/vagrant/.grided --keyring-backend test -o json")
 except:
     logging.debug("no key to delete, this is normal in a fresh environment")
 request, credentials = build_request()
 burn_lock_functions.transfer_ethereum_to_gridironchain(request)
-test_utilities.get_gridironchain_addr_balance(request.gridironchain_address, request.gridnoded_node, "ceth")
+test_utilities.get_gridironchain_addr_balance(request.gridironchain_address, request.grided_node, "ceth")
 logging.info(f"created account for key {credentials.from_key}")
