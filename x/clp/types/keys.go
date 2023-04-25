@@ -55,7 +55,7 @@ func GetPoolKey(externalTicker string, nativeTicker string) ([]byte, error) {
 
 // Generate key to store a Liquidity Provider
 // The key is of the format ticker_lpaddress
-// Example : eth_did:fury:g1azpar20ck9lpys89r8x7zc8yu0qzgvtp48ng5v and converted into bytes after adding a prefix
+// Example : eth_did:fury:g1azpar20ck9lpys89r8x7zc8yu0qzgvtpewrjzt and converted into bytes after adding a prefix
 func GetLiquidityProviderKey(externalTicker string, lp string) []byte {
 	key := []byte(fmt.Sprintf("%s_%s", externalTicker, lp))
 	return append(LiquidityProviderPrefix, key...)

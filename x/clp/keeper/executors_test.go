@@ -97,7 +97,7 @@ func TestKeeper_CreatePool_And_AddLiquidity_RemoveLiquidity(t *testing.T) {
 	msg := types.NewMsgAddLiquidity(signer, asset, nativeAssetAmount, externalAssetAmount)
 	app.ClpKeeper.CreateLiquidityProvider(ctx, &asset, sdk.NewUint(1), signer)
 	lp, err := app.ClpKeeper.AddLiquidity(ctx, &msg, *pool, sdk.NewUint(1), sdk.NewUint(998))
-	assert.Equal(t, lp.LiquidityProviderAddress, "did:fury:g15ky9du8a2wlstz6fpx3p4mqpjyrm5cgqhns3lt")
+	assert.Equal(t, lp.LiquidityProviderAddress, "did:fury:g15ky9du8a2wlstz6fpx3p4mqpjyrm5cgqm6qtfv")
 	assert.NoError(t, err)
 	assert.Equal(t, pool.ExternalAssetBalance, externalAssetAmount)
 	assert.Equal(t, pool.NativeAssetBalance, nativeAssetAmount)
@@ -158,11 +158,11 @@ func TestKeeper_CreatePool_And_AddLiquidity_RemoveLiquidity(t *testing.T) {
 func TestKeeper_CreateLiquidityProvider(t *testing.T) {
 	ctx, app := test.CreateTestAppClp(false)
 	asset := types.NewAsset("eth")
-	lpAddess, err := sdk.AccAddressFromBech32("did:fury:g1azpar20ck9lpys89r8x7zc8yu0qzgvtp48ng5v")
+	lpAddess, err := sdk.AccAddressFromBech32("did:fury:g1azpar20ck9lpys89r8x7zc8yu0qzgvtpewrjzt")
 	require.NoError(t, err, "Error Creating Liquidity Provider :", err)
 	lp := app.ClpKeeper.CreateLiquidityProvider(ctx, &asset, sdk.NewUint(1), lpAddess)
 	assert.NoError(t, err)
-	assert.Equal(t, lp.LiquidityProviderAddress, "did:fury:g1azpar20ck9lpys89r8x7zc8yu0qzgvtp48ng5v")
+	assert.Equal(t, lp.LiquidityProviderAddress, "did:fury:g1azpar20ck9lpys89r8x7zc8yu0qzgvtpewrjzt")
 }
 
 func TestKeeper_RemoveLiquidityProvider(t *testing.T) {

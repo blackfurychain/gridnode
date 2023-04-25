@@ -1,6 +1,6 @@
 {
 	"accounts": {
-		"did:fury:g15ky9du8a2wlstz6fpx3p4mqpjyrm5cgp29yyze": [
+		"did:fury:g15ky9du8a2wlstz6fpx3p4mqpjyrm5cgpxv5757": [
 			{
 				"denom": "atom",
 				"amount": "1000000000000000000"
@@ -14,7 +14,7 @@
 				"amount": "999999500000000000000000000000"
 			}
 		],
-		"did:fury:g15ky9du8a2wlstz6fpx3p4mqpjyrm5cgqhns3lt": [
+		"did:fury:g15ky9du8a2wlstz6fpx3p4mqpjyrm5cgqm6qtfv": [
 			{
 				"denom": "atom",
 				"amount": "1000000000000000000"

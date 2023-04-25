@@ -220,7 +220,7 @@ func GenerateRandomLP(numberOfLp int) []types.LiquidityProvider {
 	for i := 0; i < numberOfLp; i++ {
 		externalToken := tokens[rand.Intn(len(tokens))]
 		asset := types.NewAsset(TrimFirstRune(externalToken))
-		lpAddess, err := sdk.AccAddressFromBech32("did:fury:g1azpar20ck9lpys89r8x7zc8yu0qzgvtp48ng5v")
+		lpAddess, err := sdk.AccAddressFromBech32("did:fury:g1azpar20ck9lpys89r8x7zc8yu0qzgvtpewrjzt")
 		if err != nil {
 			panic(err)
 		}
@@ -242,7 +242,7 @@ func GeneratePoolsAndLPs(keeper clpkeeper.Keeper, ctx sdk.Context, tokens []stri
 			panic(err)
 		}
 		poolList = append(poolList, pool)
-		lpAddess, err := sdk.AccAddressFromBech32("did:fury:g1azpar20ck9lpys89r8x7zc8yu0qzgvtp48ng5v")
+		lpAddess, err := sdk.AccAddressFromBech32("did:fury:g1azpar20ck9lpys89r8x7zc8yu0qzgvtpewrjzt")
 		if err != nil {
 			panic(err)
 		}
