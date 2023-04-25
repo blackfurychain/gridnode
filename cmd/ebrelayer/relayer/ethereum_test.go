@@ -15,7 +15,7 @@ import (
 // EventProcessed check if the event processed by relayer
 func TestEventProcessed(t *testing.T) {
 	var bridgeClaims []types.EthereumBridgeClaim
-	valAddress, _ := sdk.ValAddressFromBech32("gridvaloper1l7hypmqk2yc334vc6vmdwzp5sdefygj250dmpy")
+	valAddress, _ := sdk.ValAddressFromBech32("did:fury:gvaloper1l7hypmqk2yc334vc6vmdwzp5sdefygj250dmpy")
 	bridgeClaims = append(bridgeClaims, types.EthereumBridgeClaim{
 		EthereumSender: common.HexToAddress("0xd88159878c50e4B2b03BB701DD436e4A98D6fBe2"),
 		CosmosSender:   valAddress,
@@ -27,7 +27,7 @@ func TestEventProcessed(t *testing.T) {
 		BridgeContractAddress: common.HexToAddress("0xd88159878c50e4B2b03BB701DD436e4A98D6fBe2"),
 		ID:                    [32]byte{},
 		From:                  common.HexToAddress("0xd88159878c50e4B2b03BB701DD436e4A98D6fBe2"),
-		To:                    []byte("gridvaloper1l7hypmqk2yc334vc6vmdwzp5sdefygj250dmpy"),
+		To:                    []byte("did:fury:gvaloper1l7hypmqk2yc334vc6vmdwzp5sdefygj250dmpy"),
 		Token:                 common.HexToAddress("0xd88159878c50e4B2b03BB701DD436e4A98D6fBe2"),
 		Symbol:                "rewan",
 		Value:                 big.NewInt(1),
@@ -42,7 +42,7 @@ func TestEventProcessed(t *testing.T) {
 		BridgeContractAddress: common.HexToAddress("0xd88159878c50e4B2b03BB701DD436e4A98D6fBe2"),
 		ID:                    [32]byte{},
 		From:                  common.HexToAddress("0xd88159878c50e4B2b03BB701DD436e4A98D6fBe2"),
-		To:                    []byte("gridvaloper1l7hypmqk2yc334vc6vmdwzp5sdefygj250dmpy"),
+		To:                    []byte("did:fury:gvaloper1l7hypmqk2yc334vc6vmdwzp5sdefygj250dmpy"),
 		Token:                 common.HexToAddress("0xd88159878c50e4B2b03BB701DD436e4A98D6fBe2"),
 		Symbol:                "rewan",
 		Value:                 big.NewInt(1),

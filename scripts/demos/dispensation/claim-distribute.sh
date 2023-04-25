@@ -12,7 +12,7 @@ gridnoded tx dispensation claim ValidatorSubsidy --from grid --keyring-backend t
 sleep 8
 gridnoded q dispensation claims-by-type ValidatorSubsidy -o json
 sleep 8
-gridnoded tx dispensation create ValidatorSubsidy output.json did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777vuvqz8 --gas 200064128 --from did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777vuvqz8 --keyring-backend test --fees 100000fury --yes --chain-id gridchain-devnet-042 --node tcp://rpc-devnet-042.gridchain.finance:80
+gridnoded tx dispensation create ValidatorSubsidy output.json did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777gfgs92 --gas 200064128 --from did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777gfgs92 --keyring-backend test --fees 100000fury --yes --chain-id gridchain-devnet-042 --node tcp://rpc-devnet-042.gridchain.finance:80
 
 sleep 8
 gridnoded q dispensation distributions-all --chain-id localnet -o json

@@ -97,7 +97,7 @@
                 {
                     "@type": "/cosmos.auth.v1beta1.BaseAccount",
                     "account_number": "3",
-                    "address": "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777vuvqz8",
+                    "address": "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777gfgs92",
                     "pub_key": {
                         "@type": "/cosmos.crypto.secp256k1.PubKey",
                         "key": "AvUEsFHbsr40nTSmWh7CWYRZHGwf4cpRLtJlaRO4VAoq"
@@ -176,7 +176,7 @@
                     "coins": []
                 },
                 {
-                    "address": "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777vuvqz8",
+                    "address": "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777gfgs92",
                     "coins": [
                         {
                             "amount": "500000000000000000000000",
@@ -306,8 +306,8 @@
         },
         "clp": {
             "address_whitelist": [
-                "did:fury:g1ny48eeuk4dm9f63dy0lwfgjhnvud9yvtzkhtjq",
-                "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777vuvqz8",
+                "did:fury:g1ny48eeuk4dm9f63dy0lwfgjhnvud9yvtwl83y8",
+                "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777gfgs92",
                 "did:fury:g1l7hypmqk2yc334vc6vmdwzp5sdefygj2433ms7"
             ],
             "liquidity_provider_list": null,
@@ -322,13 +322,13 @@
         "distribution": {
             "delegator_starting_infos": [
                 {
-                    "delegator_address": "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777vuvqz8",
+                    "delegator_address": "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777gfgs92",
                     "starting_info": {
                         "height": "0",
                         "previous_period": "1",
                         "stake": "1000000000000000000000000.000000000000000000"
                     },
-                    "validator_address": "gridvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna"
+                    "validator_address": "did:fury:gvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna"
                 }
             ],
             "delegator_withdraw_infos": [],
@@ -338,7 +338,7 @@
             "outstanding_rewards": [
                 {
                     "outstanding_rewards": [],
-                    "validator_address": "gridvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna"
+                    "validator_address": "did:fury:gvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna"
                 }
             ],
             "params": {
@@ -347,13 +347,13 @@
                 "community_tax": "0.020000000000000000",
                 "withdraw_addr_enabled": true
             },
-            "previous_proposer": "gridvalcons19nf44j47mssrgd76frpgc75jpk50ru4shyut55",
+            "previous_proposer": "did:fury:gvalcons19nf44j47mssrgd76frpgc75jpk50ru4shyut55",
             "validator_accumulated_commissions": [
                 {
                     "accumulated": {
                         "commission": []
                     },
-                    "validator_address": "gridvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna"
+                    "validator_address": "did:fury:gvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna"
                 }
             ],
             "validator_current_rewards": [
@@ -362,7 +362,7 @@
                         "period": "2",
                         "rewards": []
                     },
-                    "validator_address": "gridvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna"
+                    "validator_address": "did:fury:gvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna"
                 }
             ],
             "validator_historical_rewards": [
@@ -372,7 +372,7 @@
                         "cumulative_reward_ratio": [],
                         "reference_count": 2
                     },
-                    "validator_address": "gridvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna"
+                    "validator_address": "did:fury:gvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna"
                 }
             ],
             "validator_slash_events": []
@@ -410,14 +410,14 @@
         },
         "oracle": {
             "address_whitelist": [
-                "gridvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna"
+                "did:fury:gvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna"
             ],
             "admin_address": ""
         },
         "slashing": {
             "missed_blocks": [
                 {
-                    "address": "gridvalcons19nf44j47mssrgd76frpgc75jpk50ru4shyut55",
+                    "address": "did:fury:gvalcons19nf44j47mssrgd76frpgc75jpk50ru4shyut55",
                     "missed_blocks": []
                 }
             ],
@@ -430,9 +430,9 @@
             },
             "signing_infos": [
                 {
-                    "address": "gridvalcons19nf44j47mssrgd76frpgc75jpk50ru4shyut55",
+                    "address": "did:fury:gvalcons19nf44j47mssrgd76frpgc75jpk50ru4shyut55",
                     "validator_signing_info": {
-                        "address": "gridvalcons19nf44j47mssrgd76frpgc75jpk50ru4shyut55",
+                        "address": "did:fury:gvalcons19nf44j47mssrgd76frpgc75jpk50ru4shyut55",
                         "index_offset": "5",
                         "jailed_until": "1970-01-01T00:00:00Z",
                         "missed_blocks_counter": "0",
@@ -445,16 +445,16 @@
         "staking": {
             "delegations": [
                 {
-                    "delegator_address": "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777vuvqz8",
+                    "delegator_address": "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777gfgs92",
                     "shares": "1000000000000000000000000.000000000000000000",
-                    "validator_address": "gridvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna"
+                    "validator_address": "did:fury:gvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna"
                 }
             ],
             "exported": true,
             "last_total_power": "1000000",
             "last_validator_powers": [
                 {
-                    "address": "gridvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna",
+                    "address": "did:fury:gvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna",
                     "power": "1000000"
                 }
             ],
@@ -491,7 +491,7 @@
                     },
                     "jailed": false,
                     "min_self_delegation": "1",
-                    "operator_address": "gridvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna",
+                    "operator_address": "did:fury:gvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna",
                     "status": "BOND_STATUS_BONDED",
                     "tokens": "1000000000000000000000000",
                     "unbonding_height": "0",

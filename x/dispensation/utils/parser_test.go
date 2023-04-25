@@ -34,7 +34,7 @@ func SetConfig() {
 }
 
 func createInput(t *testing.T, filename string) {
-	in, err := sdk.AccAddressFromBech32("did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777vuvqz8")
+	in, err := sdk.AccAddressFromBech32("did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777gfgs92")
 	assert.NoError(t, err)
 	out, err := sdk.AccAddressFromBech32("did:fury:g1l7hypmqk2yc334vc6vmdwzp5sdefygj2433ms7")
 	assert.NoError(t, err)
