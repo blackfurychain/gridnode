@@ -71,7 +71,7 @@ contract("End To End", function (accounts) {
     beforeEach(async function () {
       // Set up ProphecyClaim values
       this.cosmosSender = web3.utils.utf8ToHex(
-        "grid1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace"
+        "did:fury:g1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace"
       );
       this.cosmosSenderSequence = 1;
       this.ethereumReceiver = userSeven;

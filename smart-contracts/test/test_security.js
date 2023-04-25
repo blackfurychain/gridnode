@@ -19,7 +19,7 @@ const { expect } = require('chai');
 
 const NULL_ADDRESS = "0x0000000000000000000000000000000000000000";
 const gridRecipient = web3.utils.utf8ToHex(
-  "grid1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace"
+  "did:fury:g1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace"
 );
 
 require("chai")
@@ -245,7 +245,7 @@ contract("Security Test", function (accounts) {
 
       const symbol = 'eFury'
       const amount = 100000;
-      const gridAddress = "0x" + convertToHex("grid12qfvgsq76eghlagyfcfyt9md2s9nunsn40zu2h");
+      const gridAddress = "0x" + convertToHex("did:fury:g12qfvgsq76eghlagyfcfyt9md2s9nunsn40zu2h");
       
       // create new fake eFury token
       const bridgeToken = await BridgeToken.new("eFury");

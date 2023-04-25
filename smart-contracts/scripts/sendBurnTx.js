@@ -17,13 +17,13 @@ module.exports = async (cb) => {
 
     const NULL_ADDRESS = "0x0000000000000000000000000000000000000000";
 
-    console.log("Expected usage: \n\ntruffle exec scripts/sendBurnTx.js --network ropsten grid1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace <token smart contract address> 100\n");
+    console.log("Expected usage: \n\ntruffle exec scripts/sendBurnTx.js --network ropsten did:fury:g1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace <token smart contract address> 100\n");
     /*******************************************
      *** Constants
      ******************************************/
     // Burn transaction default params
     const DEFAULT_COSMOS_RECIPIENT = Web3.utils.utf8ToHex(
-      "grid1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace"
+      "did:fury:g1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace"
     );
     const DEFAULT_ETH_DENOM = "eth";
     const DEFAULT_AMOUNT = 10;

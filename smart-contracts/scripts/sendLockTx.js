@@ -12,13 +12,13 @@ module.exports = async (cb) => {
 
   const NULL_ADDRESS = "0x0000000000000000000000000000000000000000";
 
-  console.log("Expected usage: \nBRIDGEBANK_ADDRESS='0x9e8bd20374898f61b4e5bd32b880b7fe198e44a1' truffle exec scripts/sendLockTx.js --network ropsten grid1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace eth 100\n");
+  console.log("Expected usage: \nBRIDGEBANK_ADDRESS='0x9e8bd20374898f61b4e5bd32b880b7fe198e44a1' truffle exec scripts/sendLockTx.js --network ropsten did:fury:g1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace eth 100\n");
   /*******************************************
    *** Constants
    ******************************************/
   // Lock transaction default params
   const DEFAULT_COSMOS_RECIPIENT = Web3.utils.utf8ToHex(
-    "grid1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace"
+    "did:fury:g1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace"
   );
   const DEFAULT_ETH_DENOM = "eth";
   const DEFAULT_AMOUNT = 10;

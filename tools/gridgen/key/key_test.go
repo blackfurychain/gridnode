@@ -8,9 +8,9 @@ import (
 
 var (
 	name             = "cool-frost"
-	address          = "grid1hu2lxzusgf4ezp9etyue34zusx82220997ucah"
-	validatorAddress = "gridvaloper1hu2lxzusgf4ezp9etyue34zusx822209vu5ja8"
-	consensusAddress = "gridvalcons1hu2lxzusgf4ezp9etyue34zusx822209c08w3x"
+	address          = "did:fury:g1hu2lxzusgf4ezp9etyue34zusx822209fhvzts"
+	validatorAddress = "did:fury:g1gvaloper1hu2lxzusgf4ezp9etyue34zusx822209g4fzhk"
+	consensusAddress = "did:fury:g1gvalcons1hu2lxzusgf4ezp9etyue34zusx822209ux67mh"
 	random           = "qY3XtZc4a16jTnQWsJUwDvxfC2giHmSB"
 	mnemonic         = "flock toss tip service element interest leisure bright subway critic copy lazy zero limb unveil reveal ecology slab detail wrong smooth fun pond choice"
 )

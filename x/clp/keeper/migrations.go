@@ -50,12 +50,12 @@ func (m Migrator) MigrateToVer3(ctx sdk.Context) error {
 		units   sdk.Uint
 	}
 	lps := []LPS{
-		{"grid1smknl4uf89ef84kg020ff7ask7l0sxz3s93gva", sdk.NewUintFromString("49661617604396299845632")},
-		{"grid1gy2ne7m62uer4h5s4e7xlfq7aeem5zpwx6nu9q", sdk.NewUintFromString("57436791960686469054464")},
-		{"grid1uk77p6he26undp9wjjav6ygtu53kswl60cd5va", sdk.NewUintFromString("54301402049261093257216")},
-		{"grid1hspkfnzexvn4drk9dlfpg8n0ppw8sxsl00t65a", sdk.NewUintFromString("55396192200751201648640")},
-		{"grid1y2rfrgh374gd40gj0yusjasw2paaysahu9qk5j", sdk.NewUintFromString("138696029054663414251520")},
-		{"grid1ra9563z5tn2lmqhydt2atrgzftk2d7umyr4vqw", sdk.NewUintFromString("139123862445111950442496")}}
+		{"did:fury:g1smknl4uf89ef84kg020ff7ask7l0sxz3s93gva", sdk.NewUintFromString("49661617604396299845632")},
+		{"did:fury:g1gy2ne7m62uer4h5s4e7xlfq7aeem5zpwx6nu9q", sdk.NewUintFromString("57436791960686469054464")},
+		{"did:fury:g1uk77p6he26undp9wjjav6ygtu53kswl60cd5va", sdk.NewUintFromString("54301402049261093257216")},
+		{"did:fury:g1hspkfnzexvn4drk9dlfpg8n0ppw8sxsl00t65a", sdk.NewUintFromString("55396192200751201648640")},
+		{"did:fury:g1y2rfrgh374gd40gj0yusjasw2paaysahu9qk5j", sdk.NewUintFromString("138696029054663414251520")},
+		{"did:fury:g1ra9563z5tn2lmqhydt2atrgzftk2d7umyr4vqw", sdk.NewUintFromString("139123862445111950442496")}}
 
 	symbol := "cusdc"
 

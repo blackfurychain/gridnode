@@ -4,7 +4,7 @@ set -x
 
 gridnoded tx bank send \
     $GRID_ACT \
-    grid144w8cpva2xkly74xrms8djg69y3mljzplx3fjt \
+    did:fury:g144w8cpva2xkly74xrms8djg69y3mljzplx3fjt \
     9299999999750930000fury \
     --keyring-backend test \
     --node ${GRIDNODE_NODE} \

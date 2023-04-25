@@ -63,7 +63,7 @@ const transactionYargOptions = {
         demandOption: true
     },
     'gridchain_address': {
-        describe: "A GridChain address like grid132tc0acwt8klntn53xatchqztl3ajfxxxsawn8",
+        describe: "A GridChain address like did:fury:g132tc0acwt8klntn53xatchqztl3ajfxxxsawn8",
         demandOption: true
     },
 }

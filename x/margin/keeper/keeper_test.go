@@ -280,7 +280,7 @@ func TestKeeper_Borrow(t *testing.T) {
 			denom:            "unregistered_denom",
 			decimals:         18,
 			to:               "fury",
-			address:          "grid1azpar20ck9lpys89r8x7zc8yu0qzgvtp48ng5v",
+			address:          "did:fury:g1azpar20ck9lpys89r8x7zc8yu0qzgvtp48ng5v",
 			collateralAmount: sdk.NewUint(10000),
 			custodyAmount:    sdk.NewUint(1000),
 			leverage:         sdk.NewDec(1),
@@ -292,7 +292,7 @@ func TestKeeper_Borrow(t *testing.T) {
 			denom:            "unregistered_denom",
 			decimals:         18,
 			to:               "fury",
-			address:          "grid1azpar20ck9lpys89r8x7zc8yu0qzgvtp48ng5v",
+			address:          "did:fury:g1azpar20ck9lpys89r8x7zc8yu0qzgvtp48ng5v",
 			collateralAmount: sdk.NewUint(10000),
 			custodyAmount:    sdk.NewUint(1000),
 			leverage:         sdk.NewDec(1),
@@ -304,7 +304,7 @@ func TestKeeper_Borrow(t *testing.T) {
 			denom:            "fury",
 			decimals:         18,
 			to:               "fury",
-			address:          "grid1azpar20ck9lpys89r8x7zc8yu0qzgvtp48ng5v",
+			address:          "did:fury:g1azpar20ck9lpys89r8x7zc8yu0qzgvtp48ng5v",
 			collateralAmount: sdk.NewUint(1000000000000000),
 			custodyAmount:    sdk.NewUint(1000000000000000),
 			leverage:         sdk.NewDec(1),
@@ -328,7 +328,7 @@ func TestKeeper_Borrow(t *testing.T) {
 			denom:            "fury",
 			decimals:         9,
 			to:               "xxx",
-			address:          "grid1azpar20ck9lpys89r8x7zc8yu0qzgvtp48ng5v",
+			address:          "did:fury:g1azpar20ck9lpys89r8x7zc8yu0qzgvtp48ng5v",
 			collateralAmount: sdk.NewUint(10000),
 			custodyAmount:    sdk.NewUint(1000),
 			leverage:         sdk.NewDec(1),
@@ -340,7 +340,7 @@ func TestKeeper_Borrow(t *testing.T) {
 			denom:            "fury",
 			decimals:         9,
 			to:               "fury",
-			address:          "grid1azpar20ck9lpys89r8x7zc8yu0qzgvtp48ng5v",
+			address:          "did:fury:g1azpar20ck9lpys89r8x7zc8yu0qzgvtp48ng5v",
 			collateralAmount: sdk.NewUint(1000),
 			custodyAmount:    sdk.NewUint(1000),
 			leverage:         sdk.NewDec(1),
@@ -761,7 +761,7 @@ func TestKeeper_Repay(t *testing.T) {
 			denom:                    "fury",
 			decimals:                 18,
 			to:                       "xxx",
-			address:                  "grid1azpar20ck9lpys89r8x7zc8yu0qzgvtp48ng5v",
+			address:                  "did:fury:g1azpar20ck9lpys89r8x7zc8yu0qzgvtp48ng5v",
 			collateralAmount:         sdk.NewUint(0),
 			custodyAmount:            sdk.NewUint(1000),
 			liabilities:              sdk.NewUint(0),
@@ -894,7 +894,7 @@ func TestKeeper_CalcMTPInterestLiabilities(t *testing.T) {
 func TestKeeper_CalcMTPInterestLiabilitiesOverflow(t *testing.T) { // test fails after fix to interest calc
 
 	mtp := types.MTP{
-		Address:                  "grid123",
+		Address:                  "did:fury:g123",
 		CollateralAsset:          "fury",
 		CollateralAmount:         sdk.Uint{},
 		Liabilities:              sdk.NewUintFromString("100"),
@@ -978,9 +978,9 @@ func TestKeeper_InterestRateComputation(t *testing.T) {
 				HealthGainFactor:                         sdk.NewDec(1),
 				EpochLength:                              1,
 				ForceCloseFundPercentage:                 sdk.NewDecWithPrec(1, 1),
-				ForceCloseFundAddress:                    "grid1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd",
+				ForceCloseFundAddress:                    "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777vuvqz8",
 				IncrementalInterestPaymentFundPercentage: sdk.NewDecWithPrec(1, 1),
-				IncrementalInterestPaymentFundAddress:    "grid1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd",
+				IncrementalInterestPaymentFundAddress:    "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777vuvqz8",
 				IncrementalInterestPaymentEnabled:        false,
 				PoolOpenThreshold:                        sdk.NewDecWithPrec(1, 1),
 				RemovalQueueThreshold:                    sdk.NewDecWithPrec(1, 1),
@@ -1027,12 +1027,12 @@ func TestKeeper_InterestRateComputation(t *testing.T) {
 func TestWhitelist(t *testing.T) {
 	ctx, _, marginKeeper := initKeeper(t)
 
-	marginKeeper.WhitelistAddress(ctx, "grid123")
-	is := marginKeeper.IsWhitelisted(ctx, "grid123")
+	marginKeeper.WhitelistAddress(ctx, "did:fury:g123")
+	is := marginKeeper.IsWhitelisted(ctx, "did:fury:g123")
 	require.True(t, is)
 	whitelist, _, err := marginKeeper.GetWhitelist(ctx, nil)
 	require.NoError(t, err)
-	require.Equal(t, []string{"grid123"}, whitelist)
+	require.Equal(t, []string{"did:fury:g123"}, whitelist)
 }
 
 func TestSQBeginBlocker(t *testing.T) {

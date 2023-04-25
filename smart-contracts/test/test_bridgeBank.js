@@ -128,7 +128,7 @@ contract("BridgeBank", function (accounts) {
 
       // This is for ERC20 deposits
       this.sender = web3.utils.utf8ToHex(
-        "grid1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace"
+        "did:fury:g1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace"
       );
       this.senderSequence = 1;
       this.recipient = userThree;
@@ -282,7 +282,7 @@ contract("BridgeBank", function (accounts) {
       await this.bridgeBank.setBlocklist(this.blocklist.address);
 
       this.recipient = web3.utils.utf8ToHex(
-        "grid1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace"
+        "did:fury:g1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace"
       );
       // This is for Ethereum deposits
       this.ethereumToken = "0x0000000000000000000000000000000000000000";
@@ -370,7 +370,7 @@ contract("BridgeBank", function (accounts) {
       await this.bridgeBank.setBlocklist(this.blocklist.address);
 
       this.recipient = web3.utils.utf8ToHex(
-        "grid1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace"
+        "did:fury:g1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace"
       );
       // This is for Ethereum deposits
       this.ethereumToken = "0x0000000000000000000000000000000000000000";
@@ -580,7 +580,7 @@ contract("BridgeBank", function (accounts) {
 
       // Lock an Ethereum deposit
       this.sender = web3.utils.utf8ToHex(
-        "grid1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace"
+        "did:fury:g1nx650s8q9w28f2g3t9ztxyg48ugldptuwzpace"
       );
       this.senderSequence = 1;
       this.recipient = accounts[4];
@@ -1020,7 +1020,7 @@ contract("BridgeBank", function (accounts) {
 
       const symbol = 'eFury'
       const amount = 100000;
-      const gridAddress = "0x" + convertToHex("grid12qfvgsq76eghlagyfcfyt9md2s9nunsn40zu2h");
+      const gridAddress = "0x" + convertToHex("did:fury:g12qfvgsq76eghlagyfcfyt9md2s9nunsn40zu2h");
 
       await this.token.mint(operator, amount, { from: operator })
       await this.token.approve(this.bridgeBank.address, amount, {from: operator})
@@ -1047,7 +1047,7 @@ contract("BridgeBank", function (accounts) {
       }
 
       const amount = 100000;
-      const gridAddress = "0x" + convertToHex("grid12qfvgsq76eghlagyfcfyt9md2s9nunsn40zu2h");
+      const gridAddress = "0x" + convertToHex("did:fury:g12qfvgsq76eghlagyfcfyt9md2s9nunsn40zu2h");
 
       await this.token.mint(operator, amount, { from: operator })
       await this.token.approve(this.bridgeBank.address, amount, {from: operator})
@@ -1068,7 +1068,7 @@ contract("BridgeBank", function (accounts) {
         return hex;
       }
 
-      const cosmosSender = "0x" + convertToHex("grid12qfvgsq76eghlagyfcfyt9md2s9nunsn40zu2h");
+      const cosmosSender = "0x" + convertToHex("did:fury:g12qfvgsq76eghlagyfcfyt9md2s9nunsn40zu2h");
       const senderSequence = 1
       const symbol = 'eFury'
       const amount = 100000;

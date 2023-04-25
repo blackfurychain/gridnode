@@ -2,7 +2,7 @@
 
 set -x
 
-gridnoded tx margin dewhitelist grid1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd \
+gridnoded tx margin dewhitelist did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777vuvqz8 \
   --from $GRID_ACT \
   --keyring-backend test \
   --fees 100000000000000000fury \

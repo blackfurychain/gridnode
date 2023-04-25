@@ -112,7 +112,7 @@ def query_account_balance(cmd, account, node, chain_id):
 
 def transfer(cmd, channel, address, amount, from_addr, chain_id, node, gas_prices, gas, packet_timeout_timestamp):
     # akash tx ibc-transfer transfer transfer channel-66
-    # grid19q2swhcxkxlc6va3pz5jz42jfsfv2ly4kuu8y0
+    # did:fury:g19q2swhcxkxlc6va3pz5jz42jfsfv2ly4kuu8y0
     # 100ibc/10CD333A451FAE602172F612E6F0D695476C8A0C4BEC6E0A9F1789A599B9F135
     # --from akash19q2swhcxkxlc6va3pz5jz42jfsfv2ly4767kj7
     # --keyring-backend test
@@ -120,7 +120,7 @@ def transfer(cmd, channel, address, amount, from_addr, chain_id, node, gas_price
     # --node http://147.75.32.35:26657
     # -y --gas-prices 2.0uakt --gas 500000 --packet-timeout-timestamp 600000000000
     # channel = "channel-66"
-    # address = "grid19q2swhcxkxlc6va3pz5jz42jfsfv2ly4kuu8y0
+    # address = "did:fury:g19q2swhcxkxlc6va3pz5jz42jfsfv2ly4kuu8y0
     # amount = "100ibc/10CD333A451FAE602172F612E6F0D695476C8A0C4BEC6E0A9F1789A599B9F135"
     # from_addr = "akash19q2swhcxkxlc6va3pz5jz42jfsfv2ly4767kj7"
     # chain_id = "akash-testnet-6"

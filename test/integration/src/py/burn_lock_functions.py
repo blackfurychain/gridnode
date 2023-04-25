@@ -246,7 +246,7 @@ def transfer_argument_parser() -> argparse.ArgumentParser:
         type=str,
         nargs=1,
         required=True,
-        help="A GridChain address like grid132tc0acwt8klntn53xatchqztl3ajfxxxsawn8"
+        help="A GridChain address like did:fury:g132tc0acwt8klntn53xatchqztl3ajfxxxsawn8"
     )
     parser.add_argument(
         '--gridchain_destination_address',
@@ -254,7 +254,7 @@ def transfer_argument_parser() -> argparse.ArgumentParser:
         nargs=1,
         required=False,
         default=[""],
-        help="A GridChain address like grid132tc0acwt8klntn53xatchqztl3ajfxxxsawn8, used for transferring between gridchain addresses"
+        help="A GridChain address like did:fury:g132tc0acwt8klntn53xatchqztl3ajfxxxsawn8, used for transferring between gridchain addresses"
     )
     parser.add_argument(
         '--ethereum_address',
@@ -418,7 +418,7 @@ def create_new_gridaddr(
         credentials: GridironchaincliCredentials,
         keyname
 ):
-    """returns something like {"name":"9cbf3bd4-f15c-4128-bae6-a534fc8d6877","type":"local","address":"grid19u4xtckuvy2zk9r2l4063g93s3r8qc4vw0a20t","pubkey":"gridpub1addwnpepqw88ns6dmy3xwjqh4mkvuda6ezn056nxy8ldrtpkrfuvuamexv9hxyzhxm7","mnemonic":"surprise fire cupboard orange scatter boat cruel ability oven gap accident purity delay"}"""
+    """returns something like {"name":"9cbf3bd4-f15c-4128-bae6-a534fc8d6877","type":"local","address":"did:fury:g19u4xtckuvy2zk9r2l4063g93s3r8qc4vw0a20t","pubkey":"gridpub1addwnpepqw88ns6dmy3xwjqh4mkvuda6ezn056nxy8ldrtpkrfuvuamexv9hxyzhxm7","mnemonic":"surprise fire cupboard orange scatter boat cruel ability oven gap accident purity delay"}"""
     keyring_passphrase = credentials.keyring_passphrase
     yes_subcmd = f"yes {keyring_passphrase} |" if keyring_passphrase else ""
     keyring_backend_subcmd = f"--keyring-backend {credentials.keyring_backend}" if credentials.keyring_backend else ""

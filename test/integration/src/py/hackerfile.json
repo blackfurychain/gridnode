@@ -5,12 +5,12 @@
         {
           "type": "dispensation/create",
           "value": {
-            "Signer": "grid1l7hypmqk2yc334vc6vmdwzp5sdefygj2ad93p5",
+            "Signer": "did:fury:g1l7hypmqk2yc334vc6vmdwzp5sdefygj2433ms7",
             "distribution_name": "testnetfinaltest23",
             "distribution_type": "1",
             "Input": [
               {
-                "address": "grid1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd",
+                "address": "did:fury:g1syavy2npfyt9tcncdtsdzf7kny9lh777vuvqz8",
                 "coins": [
                   {
                     "denom": "fury",
@@ -21,7 +21,7 @@
             ],
             "Output": [
               {
-                "address": "grid1l7hypmqk2yc334vc6vmdwzp5sdefygj2ad93p5",
+                "address": "did:fury:g1l7hypmqk2yc334vc6vmdwzp5sdefygj2433ms7",
                 "coins": [
                   {
                     "denom": "fury",
