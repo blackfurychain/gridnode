@@ -63,7 +63,7 @@ func InitialAdminAccounts() []*AdminAccount {
 		},
 		{
 			AdminType:    AdminType_CLPDEX,
-			AdminAddress: "did:fury:g1l7hypmqk2yc334vc6vmdwzp5sdefygj2433ms7",
+			AdminAddress: "did:fury:g1l7hypmqk2yc334vc6vmdwzp5sdefygj23y4thn",
 		},
 		{
 			AdminType:    AdminType_PMTPREWARDS,
@@ -75,7 +75,7 @@ func InitialAdminAccounts() []*AdminAccount {
 		},
 		{
 			AdminType:    AdminType_PMTPREWARDS,
-			AdminAddress: "did:fury:g1l7hypmqk2yc334vc6vmdwzp5sdefygj2433ms7",
+			AdminAddress: "did:fury:g1l7hypmqk2yc334vc6vmdwzp5sdefygj23y4thn",
 		},
 		{
 			AdminType:    AdminType_ETHBRIDGE,
