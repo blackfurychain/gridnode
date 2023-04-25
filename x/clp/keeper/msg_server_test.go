@@ -76,7 +76,7 @@ func TestMsgServer_DecommissionPool(t *testing.T) {
 			externalAssetAmount: sdk.NewUint(1000),
 			poolUnits:           sdk.NewUint(1000),
 			msg: &types.MsgDecommissionPool{
-				Signer: "did:fury:g1jv65s3grqf6v6jl3dp4t6c9t9rk99cd8zzt2x5",
+				Signer: "did:fury:g1jv65s3grqf6v6jl3dp4t6c9t9rk99cd8wtmssn",
 				Symbol: "eth",
 			},
 			errString: errors.New("user does not have permission to decommission pool: invalid"),
@@ -1829,7 +1829,7 @@ func TestMsgServer_AddLiquidity(t *testing.T) {
 }
 
 func TestMsgServer_AddProviderDistribution(t *testing.T) {
-	admin := "did:fury:g1gy2ne7m62uer4h5s4e7xlfq7aeem5zpwx6nu9q"
+	admin := "did:fury:g1gy2ne7m62uer4h5s4e7xlfq7aeem5zpw2nrxn8"
 	nonAdmin := "did:fury:g1gy2ne7m62uer4h5s4e7xlfq7aeem5zpwx6nu9r"
 	ctx, app := test.CreateTestAppClpFromGenesis(false, func(app *gridapp.GridironchainApp, genesisState gridapp.GenesisState) gridapp.GenesisState {
 		adminGs := &admintypes.GenesisState{
