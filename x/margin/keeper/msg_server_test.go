@@ -1096,7 +1096,7 @@ func TestKeeper_OpenThenClose(t *testing.T) {
 
 		balances := []banktypes.Balance{
 			{
-				Address: "did:fury:g1pjm228rsgwqf23arkx7lm9ypkyma7mzr3y2n85",
+				Address: "did:fury:g1pjm228rsgwqf23arkx7lm9ypkyma7mzrad6f3n",
 				Coins: sdk.Coins{
 					sdk.NewCoin(nativeAsset, sdk.Int(sdk.NewUintFromString("1000000000000000000000000000000"))),
 					sdk.NewCoin(externalAsset, sdk.Int(sdk.NewUintFromString("1000000000000000000000000000000"))),
@@ -1805,7 +1805,7 @@ func TestKeeper_EC(t *testing.T) {
 
 				balances := []banktypes.Balance{
 					{
-						Address: "did:fury:g1pjm228rsgwqf23arkx7lm9ypkyma7mzr3y2n85",
+						Address: "did:fury:g1pjm228rsgwqf23arkx7lm9ypkyma7mzrad6f3n",
 						Coins: sdk.Coins{
 							sdk.NewCoin(nativeAsset, sdk.Int(testItem.X_A)),
 							sdk.NewCoin(asset.Symbol, sdk.Int(testItem.Y_A)),

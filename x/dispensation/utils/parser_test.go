@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	AccountAddressPrefix = "grid"
+	AccountAddressPrefix = "did:fury:g"
 )
 
 var (
